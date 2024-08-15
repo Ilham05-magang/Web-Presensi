@@ -16,3 +16,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('user.home',['title'=>"Presensi"]);
 });
+Route::get('/login', function () {
+    return view('auth.login',['title'=>"Masuk akun"]);
+});
+Route::get('/register', function () {
+    return view('auth.register',['title'=>"Buat akun"]);
+});

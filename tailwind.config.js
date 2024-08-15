@@ -7,6 +7,10 @@ module.exports = {
     ],
     theme: {
         extend: {},
+        colors: {
+            'login':'#212529',
+            'button':'#6C757D'
+        }
     },
     plugins: [
         require('flowbite/plugin')

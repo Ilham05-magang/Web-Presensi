@@ -9,10 +9,8 @@
     <link rel="shortcut icon" href="assets/logo.png" type="image/x-icon">
 </head>
 <body>
-    <x-navbar/>
-    <Main class="max-w-screen-xl w-full mx-auto p-4">
+    <Main>
         {{ $slot }}
     </Main>
-    <x-footer/>
 </body>
 </html>

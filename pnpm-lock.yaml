@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      remixicon:
+        specifier: ^4.3.0
+        version: 4.3.0
     devDependencies:
       autoprefixer:
         specifier: ^10.4.20
@@ -715,6 +719,9 @@ packages:
     resolution: {integrity: sha512-hOS089on8RduqdbhvQ5Z37A0ESjsqz6qnRcffsMU3495FuTdqSm+7bhJ29JvIOsBDEEnan5DPu9t3To9VRlMzA==}
     engines: {node: '>=8.10.0'}
 
+  remixicon@4.3.0:
+    resolution: {integrity: sha512-jRYQ37dTFSkJtvcxwTUAkIiXkYRvA9EDvVuXPNrmt2xf/VS//CRgFtsX2TAFBoQOhh9SDh7l6La4Xu12snEyxg==}
+
   resolve@1.22.8:
     resolution: {integrity: sha512-oKWePCxqpd6FlLvGV1VU0x7bkPmmCNolxzjMf4NczoDnQcIWrAF+cPtZn5i6n+RfD2d9i0tzpKnG6Yk168yIyw==}
     hasBin: true
@@ -1407,6 +1414,8 @@ snapshots:
   readdirp@3.6.0:
     dependencies:
       picomatch: 2.3.1
+
+  remixicon@4.3.0: {}
 
   resolve@1.22.8:
     dependencies:
