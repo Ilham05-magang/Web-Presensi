@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\AuthController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,9 +16,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('user.home',['title'=>"Presensi"]);
 });
-Route::get('/login', function () {
-    return view('auth.login',['title'=>"Masuk akun"]);
-});
-Route::get('/register', function () {
-    return view('auth.register',['title'=>"Buat akun"]);
-});
+
+#auth route
+Route::get('/login', [AuthController::class, 'loginindex'])->name('login');
+Route::get('/register', [AuthController::class, 'registerindex'])->name('register');
+
+Route::post('/register/akun', [AuthController::class, 'register'])->name('register.create');

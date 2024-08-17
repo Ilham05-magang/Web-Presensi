@@ -41,6 +41,12 @@ return [
             'provider' => 'users',
         ],
     ],
+    'guards' => [
+        'intern' => [
+            'driver' => 'session',
+            'provider' => 'interns',
+        ],
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -64,6 +70,12 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
+    'providers' => [
+        'interns' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\DIntern::class,
+        ],
+    ],
 
         // 'users' => [
         //     'driver' => 'database',

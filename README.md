@@ -14,6 +14,10 @@ cd (folder yang sudah diclone tadi)
 npm install
 ```
 
+```sh
+composer install atau composer update
+```
+
 - Menyalakan Xampp terlebih dahulu, nyalakan **Apache dan Mysql**
 
 - Ubah **.env.example menjadi .env**
