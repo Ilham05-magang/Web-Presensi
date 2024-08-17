@@ -12,7 +12,7 @@
                         <img src="{{ asset('assets/logo.png') }}" class="md:hidden block w-12 bg-login rounded-full p-2" alt="Logo">
                         <h1 class="font-bold text-3xl">Sign Up</h1>
                     </div>
-                    <form action="{{ route('register.create') }}" method="POST" class="flex flex-col gap-6 w-full md:px-0 px-8 md:px-0 max-w-lg">
+                    <form action="{{ route('register.create.intern') }}" method="POST" class="flex flex-col gap-6 w-full md:px-0 px-8 md:px-0 max-w-lg">
                         @csrf
                         <div class="md:grid flex flex-col md:grid-cols-2 gap-4 text-sm">
                             <div class="flex flex-col gap-5">

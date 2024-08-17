@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('instansis', function (Blueprint $table) {
             $table->id();
             $table->string('nama')->nullable(false);
-            $table->string('telepon')->nullable(false);
-            $table->string('alamat');
-            $table->string('link_gmaps');
+            $table->string('telepon')->nullable();
+            $table->string('alamat')->nullable();
+            $table->string('link_gmaps')->nullable();
             $table->timestamps();
         });
     }

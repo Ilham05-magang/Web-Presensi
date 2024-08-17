@@ -21,4 +21,4 @@ Route::get('/', function () {
 Route::get('/login', [AuthController::class, 'loginindex'])->name('login');
 Route::get('/register', [AuthController::class, 'registerindex'])->name('register');
 
-Route::post('/register/akun', [AuthController::class, 'register'])->name('register.create');
+Route::post('/register/intern', [AuthController::class, 'registerintern'])->name('register.create.intern');

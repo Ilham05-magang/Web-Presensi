@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('akun_id')->nullable(false);
             $table->foreign('akun_id')->references('id')->on('akuns');
-            $table->unsignedBigInteger('instansi_id')->nullable(false);
+            $table->unsignedBigInteger('instansi_id')->nullable();
             $table->foreign('instansi_id')->references('id')->on('instansis');
             $table->string('nama')->nullable(false);
             $table->string('nip')->nullable(false);
