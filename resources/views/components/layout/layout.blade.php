@@ -12,6 +12,5 @@
     <Main class="h-screen max-w-screen-xl mx-auto">
         {{ $slot }}
     </Main>
-    <x-footer/>
 </body>
 </html>
