@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities{
+    .bg-user-dashboard{
+        background-image: "url('/assets/user-dashboard.svg')";
+    }
+}

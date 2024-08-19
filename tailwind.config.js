@@ -6,10 +6,13 @@ module.exports = {
         "./node_modules/flowbite/**/*.js"
     ],
     theme: {
-        extend: {},
+        backgroundImage: {
+            'user-background': "url('assets/user-dashboard.svg')"
+        },
         colors: {
             'login':'#212529',
-            'button':'#6C757D'
+            'button':'#6C757D',
+            'red-button': '#A4161A'
         }
     },
     plugins: [
