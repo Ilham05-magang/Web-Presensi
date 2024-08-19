@@ -12,13 +12,16 @@ use App\Http\Controllers\AuthController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-// route user
+
 Route::get('/', function () {
     return view('user.home',['title'=>"Presensi"]);
 });
-Route::get('/login', function () {
-    return view('auth.login',['title'=>"Masuk akun"]);
-});
-Route::get('/register', function () {
-    return view('auth.register',['title'=>"Buat akun"]);
-});
+
+#auth route
+Route::get('/login', [AuthController::class, 'loginindex'])->name('login');
+Route::get('/register', [AuthController::class, 'registerindex'])->name('register');
+
+Route::post('/register/karyawan', [AuthController::class, 'registerkaryawan'])->name('register.create.karyawan');
+
+Route::get('/admin', [AuthController::class, 'adminindex'])->name('register.admin');
+Route::post('/register/admin', [AuthController::class, 'registeradmin'])->name('register.create.admin');
