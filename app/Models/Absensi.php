@@ -9,10 +9,12 @@ class Absensi extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'intern_id',
+        'karyawan_id',
         'shift_id',
         'jam_mulai',
         'jam_istirahat',
+        'jam_izin',
+        'jam_selesai_izin',
         'jam_selesai_istirahat',
         'jam_pulang',
         'jam_total_produktif',

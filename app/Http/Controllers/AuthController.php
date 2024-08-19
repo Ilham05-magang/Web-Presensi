@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use App\Models\Interns;
-use App\Models\Akuns;
-use App\Models\Instansi;
+use Illuminate\Support\Str;
+use App\Models\Users;
+use App\Models\Karyawan;
+use App\Models\Admins;
 
 class AuthController extends Controller
 {
@@ -22,59 +23,77 @@ class AuthController extends Controller
         return view('auth.register', compact('title'));
     }
 
-    private function validateInternData($request)
+    private function validateData($request)
     {
         return $request->validate([
             'nama' => 'required|string|max:255',
-            'username' => 'required|string|max:255|unique:akuns',
-            'email' => 'required|string|email|max:255|unique:akuns',
+            'username' => 'required|string|max:255|unique:users',
+            'email' => 'required|string|email|max:255|unique:users',
             'telepon' => 'required|string|max:16',
-            'ttl' => 'required|string',
-            'instansi' => 'required|string|max:255',
+            'nip' => 'string|max:20',
+            'ttl' => 'string',
             'password' => 'required|string|confirmed',
         ]);
     }
 
-    public function registerintern(Request $request)
+    public function registerkaryawan(Request $request)
     {
         // Validasi input
-        $validatedData = $this->validateInternData($request);
+        $validatedData = $this->validateData($request);
 
-        // Create Akun first and get its ID
-        $akun = Akuns::create([
+        $akun = Users::create([
             'username' => $validatedData['username'],
             'email' => $validatedData['email'],
             'password' => Hash::make($validatedData['password']),
             'status_akun' => false,
-            'role_id' => 1
+            'role_id' => 1,
+            'email_verified_at' => now(),
+            'remember_token' => Str::random(20),
         ]);
 
-        // Create the Interns record using the newly created Akun ID
-        Interns::create([
-            'akun_id' => $akun->id,  // Corrected field name
+        Karyawan::create([
+            'akun_id' => $akun->id,
             'nama' => $validatedData['nama'],
-            'telepon' => $validatedData['telepon'],
+            'telepon' => '+62' . $validatedData['telepon'],
+            'nip' => $validatedData['nip'],
             'ttl' => $validatedData['ttl'],
+
         ]);
 
-        // Create the Instansi record
-        Instansi::create([
-            'nama' => $validatedData['instansi'],
-        ]);
-
+        // Redirect ke halaman login dengan pesan sukses
         return redirect()->route('login')->with('success', 'Pendaftaran berhasil! Silakan login.');
     }
 
 
 
+    public function adminindex(){
+        $title = 'Admin';
+        return view('auth.admin-register', compact('title'));
+    }
+
     public function registeradmin(Request $request)
     {
-        $validatedData = $this->validateInternData($request);
+        // Validasi input
+        $validatedData = $this->validateData($request);
 
-    }
-    public function registercontributor(Request $request)
-    {
-        $validatedData = $this->validateInternData($request);
+        $akun = Users::create([
+            'username' => $validatedData['username'],
+            'email' => $validatedData['email'],
+            'password' => Hash::make($validatedData['password']),
+            'status_akun' => true,
+            'role_id' => 2,
+            'email_verified_at' => now(),
+            'remember_token' => Str::random(20),
+        ]);
+
+        Admins::create([
+            'akun_id' => $akun->id,
+            'nama' => $validatedData['nama'],
+            'telepon' => '+62' . $validatedData['telepon'],
+        ]);
+
+        // Redirect ke halaman login dengan pesan sukses
+        return redirect()->route('login')->with('success', 'Pendaftaran berhasil! Silakan login.');
     }
 
 

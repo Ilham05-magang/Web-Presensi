@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Interns;
+use App\Models\Karyawan;
 use App\Models\Shift;
 use App\Models\Absensi;
 use Carbon\Carbon;
@@ -15,7 +15,7 @@ class SeederAbsensi extends Seeder
      */
     public function run(): void
     {
-        $internID = Interns::where('nim', '43423242314')->first()->id;
+        $karyawanID = Karyawan::where('nip', '343565433')->first()->id;
         $shift = Shift::where('nama', 'Shift pagi')->first();
 
         $jamDefaultMulai = Carbon::createFromFormat('H:i:s', $shift->jam_mulai);
@@ -47,11 +47,13 @@ class SeederAbsensi extends Seeder
         $jamTotalProduktifFormatted = gmdate('H:i:s', $jamTotalProduktif);
 
         Absensi::create([
-            'intern_id' => $internID,
+            'karyawan_id' => $karyawanID,
             'shift_id' => $shift->id,
             'tanggal' => '2024-08-17', // Format tanggal sesuai dengan penyimpanan di database
             'jam_mulai' => $jamMulai->format('H:i:s'),
             'jam_istirahat' => $jamIstirahatMulai->format('H:i:s'),
+            'jam_izin' => null,
+            'jam_selesai_izin' => null,
             'jam_selesai_istirahat' => $jamIstirahatSelesai->format('H:i:s'),
             'jam_pulang' => $jamPulang->format('H:i:s'),
             'jam_total_produktif' => $jamTotalProduktifFormatted

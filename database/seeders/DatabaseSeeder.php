@@ -15,17 +15,13 @@ class DatabaseSeeder extends Seeder
         //jangan ubah Urutan pemanggilan
         $this->call([
             SeederRoles::class,
-            SeederAkun::class,
+            SeederUser::class,
             SeederAdmin::class,
-            SeederInstansi::class,
-            SeederTingkat::class,
-            SeederContributor::class,
             SeederKantor::class,
             SeederDivisi::class,
             SeederShift::class,
-            SeederIntern::class,
+            Seederkaryawan::class,
             SeederAbsensi::class,
-            SeederAktivitas::class,
         ]);
     }
 }

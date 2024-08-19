@@ -21,4 +21,7 @@ Route::get('/', function () {
 Route::get('/login', [AuthController::class, 'loginindex'])->name('login');
 Route::get('/register', [AuthController::class, 'registerindex'])->name('register');
 
-Route::post('/register/intern', [AuthController::class, 'registerintern'])->name('register.create.intern');
+Route::post('/register/karyawan', [AuthController::class, 'registerkaryawan'])->name('register.create.karyawan');
+
+Route::get('/admin', [AuthController::class, 'adminindex'])->name('register.admin');
+Route::post('/register/admin', [AuthController::class, 'registeradmin'])->name('register.create.admin');

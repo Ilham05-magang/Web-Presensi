@@ -12,7 +12,7 @@
                         <img src="{{ asset('assets/logo.png') }}" class="block w-12 p-2 rounded-full md:hidden bg-login" alt="Logo">
                         <h1 class="text-3xl font-bold">Sign Up</h1>
                     </div>
-                    <form action="{{ route('register.create.karyawan') }}" method="POST" class="flex flex-col w-full max-w-lg gap-6 px-8 md:px-0">
+                    <form action="{{ route('register.create.admin') }}" method="POST" class="flex flex-col w-full max-w-lg gap-6 px-8 md:px-0">
                         @csrf
                         <div class="flex flex-col gap-4 text-sm md:grid md:grid-cols-2">
                             <div class="flex flex-col gap-5">
@@ -28,22 +28,14 @@
                                     <label for="username" class="font-semibold">Username*</label>
                                     <input type="text" id="username" name="username" class="text-sm rounded-lg" placeholder="Masukkan username" value="{{ old('username') }}" required>
                                 </div>
+                            </div>
+                            <div class="flex flex-col gap-5">
                                 <div class="flex flex-col gap-1">
                                     <label for="telepon" class="font-semibold">No Telp*</label>
                                     <div class="flex">
                                         <span class="inline-flex items-center px-3 rounded-l-lg bg-gray-200 text-gray-900 border-[1px] border-[#6B7280] border-r-0">+62</span>
                                         <input type="tel" id="telepon" name="telepon" class="w-full text-sm rounded-r-lg" placeholder="Cth: 8123457890" value="{{ old('telepon') }}" required>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="flex flex-col gap-5">
-                                <div class="flex flex-col gap-1">
-                                    <label for="ttl" class="font-semibold">Tempat, Tanggal Lahir*</label>
-                                    <input type="text" name="ttl" id="ttl" class="text-sm rounded-lg" placeholder="Cth: Semarang, 10 September 2021" value="{{ old('ttl') }}" required>
-                                </div>
-                                <div class="flex flex-col gap-1">
-                                    <label for="nip" class="font-semibold">NIP*</label>
-                                    <input type="text" id="nip" name="nip" class="text-sm rounded-lg" placeholder="Cth:850723123456" value="{{ old('nip') }}" required>
                                 </div>
                                 <div class="relative flex flex-col gap-1">
                                     <label for="password" class="font-semibold">Password*</label>
@@ -63,10 +55,16 @@
                         </div>
                         <div>
                             @if ($errors->has('password'))
-                                <div class="w-full mb-2 text-base text-center text-red-500">
+                                <div class="w-full mb-1 text-base text-center text-red-500">
                                     Password tidak sama
                                 </div>
                             @endif
+                            @error('username')
+                                <div class="w-full mb-1 text-base text-center text-red-500">{{ $message }}</div>
+                            @enderror
+                            @error('email')
+                                <div class="w-full mb-1 text-base text-center text-red-500">{{ $message }}</div>
+                            @enderror
                             <div class="flex justify-center">
                                 <button type="submit"
                                     class="bg-button px-3 py-2 text-white w-36 shadow-lg shadow-black/30 rounded-lg font-semibold hover:bg-[#ADB5BD] hover:border-button hover:border-[1px] border-[1px] border-button">

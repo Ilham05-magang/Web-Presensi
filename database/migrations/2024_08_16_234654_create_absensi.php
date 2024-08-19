@@ -13,14 +13,16 @@ return new class extends Migration
     {
         Schema::create('absensis', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('intern_id')->nullable(false);
-            $table->foreign('intern_id')->references('id')->on('interns');
+            $table->unsignedBigInteger('karyawan_id')->nullable(false);
+            $table->foreign('karyawan_id')->references('id')->on('karyawans');
             $table->unsignedBigInteger('shift_id')->nullable(false);
             $table->foreign('shift_id')->references('id')->on('shifts');
             $table->date('tanggal');
             $table->time('jam_mulai');
-            $table->time('jam_istirahat');
-            $table->time('jam_selesai_istirahat');
+            $table->time('jam_istirahat')->nullable();;
+            $table->time('jam_selesai_istirahat')->nullable();;
+            $table->time('jam_izin')->nullable();;
+            $table->time('jam_selesai_izin')->nullable();;
             $table->time('jam_pulang');
             $table->time('jam_total_produktif');
             $table->timestamps();

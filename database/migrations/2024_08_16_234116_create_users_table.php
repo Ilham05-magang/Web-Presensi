@@ -11,14 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('akuns', function (Blueprint $table) {
+        Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('role_id')->nullable(false);
             $table->foreign('role_id')->references('id')->on('roles');
             $table->string('username')->unique()->nullable(false);
             $table->string('email')->unique()->nullable(false);
-            $table->string('password')->nullable(false);
             $table->boolean('status_akun')->default(false)->nullable(false);
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('password')->nullable(false);
+            $table->rememberToken();
             $table->timestamps();
         });
     }
@@ -28,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('akuns');
+        Schema::dropIfExists('users');
     }
 };
