@@ -16,6 +16,12 @@ use App\Http\Controllers\AuthController;
 Route::get('/', function () {
     return view('user.home',['title'=>"Presensi"]);
 });
+Route::get('/history-log', function () {
+    return view('user.history-log',['title'=>"History log"]);
+});
+Route::get('/data-ganti-jam', function () {
+    return view('user.data-ganti-jam',['title'=>"Data ganti jam"]);
+});
 
 #auth route
 Route::get('/login', [AuthController::class, 'loginindex'])->name('login');
