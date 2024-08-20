@@ -13,9 +13,15 @@ module.exports = {
             'login':'#212529',
             'button':'#6C757D',
             'red-button': '#A4161A'
-        }
+        },
+        extend: {
+            fontFamily: {
+              inter: ['Inter', 'sans-serif'],
+            },
+        },
     },
     plugins: [
-        require('flowbite/plugin')
+        require('flowbite/plugin'),
+        require('@tailwindcss/typography')
     ],
 }
