@@ -11,8 +11,37 @@ class UserController extends Controller
     public function index()
     {
         $user = auth()->user();
-        $title = 'Home';
-        return view('user.home', compact('title', 'user'));
+        $tanggalHariIni = Carbon::today()->toDateString();
+
+        $absensi = Absensi::where('karyawan_id', $user->karyawan->id)
+            ->where('tanggal', $tanggalHariIni)
+            ->first();
+
+        $titleButton = $this->determineButtonTitle($absensi);
+
+        return view('user.home', compact('user', 'absensi', 'titleButton'));
+    }
+
+    private function determineButtonTitle($absensi)
+    {
+        if ($absensi == null) {
+            return "Masuk";
+        }
+
+        $titles = [
+            'jam_mulai' => "Masuk",
+            'jam_istirahat' => "Istirahat",
+            'jam_selesai_istirahat' => "Kembali",
+            'jam_pulang' => "Pulang"
+        ];
+
+        foreach ($titles as $field => $title) {
+            if (empty($absensi->$field)) {
+                return $title;
+            }
+        }
+
+        return "Telah Pulang";
     }
 
     public function historyLog()
@@ -29,15 +58,37 @@ class UserController extends Controller
         return view('user.data-ganti-jam', compact('title', 'user'));
     }
 
-    public function presensi(Request $request)
+    public function presensi()
     {
         $user = auth()->user();
         $tanggalHariIni = Carbon::today()->toDateString();
-
         $absensi = Absensi::where('karyawan_id', $user->karyawan->id)
             ->where('tanggal', $tanggalHariIni)
             ->first();
-        dd($absensi);
-        
+
+        if ($absensi != null) {
+            $this->updateAbsensiTime($absensi);
+        }
+
+        return redirect()->route('home');
+    }
+
+    private function updateAbsensiTime($absensi)
+    {
+        $fields = [
+            'jam_mulai',
+            'jam_istirahat',
+            'jam_selesai_istirahat',
+            'jam_pulang'
+        ];
+
+        foreach ($fields as $field) {
+            if (empty($absensi->$field)) {
+                $absensi->update([
+                    $field => Carbon::now('Asia/Jakarta')->format('H:i:s'),
+                ]);
+                break;
+            }
+        }
     }
 }

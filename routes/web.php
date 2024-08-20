@@ -33,11 +33,11 @@ Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::middleware(['auth'])->group(function() {
     Route::get('/adminhome', function () {
         return view('admintesting');})->name('admintesting')->middleware("userAccess:admin");
-    Route::get("", [UserController::class,"presensi"])->name("presensi")->middleware("");
-    
+
     Route::middleware(['userAccess:karyawan'])->group(function () {
-        Route::get('/', [UserController::class, 'index'])->name('home')->middleware('userAccess:karyawan');
-        Route::get('/history-log', [UserController::class, 'historyLog'])->name('historyLog')->middleware('userAccess:karyawan');
-        Route::get('/data-ganti-jam', [UserController::class, 'gantiJam'])->name('gantiJam')->middleware('userAccess:karyawan');
+        Route::get('/', [UserController::class, 'index'])->name('home');
+        Route::put('/presensi', [UserController::class, 'presensi'])->name('presensi');
+        Route::get('/history-log', [UserController::class, 'historyLog'])->name('historyLog');
+        Route::get('/data-ganti-jam', [UserController::class, 'gantiJam'])->name('gantiJam');
     });
 });
