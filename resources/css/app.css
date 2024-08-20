@@ -6,4 +6,11 @@
     .bg-user-dashboard{
         background-image: "url('/assets/user-dashboard.svg')";
     }
+    .no-cancel-button::-webkit-search-cancel-button {
+        -webkit-appearance: none;
+    }
+
+    .no-cancel-button::-moz-search-cancel-button {
+    display: none;
+    }
 }

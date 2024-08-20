@@ -9,7 +9,7 @@
     <link rel="shortcut icon" href="assets/logo.png" type="image/x-icon">
 </head>
 <body>
-    <Main>
+    <Main class="font-inter">
         {{ $slot }}
     </Main>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

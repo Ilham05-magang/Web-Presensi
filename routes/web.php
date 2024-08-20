@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AdminController;
+
 use App\Http\Controllers\UserController;
 
 /*
@@ -25,6 +27,15 @@ Route::post('/register/karyawan', [AuthController::class, 'registerkaryawan'])->
 
 Route::get('/admin', [AuthController::class, 'adminindex'])->name('register.admin');
 Route::post('/register/admin', [AuthController::class, 'registeradmin'])->name('register.create.admin');
+
+
+#Admin Route
+Route::get('/dashboard', [AdminController::class, 'indexAdmin'])->name('dashboard');
+Route::get('/dashboard/presensi', [AdminController::class, 'PresensiAdmin'])->name('dashboard.presensi');
+Route::get('/dashboard/divisi', [AdminController::class, 'DivisiAdmin'])->name('dashboard.divisi');
+Route::get('/dashboard/laporan', [AdminController::class, 'LaporanAdmin'])->name('dashboard.laporan');
+Route::get('/dashboard/karyawan', [AdminController::class, 'KaryawanAdmin'])->name('dashboard.karyawan');
+Route::get('/dashboard/pengaturan', [AdminController::class, 'PengaturanAdmin'])->name('dashboard.pengaturan');
 
 Route::post('/login', [AuthController::class, 'loginUser'])->name('loginUser');
 
