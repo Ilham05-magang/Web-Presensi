@@ -18,13 +18,13 @@ return new class extends Migration
             $table->unsignedBigInteger('shift_id')->nullable(false);
             $table->foreign('shift_id')->references('id')->on('shifts');
             $table->date('tanggal');
-            $table->time('jam_mulai');
+            $table->time('jam_mulai')->nullable();
             $table->time('jam_istirahat')->nullable();;
             $table->time('jam_selesai_istirahat')->nullable();;
             $table->time('jam_izin')->nullable();;
             $table->time('jam_selesai_izin')->nullable();;
-            $table->time('jam_pulang');
-            $table->time('jam_total_produktif');
+            $table->time('jam_pulang')->nullable();
+            $table->time('jam_total_produktif')->nullable();
             $table->timestamps();
         });
     }

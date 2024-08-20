@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Karyawan extends Model
 {
@@ -18,4 +20,12 @@ class Karyawan extends Model
         'ttl',
         'telepon',
     ];
+
+    public function shift(): HasOne {
+        return $this->hasOne(Shift::class,'id', 'shift_id');
+    }
+
+    public function kantor(): HasOne {
+        return $this->hasOne(Kantor::class,'id', 'kantor_id');
+    }
 }

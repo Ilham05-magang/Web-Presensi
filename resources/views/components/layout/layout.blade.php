@@ -7,6 +7,7 @@
     @vite(['resources/css/app.css','resources/js/app.js'])
     <title>{{ $title }}</title>
     <link rel="shortcut icon" href="assets/logo.png" type="image/x-icon">
+    <script src="//unpkg.com/alpinejs" defer></script>
 </head>
 <body>
     <Main class="h-screen max-w-screen-xl mx-auto">
