@@ -49,14 +49,7 @@ class SeederAbsensi extends Seeder
         Absensi::create([
             'karyawan_id' => $karyawanID,
             'shift_id' => $shift->id,
-            'tanggal' => '2024-08-17', // Format tanggal sesuai dengan penyimpanan di database
-            'jam_mulai' => $jamMulai->format('H:i:s'),
-            'jam_istirahat' => $jamIstirahatMulai->format('H:i:s'),
-            'jam_izin' => null,
-            'jam_selesai_izin' => null,
-            'jam_selesai_istirahat' => $jamIstirahatSelesai->format('H:i:s'),
-            'jam_pulang' => $jamPulang->format('H:i:s'),
-            'jam_total_produktif' => $jamTotalProduktifFormatted
+            'tanggal' => Carbon::now()->format('Y-m-d'), // Format tanggal sesuai dengan penyimpanan di database
         ]);
     }
 }
