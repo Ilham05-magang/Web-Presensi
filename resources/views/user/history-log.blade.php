@@ -1,4 +1,4 @@
-<x-layout.layout><x-slot:title>{{ $title }}</x-slot:title><x-navbar />
+<x-layout.layout><x-slot:title>{{ $title }}</x-slot:title><x-navbar :user="$user" />
     <div class="p-5">
         <div class="flex relative items-center pt-12">
             <a href="/" class="absolute left-0 cursor-pointer"><i class="ri-arrow-left-s-line text-3xl"></i></a>

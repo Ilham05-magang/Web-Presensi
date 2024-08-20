@@ -1,9 +1,10 @@
 <x-layout.layout>
     <x-slot:title>{{ $title }}</x-slot:title>
-    <x-navbar></x-navbar>
+    <x-navbar :user="$user"></x-navbar>
     <div class="flex relative py-5 px-16 max-md:px-8 mx-auto justify-center items-center gap-16 max-md:flex-col "> 
         <div class="flex flex-col flex-none py-10 gap-3 tracking-[.13em] max-md:hidden"> 
-            <div class="text-center text-2xl font-bold "> Shift Middle </div>
+            <div class="text-center text-2xl font-bold ">{{$user->karyawan->shift->nama}}</div>
+            {{-- <form action=""></form> --}}
             <a href="#" class="cursor-pointer bg-button text-white font-semibold rounded-xl px-3 py-3 text-xs justify-center gap-1 flex">Masuk</a>
             <button data-modal-target="modal-add" data-modal-toggle="modal-add" class="px-3 py-3 text-xs bg-button text-white font-semibold rounded-xl justify-center gap-1 flex"><img src="assets/file-add-icon.svg" class="w-4" alt="add-log"> Log Activity</button>
             <a href="/history-log" class="cursor-pointer bg-button text-white font-semibold rounded-xl px-3 py-3 text-xs justify-center gap-1 flex"><img src="assets/file-history-icon.svg" class="w-4" alt="history-log"> History Log Activity</a>
@@ -11,10 +12,10 @@
         <div class="flex gap-4 flex-auto max-md:flex-col">
             <div class="text-center text-2xl font-bold max-md:block hidden tracking-[.13em] pb-7"> Shift Middle </div>
             <div class="gap-4 grid grid-cols-2 grid-rows-2 w-full">
-                <x-presensi_card></x-presensi_card>
-                <x-presensi_card></x-presensi_card>
-                <x-presensi_card></x-presensi_card>
-                <x-presensi_card></x-presensi_card>
+                <x-presensi_card title="Masuk"></x-presensi_card>
+                <x-presensi_card title="Istirahat"></x-presensi_card>
+                <x-presensi_card title="Kembali"></x-presensi_card>
+                <x-presensi_card title="Pulang"></x-presensi_card>
             </div>
             <div class="flex max-md:flex-col h-full items-end gap-4 max-md:pb-20">
                 {{-- <div class="flex w-1/2 flex-col px-4 py-2 border border-[#ADADAD] max-md:w-full  border-solid rounded-md gap-2">

@@ -12,15 +12,17 @@
                         <img src="assets/logo.png" class="bg-login rounded-full p-2 md:hidden block w-12" alt="">
                         <h1 class="font-bold text-4xl">Log In</h1>
                     </div>
-                    <form class="flex flex-col gap-6 w-full px-5 md:px-0 max-w-xs">
+                    <form action="/login" method="POST" class="flex flex-col gap-6 w-full px-5 md:px-0 max-w-xs">
+                        @method("POST")
+                        @csrf
                         <div class="flex flex-col gap-4 text-base">
                             <div class="flex flex-col gap-1">
                                 <label for="" class="font-semibold" >Username/Email</label>
-                                <input type="text" class="rounded-lg" placeholder="Masukkan username / email">
+                                <input type="text" name="email" class="rounded-lg" placeholder="Masukkan username / email">
                             </div>
                             <div class="flex flex-col gap-1">
                                 <label for="" class="font-semibold">Password</label>
-                                <input type="password" class="rounded-lg" placeholder="Masukkan password" >
+                                <input type="password" name="password" class="rounded-lg" placeholder="Masukkan password" >
                             </div>
                         </div>
                         <div class="flex justify-between text-sm">

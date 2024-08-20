@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,15 +15,7 @@ use App\Http\Controllers\AuthController;
 |
 */
 
-Route::get('/', function () {
-    return view('user.home',['title'=>"Presensi"]);
-});
-Route::get('/history-log', function () {
-    return view('user.history-log',['title'=>"History log"]);
-});
-Route::get('/data-ganti-jam', function () {
-    return view('user.data-ganti-jam',['title'=>"Data ganti jam"]);
-});
+
 
 #auth route
 Route::get('/login', [AuthController::class, 'loginindex'])->name('login');
@@ -31,3 +25,19 @@ Route::post('/register/karyawan', [AuthController::class, 'registerkaryawan'])->
 
 Route::get('/admin', [AuthController::class, 'adminindex'])->name('register.admin');
 Route::post('/register/admin', [AuthController::class, 'registeradmin'])->name('register.create.admin');
+
+Route::post('/login', [AuthController::class, 'loginUser'])->name('loginUser');
+
+Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+
+Route::middleware(['auth'])->group(function() {
+    Route::get('/adminhome', function () {
+        return view('admintesting');})->name('admintesting')->middleware("userAccess:admin");
+    Route::get("", [UserController::class,"presensi"])->name("presensi")->middleware("");
+    
+    Route::middleware(['userAccess:karyawan'])->group(function () {
+        Route::get('/', [UserController::class, 'index'])->name('home')->middleware('userAccess:karyawan');
+        Route::get('/history-log', [UserController::class, 'historyLog'])->name('historyLog')->middleware('userAccess:karyawan');
+        Route::get('/data-ganti-jam', [UserController::class, 'gantiJam'])->name('gantiJam')->middleware('userAccess:karyawan');
+    });
+});

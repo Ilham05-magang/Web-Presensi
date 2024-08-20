@@ -9,10 +9,10 @@
                 <div class=" flex justify-between mx-5 items-center">
                     <button data-modal-hide="popup-modal" type="button"
                         class="py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-[#D9D9D9] rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Tidak</button>
-                    <button data-modal-hide="popup-modal" type="button"
+                    <a href="{{ route('logout') }}" data-modal-hide="popup-modal" type="button"
                         class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
                         Ya
-                    </button>
+                    </a>
                 </div>
 
             </div>

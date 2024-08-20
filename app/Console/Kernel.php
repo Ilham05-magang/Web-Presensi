@@ -12,7 +12,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        // $schedule->command('inspire')->hourly();
+        $schedule->command('app:post-daily-absensi')->daily(); // Menjadwalkan command untuk dijalankan setiap hari
     }
 
     /**

@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use App\Models\Users;
 use App\Models\Karyawan;
 use App\Models\Admins;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -66,7 +67,8 @@ class AuthController extends Controller
 
 
 
-    public function adminindex(){
+    public function adminindex()
+    {
         $title = 'Admin';
         return view('auth.admin-register', compact('title'));
     }
@@ -96,5 +98,38 @@ class AuthController extends Controller
         return redirect()->route('login')->with('success', 'Pendaftaran berhasil! Silakan login.');
     }
 
+    public function loginUser(Request $request)
+    {
+        $request->validate([
+            'email' => 'required',
+            'password' => 'required'
+        ]);
+        // mengecek ygd dimasukkan apakah email atau username
+        $loginType = filter_var($request->email, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
 
+        // inputan user untuk login
+        $infologin = [
+            $loginType => $request->email,
+            'password' => $request->password,
+        ];
+
+        if (Auth::attempt($infologin)) {
+            if (Auth::user()->role->role == 'admin' && Auth::user()->status_akun == 1) {
+                //TODO masukkin route admin ke sini
+                return redirect()->route('admintesting');
+            } else if (Auth::user()->role->role == 'karyawan' && Auth::user()->status_akun == 1) {
+                return redirect()->route('home');
+            } else {
+                return redirect()->route('login')->with('error','');
+            }
+        } else {
+            return redirect()->route('login')->withErrors('Username/email dan password tidak sesuai', '')->withInput();
+        }
+    }
+
+    public function logout()
+    {
+        Auth::logout();
+        return redirect()->route('login');
+    }
 }

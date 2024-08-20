@@ -26,11 +26,10 @@ class SeederUser extends Seeder
             'username' => 'karyawan',
             'email' => 'karyawan@example.com',
             'password' => Hash::make('12345'),
-            'status_akun' => false,
+            'status_akun' => true,
             'email_verified_at' => now(),
             'remember_token' => Str::random(20),
         ]);
-
         // Create a user with the 'admin' role
         Users::create([
             'role_id' => $adminRoleId,
