@@ -1,3 +1,4 @@
+@props(['dataadmin'=>null])
 <nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
     <div class="px-3 py-3 lg:px-5 lg:pl-3">
         <div class="flex items-center justify-between">
@@ -26,7 +27,7 @@
                             data-dropdown-toggle="dropdown-user" id="dropdown">
                             <span class="sr-only">Open user menu</span>
                             <div class="flex gap-2 text-base">
-                                <h1>Neil Sims</h1>
+                                <h1>{{ $dataadmin->admin->nama }}</h1>
                                 <i id="dropdown-icon" class="ri-arrow-drop-down-line"></i>
                             </div>
                         </button>
@@ -35,10 +36,10 @@
                         id="dropdown-user">
                         <div class="px-4 py-3" role="none">
                             <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none">
-                                Username
+                                {{ $dataadmin->username }}
                             </p>
                             <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none">
-                                neil.sims@flowbite.com
+                                {{ $dataadmin->email }}
                             </p>
                         </div>
                         <ul class="py-1" role="none">

@@ -9,6 +9,7 @@ use App\Models\Divisi;
 use App\Models\Shift;
 use App\Models\Users;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\View;
 
 class AdminController extends Controller
 {

@@ -18,6 +18,6 @@ class UserAccess
         if(auth()->user()->role->role == $roleName && auth()->user()->status_akun == '1') {
             return $next($request);
         }
-        return redirect()->route("login");
+        return redirect()->back();
     }
 }

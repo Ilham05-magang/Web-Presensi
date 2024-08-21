@@ -115,8 +115,7 @@ class AuthController extends Controller
 
         if (Auth::attempt($infologin)) {
             if (Auth::user()->role->role == 'admin' && Auth::user()->status_akun == 1) {
-                //TODO masukkin route admin ke sini
-                return redirect()->route('admintesting');
+                return redirect()->route('dashboard');
             } else if (Auth::user()->role->role == 'karyawan' && Auth::user()->status_akun == 1) {
                 return redirect()->route('home');
             } else {

@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\Roles;
+use App\Models\Admins;
 
 class Users extends Authenticatable
 {
@@ -56,5 +57,9 @@ class Users extends Authenticatable
     public function karyawan()
     {
         return $this->hasOne(Karyawan::class, 'akun_id', 'id');
+    }
+    public function admin()
+    {
+        return $this->hasOne(Admins::class, 'akun_id', 'id');
     }
 }
