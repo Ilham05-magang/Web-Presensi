@@ -17,22 +17,29 @@ class SeederKaryawan extends Seeder
      */
     public function run(): void
     {
-        // Mendapatkan ID berdasarkan nama/role
-        $akun_id = Roles::where('role', 'karyawan')->first()->id;
-        $kantor_id = Kantor::where('nama', 'kantor 1')->first()->id;
-        $divisi_id = Divisi::where('divisi', 'Programming')->first()->id;
-        $shift_id = Shift::where('nama', 'Shift Pagi')->first()->id;
+        $city = ['Jakarta', 'Surabaya', 'Bandung', 'Medan', 'Semarang', 'Yogyakarta', 'Solo', 'Makassar', 'Pontianak', 'Banjarmasin'];
+        $name = [
+            'Juleha', 'Ahmad', 'Rifki', 'Siti', 'Arief', 'Reni', 'Imam', 'Eko', 'Yeni', 'Tia'
+        ];
 
-        // Membuat entri baru di tabel interns
-        karyawan::create([
-            'akun_id' => $akun_id,
-            'kantor_id' => $kantor_id,
-            'divisi_id' => $divisi_id,
-            'shift_id' => $shift_id,
-            'nama' => 'juleha',
-            'nip' => '343565433',
-            'telepon' => '0849313313',
-            'ttl' => 'semarang, 13 november 2000'
-        ]);
+        $month = [
+            'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+        ];
+
+        $data = [];
+        for ($i=1; $i<=10; $i++){
+            $tahun = rand(1995, 2005);
+            $data[] = [
+                'akun_id' => $i,
+                'kantor_id' => rand(1,2),
+                'divisi_id' => rand(1,6),
+                'shift_id' => rand(1,3),
+                'nama' => $name[$i-1],
+                'nip' => rand(100000000, 999999999),
+                'telepon' => '08'.rand(1000000000, 9999999999),
+                'ttl' => $city[rand(0, count($city)-1)].', '.rand(1, 31).' '.$month[rand(0, count($month)-1)].' '.$tahun
+            ];
+        }
+        Karyawan::insert($data);
     }
 }

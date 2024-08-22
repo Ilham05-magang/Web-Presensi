@@ -9,6 +9,7 @@ use App\Models\Divisi;
 use App\Models\Shift;
 use App\Models\Users;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\View;
 
 class AdminController extends Controller
@@ -51,5 +52,40 @@ class AdminController extends Controller
         $datenow = Carbon::now()->format('Y-m-d');
         $title = 'Pengaturan';
         return view('admin.pengaturan', compact('title'));
+    }
+
+    public function absencesbyDay(Request $request)
+    {
+        $date = Carbon::now()->format('Y-m-d');
+        if ($request->date) {
+            $date = Carbon::parse($request->date)->format('Y-m-d');
+        }
+        $absences = DB::select(
+            "SELECT 
+            k.id AS karyawan_id,
+            k.nama,
+            a.tanggal,
+            a.jam_mulai,
+            a.jam_istirahat,
+            a.jam_selesai_istirahat,
+            a.jam_izin,
+            a.jam_selesai_izin,
+            a.jam_pulang,
+            TIMESTAMPDIFF(MINUTE, COALESCE(a.jam_mulai, a.jam_pulang), COALESCE(a.jam_pulang, a.jam_mulai)) 
+                - COALESCE(TIMESTAMPDIFF(MINUTE, a.jam_istirahat, a.jam_selesai_istirahat), 0) 
+                - COALESCE(TIMESTAMPDIFF(MINUTE, a.jam_izin, a.jam_selesai_izin), 0) AS total_jam_dalam_menit,
+            SEC_TO_TIME(
+                TIMESTAMPDIFF(MINUTE, COALESCE(a.jam_mulai, a.jam_pulang), COALESCE(a.jam_pulang, a.jam_mulai)) 
+                - COALESCE(TIMESTAMPDIFF(MINUTE, a.jam_istirahat, a.jam_selesai_istirahat), 0) 
+                - COALESCE(TIMESTAMPDIFF(MINUTE, a.jam_izin, a.jam_selesai_izin), 0) * 60
+            ) AS total_jam_masuk
+            FROM 
+                karyawans k
+            LEFT JOIN 
+                absensis a 
+            ON k.id = a.karyawan_id AND a.tanggal = ?",[$date]
+            );
+
+        return response()->json($absences);
     }
 }
