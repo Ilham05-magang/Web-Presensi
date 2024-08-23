@@ -9,13 +9,14 @@ use App\Models\Users;
 use App\Models\Karyawan;
 use App\Models\Admins;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 
 class AuthController extends Controller
 {
     public function loginindex()
     {
         $title = 'Masuk Akun';
-        return view('auth.login', compact('title'));
+        return view('auth.login', compact('title'))->with('error','ini errorlah');
     }
 
     public function registerindex()
@@ -49,7 +50,6 @@ class AuthController extends Controller
             'status_akun' => false,
             'role_id' => 1,
             'email_verified_at' => now(),
-            'remember_token' => Str::random(20),
         ]);
 
         Karyawan::create([
@@ -112,23 +112,33 @@ class AuthController extends Controller
             $loginType => $request->email,
             'password' => $request->password,
         ];
+        $remember = $request->input('remember_me');
 
-        if (Auth::attempt($infologin)) {
+        if (Auth::attempt($infologin, $remember)) {
+            Cookie::queue('email', $request->email, 60 * 24 * 30); // menyimpan selama 30 hari
+        
             if (Auth::user()->role->role == 'admin' && Auth::user()->status_akun == 1) {
                 return redirect()->route('dashboard');
             } else if (Auth::user()->role->role == 'karyawan' && Auth::user()->status_akun == 1) {
                 return redirect()->route('home');
             } else {
-                return redirect()->route('login')->with('error','');
+                auth()->logout();
+                return redirect()->route('login')->with('error','Status akun anda belum Aktif');
             }
         } else {
-            return redirect()->route('login')->withErrors('Username/email dan password tidak sesuai', '')->withInput();
+            return redirect()->route('login')->with('error', 'Username/email dan password tidak sesuai')->withInput();
         }
     }
 
-    public function logout()
+    public function inactive() {
+        return view('inactive');
+    }
+
+    public function logout(Request $request)
     {
         Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
         return redirect()->route('login');
     }
 }

@@ -19,5 +19,6 @@ class Absensi extends Model
         'jam_selesai_istirahat',
         'jam_pulang',
         'jam_total_produktif',
+        'status_kehadiran',
     ];
 }
