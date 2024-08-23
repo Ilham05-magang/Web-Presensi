@@ -29,13 +29,19 @@
                         <div class="flex flex-col gap-4 text-base">
                             <div class="flex flex-col gap-1">
                                 <label for="" class="font-semibold">Username/Email</label>
-                                <input type="text" name="email" class="rounded-lg"
+                                <input type="text" name="email" value="{{old('email')}}" class="rounded-lg"
                                     placeholder="Masukkan username / email">
                             </div>
                             <div class="flex flex-col gap-1">
                                 <label for="" class="font-semibold">Password</label>
-                                <input type="password" name="password" class="rounded-lg"
+                                <div class="relative w-full">
+                                    <input type="password" id="password" name="password" class="pr-8 w-full rounded-lg"
                                     placeholder="Masukkan password">
+                                    <button type="button" id="togglePassword" class="absolute inset-y-0 flex items-center top-[2px] right-4">
+                                        <i id="eyeIconKonfirmasi" class="ri-eye-off-fill"></i>
+                                    </button>
+                                </div>
+                                
                             </div>
                         </div>
                         <div class="flex justify-between text-sm">
@@ -45,7 +51,7 @@
                             </div>
                             <div class="flex gap-1">
                                 <p>Lupa Kata Sandi?</p>
-                                <a href="" class="text-red-700 hover:underline">Reset</a>
+                                <a href="{{route('password.request')}}" class="text-red-700 hover:underline">Reset</a>
                             </div>
                         </div>
                         <div class="flex justify-center">
@@ -61,4 +67,20 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function togglePasswordVisibility(id, iconId) {
+            const passwordField = document.getElementById(id);
+            const eyeIcon = document.getElementById(iconId);
+            const isPassword = passwordField.type === 'password';
+            passwordField.type = isPassword ? 'text' : 'password';
+            eyeIcon.classList.toggle('ri-eye-fill', isPassword);
+            eyeIcon.classList.toggle('ri-eye-off-fill', !isPassword);
+        }
+
+        document.getElementById('togglePassword').addEventListener('click', function () {
+            togglePasswordVisibility('password', 'eyeIcon');
+        });
+
+    </script>
 </x-layout.layoutauth>

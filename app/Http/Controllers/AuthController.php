@@ -123,7 +123,7 @@ class AuthController extends Controller
                 return redirect()->route('home');
             } else {
                 auth()->logout();
-                return redirect()->route('login')->with('error','Status akun anda belum Aktif');
+                return redirect()->route('login')->with('error','Status akun anda belum aktif! Silakan hubungi Admin');
             }
         } else {
             return redirect()->route('login')->with('error', 'Username/email dan password tidak sesuai')->withInput();

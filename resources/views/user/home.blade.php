@@ -13,7 +13,7 @@
                     @method('PUT')
                 @endif
                 @csrf
-                <button {{ $absensi && $absensi->jam_pulang || $izin ? 'disabled' : '' }} type="submit"
+                <button {{ ($absensi && $absensi->jam_pulang) || $izin ? 'disabled' : '' }} type="submit"
                     class="disabled:opacity-20 bg-button w-full text-white font-semibold rounded-xl px-3 py-3 text-sm justify-center gap-1 ">{{ $titleButton ?? 'Masuk' }}</button>
             </form>
             <form action="{{ route('izin') }}" method="post">
@@ -46,17 +46,29 @@
 
         </div> --}}
         <div class="hidden max-md:flex bottom-0 left-0 right-0 px-5 bg-white fixed h-24 w-full items-center gap-4">
-            <a
-                class="flex justify-center items-center w-3/5 h-16 rounded-xl text-white font-bold tracking-widest bg-button">
-                Masuk
-            </a>
-            <button data-modal-target="modal-add" data-modal-toggle="modal-add"
-                class="flex justify-center items-center w-1/5 h-16 rounded-xl bg-button">
-                <img src="assets/file-add-icon.svg" class="mx-auto " alt="icon-log">
-            </button>
-            <a href="/history-log" class="w-1/5 h-16 rounded-xl flex bg-button">
-                <img src="assets/file-history-icon.svg" class="mx-auto w-6" alt="icon-history-log">
-            </a>
+            <form class="flex w-full" action="/presensi" method="POST">
+                @if ($method == 'POST')
+                    @method('POST')
+                @else
+                    @method('PUT')
+                @endif
+                @csrf
+                <button {{ ($absensi && $absensi->jam_pulang) || $izin ? 'disabled' : '' }} type="submit"
+                    class="disabled:opacity-20 flex justify-center items-center w-full h-16 rounded-xl text-white font-bold tracking-widest bg-button">{{ $titleButton ?? 'Masuk' }}</button>
+            </form>
+            <form class="w-full" action="{{ route('izin') }}" method="post">
+                @method('PUT')
+                @csrf
+                <button
+                    {{ $titleButton == 'Kembali' || $titleButton == 'Telah Pulang' || $titleButton == 'Masuk' || $absensi->jam_selesai_izin ? 'disabled' : '' }}
+                    class="disabled:opacity-20 flex w-full justify-center items-center text-white h-16 rounded-xl font-bold tracking-widest bg-button">
+                    @if (empty($absensi->jam_selesai_izin))
+                        {{ $izin == true ? 'Selesai izin' : 'izin' }}
+                    @else
+                        Telah Izin
+                    @endif
+                </button>
+            </form>
         </div>
         <x-popup_modal type="izin"></x-popup_modal>
         <x-popup_modal type=""></x-popup_modal>

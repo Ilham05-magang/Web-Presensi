@@ -3,9 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\UserController;
-use Illuminate\Auth\Notifications\ResetPassword;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -35,11 +35,21 @@ Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'loginindex'])->name('login');
     Route::post('/login', [AuthController::class, 'loginUser'])->name('loginUser');
 
-    Route::get('forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
-    Route::post('forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
-    Route::get('reset-password/{token}', [ResetPassword::class, 'showResetForm'])->name('password.reset');
-    Route::post('reset-password', [ResetPassword::class, 'reset'])->name('password.update');
-    // tambahkan rute lain yang hanya bisa diakses oleh tamu
+    Route::get('/forgot-password', [PasswordController::class, 'showForgotPasswordForm'])
+        ->middleware('guest')
+        ->name('password.request');
+
+    Route::post('/forgot-password', [PasswordController::class, 'sendResetLinkEmail'])
+        ->middleware('guest')
+        ->name('password.email');
+
+    Route::get('/reset-password/{token}', [PasswordController::class, 'showResetPasswordForm'])
+        ->middleware('guest')
+        ->name('password.reset');
+
+    Route::post('/reset-password', [PasswordController::class, 'resetPassword'])
+        ->middleware('guest')
+        ->name('password.update');
 });
 
 Route::middleware(['auth', 'web'])->group(function () {

@@ -1,9 +1,8 @@
 @props(['user'])
 <header>
-    <nav>
-        <div class="flex flex-wrap items-center justify-between mx-auto">
+        <div class="flex h-1/2 flex-wrap items-center justify-between mx-auto">
             <div style="background-image: url('assets/user-dashboard.svg')"
-                class=" w-screen flex items-center flex-col px-10 max-md:px-3 rounded-b-2xl max-md:rounded-none">
+                class=" w-screen h-full flex items-center flex-col px-10 max-md:px-3 rounded-b-2xl max-md:rounded-none">
                 <div class="w-full flex items-center justify-between pt-3 ">
                     <div class="flex items-center gap-2">
                         <i class="ri-calendar-2-line text-2xl text-white max-md:text-base"></i>
@@ -70,6 +69,5 @@
                 </div>
             </div>
         </div>
-    </nav>
     <x-popup_button title="Log out" description="Apa anda yakin ingin keluar?"></x-popup_button>
 </header>
