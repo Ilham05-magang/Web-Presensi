@@ -73,6 +73,7 @@ Route::middleware(['auth', 'web'])->group(function () {
         Route::put('/izin', [UserController::class, 'izin'])->name('izin');
     });
 
+
     Route::middleware(['userAccess:admin'])->group(function () {
 
         #Api Dashboard

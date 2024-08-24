@@ -17,10 +17,11 @@ class DatabaseSeeder extends Seeder
             SeederRoles::class,
             SeederUser::class,
             SeederAdmin::class,
+            SeederShift::class,
             SeederKantor::class,
             SeederDivisi::class,
-            SeederShift::class,
             Seederkaryawan::class,
+            SeederAbsensis::class,
         ]);
     }
 }

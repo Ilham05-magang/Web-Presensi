@@ -21,15 +21,21 @@ class SeederUser extends Seeder
         $adminRoleId = Roles::where('role', 'admin')->first()->id;
 
         // Create a user with the 'karyawan' role
-        Users::create([
-            'role_id' => $karyawanRoleId,
-            'username' => 'karyawan',
-            'email' => 'karyawan@example.com',
-            'password' => Hash::make('12345'),
-            'status_akun' => true,
-            'email_verified_at' => now(),
-            'remember_token' => Str::random(20),
-        ]);
+        $data = [];
+        for ($i = 0; $i < 10; $i++) {
+            $data[] = [
+                'role_id' => $karyawanRoleId,
+                'username' => 'karyawan' . $i,
+                'email' => 'karyawan' . $i . '@example.com',
+                'password' => Hash::make('12345'),
+                'status_akun' => true,
+                'email_verified_at' => now(),
+                'remember_token' => Str::random(20),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        }
+        Users::insert($data);
         // Create a user with the 'admin' role
         Users::create([
             'role_id' => $adminRoleId,

@@ -13,7 +13,7 @@ class Admins extends Model
         'nama',
         'telepon'
     ];
-    public function user(): HasOne {
+    public function user() {
         return $this->hasOne(Users::class,'id', 'akun_id');
     }
 

@@ -77,9 +77,14 @@ class UserController extends Controller
                     'status_kehadiran' => 'Masuk',
                 ]);
                 return redirect()->back()->with('success', 'Berhasil Presensi Masuk');
+            } else if ($absensi->jam_mulai == '')  {
+                $absensi->update([
+                    'jam_mulai' => Carbon::now('Asia/Jakarta')->format('H:i:s'),
+                    'status_kehadiran' => 'Masuk',
+                ]);
             } else {
-                $title = $this->determineButtonTitle($absensi);
                 $this->updateAbsensiTime($absensi);
+                $title = $this->determineButtonTitle($absensi);
                 return redirect()->back()->with('success', 'Berhasil Presensi ' . $title);
             }
         } else {
@@ -141,9 +146,17 @@ class UserController extends Controller
                 }
                 foreach ($fields as $field) {
                     if (empty($absensi->$field)) {
-                        $absensi->update([
-                            $field => Carbon::now('Asia/Jakarta')->format('H:i:s'),
-                        ]);
+                        if ($field == 'jam_izin'){
+                            $absensi->update([
+                                $field => Carbon::now('Asia/Jakarta')->format('H:i:s'),
+                                'status_kehadiran' => 'Izin'
+                            ]);
+                        } else {
+                            $absensi->update([
+                                $field => Carbon::now('Asia/Jakarta')->format('H:i:s'),
+                                'status_kehadiran' => 'Masuk'
+                            ]);
+                        }
                         break;
                     }
                 }
