@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\PresensiController;
 use App\Http\Controllers\DivisiController;
@@ -10,6 +11,7 @@ use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\PengaturanController;
 
 use App\Http\Controllers\UserController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -25,19 +27,41 @@ use App\Http\Controllers\UserController;
 
 
 #auth route
-Route::get('/login', [AuthController::class, 'loginindex'])->name('login');
-Route::get('/register', [AuthController::class, 'registerindex'])->name('register');
 
-Route::post('/register/karyawan', [AuthController::class, 'registerkaryawan'])->name('register.create.karyawan');
 
-Route::get('/admin', [AuthController::class, 'adminindex'])->name('register.admin');
-Route::post('/register/admin', [AuthController::class, 'registeradmin'])->name('register.create.admin');
 
-Route::post('/login', [AuthController::class, 'loginUser'])->name('loginUser');
 
-Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::middleware(['auth'])->group(function () {
+
+Route::middleware('guest')->group(function () {
+    Route::get('/admin', [AuthController::class, 'adminindex'])->name('register.admin');
+    Route::post('/register/admin', [AuthController::class, 'registeradmin'])->name('register.create.admin');
+    Route::get('/register', [AuthController::class, 'registerindex'])->name('register');
+    Route::post('/register/karyawan', [AuthController::class, 'registerkaryawan'])->name('register.create.karyawan');
+    Route::get('/login', [AuthController::class, 'loginindex'])->name('login');
+    Route::post('/login', [AuthController::class, 'loginUser'])->name('loginUser');
+
+    Route::get('/forgot-password', [PasswordController::class, 'showForgotPasswordForm'])
+        ->middleware('guest')
+        ->name('password.request');
+
+    Route::post('/forgot-password', [PasswordController::class, 'sendResetLinkEmail'])
+        ->middleware('guest')
+        ->name('password.email');
+
+    Route::get('/reset-password/{token}', [PasswordController::class, 'showResetPasswordForm'])
+        ->middleware('guest')
+        ->name('password.reset');
+
+    Route::post('/reset-password', [PasswordController::class, 'resetPassword'])
+        ->middleware('guest')
+        ->name('password.update');
+});
+
+Route::middleware(['auth', 'web'])->group(function () {
+    Route::get('/inactive', [AuthController::class, 'inactive'])->name('inactive');
+    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+
     Route::get('/adminhome', function () {
         return view('admintesting');
     })->name('admintesting')->middleware("userAccess:admin");
@@ -45,8 +69,8 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['userAccess:karyawan'])->group(function () {
         Route::get('/', [UserController::class, 'index'])->name('home');
         Route::put('/presensi', [UserController::class, 'presensi'])->name('presensi');
-        Route::get('/history-log', [UserController::class, 'historyLog'])->name('historyLog');
-        Route::get('/data-ganti-jam', [UserController::class, 'gantiJam'])->name('gantiJam');
+        Route::post('/presensi', [UserController::class, 'presensi'])->name('presensi');
+        Route::put('/izin', [UserController::class, 'izin'])->name('izin');
     });
 
     Route::middleware(['userAccess:admin'])->group(function () {

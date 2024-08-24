@@ -9,13 +9,14 @@ use App\Models\Users;
 use App\Models\Karyawan;
 use App\Models\Admins;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 
 class AuthController extends Controller
 {
     public function loginindex()
     {
         $title = 'Masuk Akun';
-        return view('auth.login', compact('title'));
+        return view('auth.login', compact('title'))->with('error','ini errorlah');
     }
 
     public function registerindex()
@@ -49,7 +50,6 @@ class AuthController extends Controller
             'status_akun' => false,
             'role_id' => 1,
             'email_verified_at' => now(),
-            'remember_token' => Str::random(20),
         ]);
 
         Karyawan::create([
@@ -99,36 +99,54 @@ class AuthController extends Controller
     }
 
     public function loginUser(Request $request)
-    {
-        $request->validate([
-            'email' => 'required',
-            'password' => 'required'
-        ]);
-        // mengecek ygd dimasukkan apakah email atau username
-        $loginType = filter_var($request->email, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+{
+    $request->validate([
+        'email' => 'required',
+        'password' => 'required'
+    ]);
 
-        // inputan user untuk login
-        $infologin = [
-            $loginType => $request->email,
-            'password' => $request->password,
-        ];
+    // Menentukan input email atau username
+    $loginType = filter_var($request->email, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
 
-        if (Auth::attempt($infologin)) {
-            if (Auth::user()->role->role == 'admin' && Auth::user()->status_akun == 1) {
-                return redirect()->route('dashboard');
-            } else if (Auth::user()->role->role == 'karyawan' && Auth::user()->status_akun == 1) {
-                return redirect()->route('home');
-            } else {
-                return redirect()->route('login')->with('error','');
-            }
-        } else {
-            return redirect()->route('login')->withErrors('Username/email dan password tidak sesuai', '')->withInput();
-        }
+    // Mengecek apakah tedapat email atau username yang sama di tabel user
+    $user = Users::where($loginType, $request->email)->first();
+
+    if (!$user) {
+        return redirect()->route('login')->with('error', 'Username/email tidak ditemukan')->withInput();
     }
 
-    public function logout()
+    // Mengecek apakah password 
+    if (!Hash::check($request->password, $user->password)) {
+        return redirect()->route('login')->with('error', 'Password yang dimasukkan salah')->withInput();
+    }
+
+    $infologin = [
+        $loginType => $request->email,
+        'password' => $request->password,
+    ];
+    $remember = $request->input('remember_me');
+
+    if (Auth::attempt($infologin, $remember)) {
+        Cookie::queue('email', $request->email, 60 * 24 * 30); // Store for 30 days
+        
+        if (Auth::user()->role->role == 'admin' && Auth::user()->status_akun == 1) {
+            return redirect()->route('dashboard');
+        } else if (Auth::user()->role->role == 'karyawan' && Auth::user()->status_akun == 1) {
+            return redirect()->route('home');
+        } else {
+            auth()->logout();
+            return redirect()->route('login')->with('error', 'Status akun anda belum aktif! Silakan hubungi Admin');
+        }
+    } else {
+        return redirect()->route('login')->with('error', 'Username/email dan password tidak sesuai')->withInput();
+    }
+}
+
+    public function logout(Request $request)
     {
         Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
         return redirect()->route('login');
     }
 }

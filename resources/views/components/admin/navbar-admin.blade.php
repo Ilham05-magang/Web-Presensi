@@ -90,7 +90,7 @@
                 <a href="{{ route('logout') }}"
                     class="flex items-center p-2 text-gray-700 rounded-lg dark:text-white hover:bg-[#242947] hover:text-white">
                     <i class="flex-shrink-0 text-2xl font-medium transition duration-75 ri-logout-box-line "></i>
-                    <span class="flex-1 ms-3 whitespace-nowrap">Sign out</span>
+                    <a href="{{route('logout')}}" class="flex-1 ms-3 whitespace-nowrap">Sign out</a>
                 </a>
             </li>
         </ul>

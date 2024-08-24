@@ -9,7 +9,7 @@
     <link rel="shortcut icon" href="assets/logo.png" type="image/x-icon">
 </head>
 <body>
-    <Main class="font-inter">
+    <Main class="font-inter h-screen">
         {{ $slot }}
     </Main>
 </body>

@@ -8,6 +8,7 @@
     <title>{{ $title }}</title>
     <link rel="shortcut icon" href="assets/logo.png" type="image/x-icon">
     <script src="//unpkg.com/alpinejs" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
     <Main class="h-screen max-w-screen-xl mx-auto">

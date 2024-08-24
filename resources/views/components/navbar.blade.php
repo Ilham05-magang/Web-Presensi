@@ -1,9 +1,37 @@
 @props(['user'])
+@php
+use Carbon\Carbon;
+
+    $monthAbbreviations = [
+        '01' => 'JAN',
+        '02' => 'FEB',
+        '03' => 'MAR',
+        '04' => 'APR',
+        '05' => 'MAY',
+        '06' => 'JUN',
+        '07' => 'JUL',
+        '08' => 'AGST',
+        '09' => 'SEP',
+        '10' => 'OCT',
+        '11' => 'NOV',
+        '12' => 'DEC'
+    ];
+
+    // Konversi ke date
+    $carbonDate = Carbon::parse($user->created_at);
+
+    // Format bulan
+    $month = $carbonDate->format('m');
+    $monthAbbreviation = $monthAbbreviations[$month];
+
+    // Format tahun
+    $year = $carbonDate->format('Y');
+    $formattedDate = $monthAbbreviation . $year;  
+@endphp
 <header>
-    <nav>
-        <div class="flex flex-wrap items-center justify-between mx-auto">
+        <div class="flex h-1/2 flex-wrap items-center justify-between mx-auto">
             <div style="background-image: url('assets/user-dashboard.svg')"
-                class=" w-screen flex items-center flex-col px-10 max-md:px-3 rounded-b-2xl max-md:rounded-none">
+                class=" w-screen h-full flex items-center flex-col px-10 max-md:px-3 rounded-b-2xl max-md:rounded-none">
                 <div class="w-full flex items-center justify-between pt-3 ">
                     <div class="flex items-center gap-2">
                         <i class="ri-calendar-2-line text-2xl text-white max-md:text-base"></i>
@@ -33,7 +61,7 @@
                     }"
                         x-init="updateTime()" x-text="time"></span>
                 </div>
-                <div class="py-6 text-white font-semibold italic text-2xl max-md:text-base max-md:py-20"
+                <div class="py-12 text-white font-semibold italic text-2xl max-md:text-base max-md:py-20"
                     x-data="{
                         quotes: [
                             'Change your life for a better future',
@@ -62,7 +90,7 @@
                             <div class="font-medium text-white text-base max-md:text-xs max-md:leading-none">
                                 {{ $user->karyawan->nama }}</div>
                             <div class="font-light text-white text-xs max-md:text-[10px] max-md:leading-none">
-                                MJ/UIUX/POLINES/AGST2023/06</div>
+                                K/{{$user->karyawan->divisi->divisi ?? '???'}}/{{$user->karyawan->nip ?? '???'}}/{{$formattedDate}}/{{$user->karyawan->id ?? '???'}}</div>
                         </div>
                     </div>
                     <i data-modal-target="popup-modal" data-modal-toggle="popup-modal"
@@ -70,6 +98,5 @@
                 </div>
             </div>
         </div>
-    </nav>
     <x-popup_button title="Log out" description="Apa anda yakin ingin keluar?"></x-popup_button>
 </header>
