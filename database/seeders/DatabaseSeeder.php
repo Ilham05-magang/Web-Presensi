@@ -21,7 +21,6 @@ class DatabaseSeeder extends Seeder
             SeederDivisi::class,
             SeederShift::class,
             Seederkaryawan::class,
-            SeederAbsensi::class,
         ]);
     }
 }
