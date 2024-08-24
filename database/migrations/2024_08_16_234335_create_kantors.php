@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('kantors', function (Blueprint $table) {
             $table->id();
             $table->string('nama')->nullable(false);
-            $table->string('link_gmaps')->nullable(false);
+            $table->string('link_gmaps')->nullable();
             $table->timestamps();
         });
     }

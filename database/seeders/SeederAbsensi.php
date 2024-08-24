@@ -17,39 +17,13 @@ class SeederAbsensi extends Seeder
     {
         $karyawanID = Karyawan::where('nip', '343565433')->first()->id;
         $shift = Shift::where('nama', 'Shift pagi')->first();
-
-        $jamDefaultMulai = Carbon::createFromFormat('H:i:s', $shift->jam_mulai);
-        $jamDefaultPulang = Carbon::createFromFormat('H:i:s', $shift->jam_pulang);
-
-        $jamMulai = Carbon::createFromFormat('H:i:s', '06:26:00');
-        $jamPulang = Carbon::createFromFormat('H:i:s', '13:00:00');
-
-        // Jika jamMulai kurang dari jamDefaultMulai, gunakan jamDefaultMulai
-        if ($jamMulai->lessThan($jamDefaultMulai)) {
-            $jamMulai = $jamDefaultMulai;
-        }
-
-        // Jika jamPulang kurang dari jamDefaultPulang, gunakan jamDefaultPulang
-        if ($jamPulang->lessThan($jamDefaultPulang)) {
-            $jamPulang = $jamDefaultPulang;
-        }
-
-        $jamIstirahatMulai = Carbon::createFromFormat('H:i:s', '00:00:00');
-        $jamIstirahatSelesai = Carbon::createFromFormat('H:i:s', '00:00:00');
-
-        // Hitung total waktu kerja
-        $totalWaktu = $jamPulang->diffInSeconds($jamMulai);
-        // Hitung waktu istirahat
-        $waktuIstirahat = $jamIstirahatSelesai->diffInSeconds($jamIstirahatMulai);
-
-        // Hitung waktu produktif
-        $jamTotalProduktif = $totalWaktu - $waktuIstirahat;
-        $jamTotalProduktifFormatted = gmdate('H:i:s', $jamTotalProduktif);
+        $jam_mulai = $shift->jam_mulai;
 
         Absensi::create([
             'karyawan_id' => $karyawanID,
             'shift_id' => $shift->id,
-            'tanggal' => Carbon::now()->format('Y-m-d'), // Format tanggal sesuai dengan penyimpanan di database
+            'status_kehadiran'=> $jam_mulai ? 'Tidak Masuk' : ' Hadir',
+            'tanggal' => Carbon::now()->format('Y-m-d'),
         ]);
     }
 }

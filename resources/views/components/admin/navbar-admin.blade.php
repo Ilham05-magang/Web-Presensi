@@ -1,4 +1,4 @@
-@props(['dataadmin'=>null])
+@props(['dataadmin'])
 <nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
     <div class="px-3 py-3 lg:px-5 lg:pl-3">
         <div class="flex items-center justify-between">
@@ -67,10 +67,27 @@
                 <x-admin.li-navbar route="dashboard.divisi" title="Divisi" icon="ri-group-2-fill" />
                 <x-admin.li-navbar route="dashboard.laporan" title="Laporan" icon="ri-folder-chart-fill" />
                 <x-admin.li-navbar route="dashboard.karyawan" title="Karyawan" icon="ri-team-fill" />
-                <x-admin.li-navbar route="dashboard.pengaturan" title="Pengaturan" icon="ri-user-settings-fill" />
+                <button id="dropdownPengaturanButton" data-dropdown-toggle="dropdownPengaturan"
+                    class="flex items-center p-2 text-gray-700 rounded-lg dark:text-white hover:bg-[#242947] hover:text-white {{ request()->routeIs('dashboard.pengaturan.profile') || request()->routeIs('dashboard.pengaturan.kantor') || request()->routeIs('dashboard.pengaturan.shift') ? 'bg-[#242947] text-white' : '' }}">
+                    <i class="flex-shrink-0 text-2xl font-medium transition duration-75 ri-user-settings-fill "></i>
+                    <span class="ms-3 hover:text-white">Pengaturan</span>
+                    <svg class="w-2.5 h-2.5 ms-20" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 10 6">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="m1 1 4 4 4-4" />
+                </button>
+                <div id="dropdownPengaturan"
+                    class="z-10 hidden w-56 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700">
+                    <ul class="py-2 text-base text-gray-700 dark:text-gray-200"
+                        aria-labelledby="dropdownPengaturanButton">
+                        <x-admin.li-navbar route="dashboard.pengaturan.profile" title="Profile" />
+                        <x-admin.li-navbar route="dashboard.pengaturan.kantor" title="Kantor" />
+                        <x-admin.li-navbar route="dashboard.pengaturan.shift" title="Shift" />
+                    </ul>
+                </div>
             </div>
             <li class="absolute w-full pr-6 bottom-7 ">
-                <a href="#"
+                <a href="{{ route('logout') }}"
                     class="flex items-center p-2 text-gray-700 rounded-lg dark:text-white hover:bg-[#242947] hover:text-white">
                     <i class="flex-shrink-0 text-2xl font-medium transition duration-75 ri-logout-box-line "></i>
                     <span class="flex-1 ms-3 whitespace-nowrap">Sign out</span>

@@ -21,3 +21,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+flatpickr("#time-picker", {
+    enableTime: true,
+    noCalendar: true,
+    dateFormat: "H:i:S", // Include seconds
+    time_24hr: true, // Use 24-hour format
+    enableSeconds: true, // Enable seconds
+    minuteIncrement: 1, // Allow minute increments
+    secondIncrement: 1 // Allow second increments
+});
+

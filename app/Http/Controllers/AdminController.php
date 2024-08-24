@@ -8,6 +8,7 @@ use App\Models\Absensi;
 use App\Models\Divisi;
 use App\Models\Shift;
 use App\Models\Users;
+use App\Models\Kantor;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\View;
 
@@ -15,41 +16,18 @@ class AdminController extends Controller
 {
     public function indexAdmin()
     {
+        $dateQuery = Carbon::now()->format('Y-m-d');
+        $totalkaryawan = Karyawan::All()->count();
+
+        $dataAbsensi = Karyawan::with(['absensi' => function($query) use ($dateQuery) {
+            $query->whereDate('tanggal', $dateQuery);
+        }])->get();
+        $statusMasuk = Absensi::where('status_kehadiran', 'Masuk')->whereDate('tanggal', $dateQuery)->count();
+
+        $totalIzin = Absensi::where('status_kehadiran', 'Izin')->whereDate('tanggal', $dateQuery)->count();
+        $totalmasuk = $statusMasuk;
+        $totaltidakmasuk = $totalkaryawan - $statusMasuk - $totalIzin;
         $title = 'Dashboard Karyawan';
-        return view('admin.dashboard', compact('title'));
-    }
-    public function PresensiAdmin()
-    {
-        $datenow = Carbon::now()->format('d-m-Y');
-        $title = 'Presensi Karyawan';
-        $title2 = 'Data Presensi Karyawan';
-        return view('admin.Presensi', compact('title','title2','datenow'));
-    }
-    public function DivisiAdmin()
-    {
-        $datenow = Carbon::now()->format('Y-m-d');
-        $title = 'Divisi';
-        $title2= 'Daftar Divisi';
-        return view('admin.divisi', compact('title','title2'));
-    }
-    public function LaporanAdmin()
-    {
-        $datenow = Carbon::now()->format('Y-m-d');
-        $title = 'Laporan';
-        $title2 = 'Data Laporan';
-        return view('admin.laporan', compact('title', 'title2'));
-    }
-    public function KaryawanAdmin()
-    {
-        $datenow = Carbon::now()->format('Y-m-d');
-        $title = 'Karyawan';
-        $title2 = 'Data Karyawan';
-        return view('admin.karyawan', compact('title','title2'));
-    }
-    public function PengaturanAdmin()
-    {
-        $datenow = Carbon::now()->format('Y-m-d');
-        $title = 'Pengaturan';
-        return view('admin.pengaturan', compact('title'));
+        return view('admin.dashboard', compact('title','totalkaryawan','totalmasuk','totaltidakmasuk','totalIzin'));
     }
 }

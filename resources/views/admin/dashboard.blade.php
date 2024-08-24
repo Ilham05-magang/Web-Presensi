@@ -9,7 +9,7 @@
             <div class="h-48 bg-green-400 border-[1px] border-green-600 shadow-xl shadow-green-700/50 rounded-2xl">
                 <div class="px-5 pt-5">
                     <h2>Jumlah Karyawan</h2>
-                    <h1 class="mt-2 text-4xl font-bold">2000</h1>
+                    <h1 class="mt-2 text-4xl font-bold">{{ $totalkaryawan }}</h1>
                 </div>
                 <i
                     class=" flex justify-end w-full h-full pt-10 font-medium text-[90px] text-right ri-team-line text-green-500"></i>
@@ -17,7 +17,7 @@
             <div class="h-48 bg-green-400 border-[1px] border-green-700 shadow-xl shadow-green-700/50 rounded-2xl">
                 <div class="px-5 pt-5">
                     <h2>Jumlah Masuk</h2>
-                    <h1 class="mt-2 text-4xl font-bold">2000</h1>
+                    <h1 class="mt-2 text-4xl font-bold">{{ $totalmasuk }}</h1>
                 </div>
                 <i
                     class="flex justify-end w-full h-full pt-10 font-medium text-[90px] text-right ri-user-received-line text-green-500"></i>
@@ -66,8 +66,8 @@
             </div>
             <div class="h-48 bg-red-500 border-[1px] border-red-600 shadow-xl shadow-red-700/50 rounded-2xl">
                 <div class="px-5 pt-5">
-                    <h2>Jumlah Tidak Hadir</h2>
-                    <h1 class="mt-2 text-4xl font-bold">2000</h1>
+                    <h2>Jumlah Tidak Masuk</h2>
+                    <h1 class="mt-2 text-4xl font-bold">{{ $totaltidakmasuk }}</h1>
                 </div>
                 <i
                     class="flex justify-end w-full h-full pt-10 font-medium text-[90px] text-right ri-user-unfollow-line text-red-600"></i>
@@ -75,7 +75,7 @@
             <div class="h-48 bg-yellow-400 border-[1px] border-yellow-700 shadow-xl shadow-yellow-700/50 rounded-2xl">
                 <div class="px-5 pt-5">
                     <h2>Jumlah Izin</h2>
-                    <h1 class="mt-2 text-4xl font-bold">2000</h1>
+                    <h1 class="mt-2 text-4xl font-bold">{{ $totalIzin }}</h1>
                 </div>
                 <i
                     class="flex justify-end w-full h-full pt-10 font-medium text-[90px] text-right ri-user-minus-line text-yellow-500"></i>

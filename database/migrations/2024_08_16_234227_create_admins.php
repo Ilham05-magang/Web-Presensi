@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('admins', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('akun_id')->nullable(false);
-            $table->foreign('akun_id')->references('id')->on('users');
+            $table->foreign('akun_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('nama')->nullable(false);
             $table->string('telepon')->nullable(false);
             $table->timestamps();

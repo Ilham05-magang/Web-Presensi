@@ -67,6 +67,16 @@
                                     Password tidak sama
                                 </div>
                             @endif
+                            @if ($errors->has('username'))
+                                <div class="w-full mb-2 text-base text-center text-red-500">
+                                    Username Telah Dipakai
+                                </div>
+                            @endif
+                            @if ($errors->has('email'))
+                                <div class="w-full mb-2 text-base text-center text-red-500">
+                                    Email sudah digunakan
+                                </div>
+                            @endif
                             <div class="flex justify-center">
                                 <button type="submit"
                                     class="bg-button px-3 py-2 text-white w-36 shadow-lg shadow-black/30 rounded-lg font-semibold hover:bg-[#ADB5BD] hover:border-button hover:border-[1px] border-[1px] border-button">

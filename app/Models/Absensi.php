@@ -18,6 +18,11 @@ class Absensi extends Model
         'jam_selesai_izin',
         'jam_selesai_istirahat',
         'jam_pulang',
+        'status_kehadiran',
         'jam_total_produktif',
     ];
+    public function karyawan()
+    {
+        return $this->belongsTo(Karyawan::class, 'karyawan_id', 'id');
+    }
 }

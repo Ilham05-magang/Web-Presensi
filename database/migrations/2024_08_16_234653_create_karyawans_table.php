@@ -14,13 +14,13 @@ return new class extends Migration
         Schema::create('karyawans', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('akun_id')->nullable(false);
-            $table->foreign('akun_id')->references('id')->on('users');
+            $table->foreign('akun_id')->references('id')->on('users')->onDelete('cascade');
             $table->unsignedBigInteger('kantor_id')->nullable();
-            $table->foreign('kantor_id')->references('id')->on('kantors');
+            $table->foreign('kantor_id')->references('id')->on('kantors')->nullOnDelete();
             $table->unsignedBigInteger('divisi_id')->nullable();
-            $table->foreign('divisi_id')->references('id')->on('divisis');
+            $table->foreign('divisi_id')->references('id')->on('divisis')->nullOnDelete();
             $table->unsignedBigInteger('shift_id')->nullable();
-            $table->foreign('shift_id')->references('id')->on('shifts');
+            $table->foreign('shift_id')->references('id')->on('shifts')->nullOnDelete();
             $table->string('nama')->nullable(false);
             $table->string('nip')->nullable();
             $table->string('telepon')->nullable(false);
