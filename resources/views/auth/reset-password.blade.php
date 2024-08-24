@@ -13,13 +13,23 @@
                 <button type="button" id="togglePassword" class="absolute inset-y-0 flex items-center top-0 right-6">
                     <i id="eyeIcon" class="ri-eye-off-fill"></i>
                 </button>
-            </div>  
+            </div>
             <div class="relative w-full">
                 <input type="password" name="password_confirmation" id="password_confirmation" class="w-full  pl-4 pr-11 rounded-3xl text-sm" placeholder="Konfirmasi password" required>
                 <button type="button" id="toggleKonfirmasiPassword" class="absolute inset-y-0 flex items-center top-0 right-6">
                     <i id="eyeIconKonfirmasi" class="ri-eye-off-fill"></i>
                 </button>
             </div>
+            @if (session('error'))
+                <div class="bg-gray-100 p-5 text-red-600 rounded-md">
+                    {{ session('error') }}
+                </div>
+            @endif
+            @if (session('success'))
+                <div class="bg-gray-100 p-5 text-green-400 rounded-md">
+                    {{ session('success') }}
+                </div>
+            @endif
             {{-- <input placeholder="Ketikkan password baru" class="w-full max-w-96 px-4 rounded-3xl" id="password" type="password" name="password" required>
             <input placeholder="Konfirmasi password" class="w-full max-w-96 px-4 rounded-3xl" id="password-confirm" type="password" name="password_confirmation" required> --}}
             <button class="max-w-56 w-full rounded-3xl px-4 py-3 bg-[#A4161A] text-white" type="submit">Reset Password</button>
