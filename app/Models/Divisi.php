@@ -9,6 +9,6 @@ class Divisi extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'nama'
+        'divisi'
     ];
 }

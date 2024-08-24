@@ -1,8 +1,8 @@
 <x-layout.layout-reset-password>
     <x-slot:title>Lupa Sandi</x-slot:title>
     <div class="flex gap-3 mb-4 items-center p-4">
-        <i class="ri-arrow-left-s-line"></i>
-        <a href="{{route('login')}}" class="font-semibold ">Kembali ke halaman utama</a>
+        <a href="{{ route('login') }}" class="font-semibold "> <i class="ri-arrow-left-s-line"></i>
+            Kembali ke halaman login</a>
     </div>
     @if (session('status'))
         <div class="bg-gray-100 p-5 text-center text-green-400 rounded-md">{{ session('status') }}</div>
@@ -18,9 +18,11 @@
             <div class="text-center font-normal max-w-sm w-f">Masukkan email yang ditautkan ke akun Anda.
                 Kami akan mengirimkan email konfirmasi
                 untuk mengubah kata sandi Anda.</div>
-            <input placeholder="example@gmail.com" class="w-full max-w-96 px-4 rounded-3xl" id="email" type="email"
-                name="email" value="{{ old('email') }}" required class="border w-full rounded-md shadow-sm">
-            <button type="submit" class="max-w-56 w-full rounded-3xl px-4 py-3 bg-[#A4161A] text-white">Continue</button>
+            <input placeholder="example@gmail.com" class="w-full max-w-96 px-4 rounded-3xl" id="email"
+                type="email" name="email" value="{{ old('email') }}" required
+                class="border w-full rounded-md shadow-sm">
+            <button type="submit"
+                class="max-w-56 w-full rounded-3xl px-4 py-3 bg-[#A4161A] text-white">Continue</button>
 
         </div>
     </form>

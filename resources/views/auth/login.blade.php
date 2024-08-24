@@ -29,13 +29,13 @@
                         <div class="flex flex-col gap-4 text-base">
                             <div class="flex flex-col gap-1">
                                 <label for="" class="font-semibold">Username/Email</label>
-                                <input type="text" name="email" value="{{old('email')}}" class="rounded-lg"
+                                <input type="text" required name="email" value="{{old('email')}}" class="rounded-lg"
                                     placeholder="Masukkan username / email">
                             </div>
                             <div class="flex flex-col gap-1">
                                 <label for="" class="font-semibold">Password</label>
                                 <div class="relative w-full">
-                                    <input type="password" id="password" name="password" class="pr-8 w-full rounded-lg"
+                                    <input required type="password" id="password" name="password" class="pr-8 w-full rounded-lg"
                                     placeholder="Masukkan password">
                                     <button type="button" id="togglePassword" class="absolute inset-y-0 flex items-center top-[2px] right-4">
                                         <i id="eyeIconKonfirmasi" class="ri-eye-off-fill"></i>

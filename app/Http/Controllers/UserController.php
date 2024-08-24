@@ -14,12 +14,14 @@ class UserController extends Controller
         $user = auth()->user();
         $tanggalHariIni = Carbon::today()->toDateString();
 
+        // Mendapatkan absensi hari ini user jika ada
         $absensi = Absensi::where('karyawan_id', $user->karyawan->id)
             ->where('tanggal', $tanggalHariIni)
             ->first();
+        // Mengecek apakah user sedang izin atau tidak
         if (!empty($absensi->jam_izin) && empty($absensi->jam_selesai_izin)) {
             $izin = true;
-        } else { 
+        } else {
             $izin = false;
         }
 
@@ -31,6 +33,7 @@ class UserController extends Controller
         return view('user.home', compact('user', 'absensi', 'titleButton', 'izin'));
     }
 
+    // Fungsi untuk menentukan nama button presensi
     private function determineButtonTitle($absensi)
     {
         if ($absensi == null) {
@@ -63,21 +66,28 @@ class UserController extends Controller
         $karyawanId = $user->karyawan->id;
         $shiftId = $user->karyawan->shift_id;
 
-        if ($absensi == '') {
-            Absensi::create([
-                'karyawan_id' => $karyawanId,
-                'shift_id' => $shiftId,
-                'tanggal' => Carbon::now()->format('Y-m-d'),
-                'jam_mulai' => Carbon::now('Asia/Jakarta')->format('H:i:s'),
-                'status_kehadiran' => 'Masuk',
-            ]);
-        } else { 
-            $this->updateAbsensiTime($absensi);
+        if ($shiftId != '') {
+            // Cek apakah user memiliki sudah presensi hari ini
+            if ($absensi == '') {
+                Absensi::create([
+                    'karyawan_id' => $karyawanId,
+                    'shift_id' => $shiftId,
+                    'tanggal' => Carbon::now()->format('Y-m-d'),
+                    'jam_mulai' => Carbon::now('Asia/Jakarta')->format('H:i:s'),
+                    'status_kehadiran' => 'Masuk',
+                ]);
+                return redirect()->back()->with('success', 'Berhasil Presensi Masuk');
+            } else {
+                $title = $this->determineButtonTitle($absensi);
+                $this->updateAbsensiTime($absensi);
+                return redirect()->back()->with('success', 'Berhasil Presensi ' . $title);
+            }
+        } else {
+            return redirect()->back()->with('error', 'Shift belum ditentukan, silakan hubungi admin');
         }
-
-        return redirect()->back();
     }
 
+    // Update absensi
     private function updateAbsensiTime($absensi)
     {
         $fields = [
@@ -88,24 +98,27 @@ class UserController extends Controller
 
         foreach ($fields as $field) {
             if (empty($absensi->$field)) {
+                // Jika jam_pulang kosong maka hitung jam produktif
                 if ($field == 'jam_pulang') {
                     $jamProduktif = $this->totalProduktif($absensi);
                     $absensi->update([
                         $field => Carbon::now('Asia/Jakarta')->format('H:i:s'),
                         'jam_total_produktif' => $jamProduktif
                     ]);
-                    break; 
+                    break;
                 } else {
                     $absensi->update([
                         $field => Carbon::now('Asia/Jakarta')->format('H:i:s'),
                     ]);
-                    break; 
+                    break;
                 }
             }
         }
     }
 
-    public function izin(){
+    // Update jam izin
+    public function izin()
+    {
         $fields = [
             'jam_izin',
             'jam_selesai_izin',
@@ -116,18 +129,34 @@ class UserController extends Controller
             ->where('tanggal', $tanggalHariIni)
             ->first();
 
-        foreach ($fields as $field) {
-            if (empty($absensi->$field)) {
-                $absensi->update([
-                    $field => Carbon::now('Asia/Jakarta')->format('H:i:s'),
-                ]);
-                break;  
+
+        if ($user->karyawan->shift_id != '') {
+            // Cek apakah user memiliki sudah presensi hari ini
+            if ($absensi != '') {
+                $message = 'Izin';
+                if (!empty($absensi->jam_izin) && empty($absensi->jam_selesai_izin)) {
+                    $message = 'Izin';
+                } else {
+                    $message = 'Selesai Izin';
+                }
+                foreach ($fields as $field) {
+                    if (empty($absensi->$field)) {
+                        $absensi->update([
+                            $field => Carbon::now('Asia/Jakarta')->format('H:i:s'),
+                        ]);
+                        break;
+                    }
+                }
+                return redirect()->back()->with('success', 'Berhasil Presensi ' . $message);
             }
+        } else {
+            return redirect()->back()->with('error', 'Shift belum ditentukan, silakan hubungi admin');
         }
-        return redirect()->back();
     }
 
-    private function totalProduktif($absensi) {
+    // Menghitung jam produktif
+    private function totalProduktif($absensi)
+    {
 
         // Konversi string waktu menjadi objek Carbon
         $jamMulai = Carbon::parse($absensi->jam_mulai);

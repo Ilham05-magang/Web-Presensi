@@ -22,11 +22,15 @@ class Karyawan extends Model
         'telepon',
     ];
 
-    public function shift(): BelongsTo {
-        return $this->belongsTo(Shift::class,'shift_id', 'id');
+    public function shift()  {
+        return $this->belongsTo(Shift::class,'shift_id');
     }
 
-    public function kantor(): HasOne {
-        return $this->hasOne(Kantor::class,'id', 'kantor_id');
+    public function kantor() {
+        return $this->belongsTo(Kantor::class,'kantor_id');
+    }
+
+    public function divisi() {
+        return $this->belongsTo(Divisi::class,'divisi_id');
     }
 }
