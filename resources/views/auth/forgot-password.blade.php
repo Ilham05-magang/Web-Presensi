@@ -10,6 +10,9 @@
     @if (session('error'))
         <div class="bg-gray-100 p-5 text-center text-red-600 rounded-md">{{ session('error') }}</div>
     @endif
+    @if (session('email'))
+        <div class="bg-gray-100 p-5 text-center text-red-600 rounded-md">{{ session('email') }}</div>
+    @endif
     <form class="flex items-center h-5/6 justify-center p-4" method="POST" action="{{ route('password.email') }}">
         @csrf
         @method('POST')
