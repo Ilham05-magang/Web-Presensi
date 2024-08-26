@@ -22,46 +22,30 @@
                 <i
                     class="flex justify-end w-full h-full pt-10 font-medium text-[90px] text-right ri-user-received-line text-green-500"></i>
             </div>
-            <div class="row-span-2 h-full bg-gray-500/90 border-[1px] border-gray-700 shadow-xl shadow-gray-700/50 rounded-2xl">
+            <div
+                class="row-span-2 h-full bg-gray-500/90 border-[1px] border-gray-700 shadow-xl shadow-gray-700/50 rounded-2xl">
                 <div class="p-5 overflow-y-auto">
                     <h2>Aktivitas Terbaru</h2>
-                    <div class="flex flex-col gap-1 pt-2 text-sm font-semibold">
-                        <div class="flex gap-1">
-                            <i class="font-medium ri-map-pin-user-line"></i>
-                            <h2>Dwi log in</h2>
-                            <p class="font-medium">21 menit yang lalu</p>
-                        </div>
-                        <div class="flex gap-1">
-                            <i class="font-medium ri-map-pin-user-line"></i>
-                            <h2>Dwi log in</h2>
-                            <p class="font-medium">21 menit yang lalu</p>
-                        </div>
-                        <div class="flex gap-1">
-                            <i class="font-medium ri-map-pin-user-line"></i>
-                            <h2>Dwi log in</h2>
-                            <p class="font-medium">21 menit yang lalu</p>
-                        </div>
-                        <div class="flex gap-1">
-                            <i class="font-medium ri-map-pin-user-line"></i>
-                            <h2>Dwi log in</h2>
-                            <p class="font-medium">21 menit yang lalu</p>
-                        </div>
-                        <div class="flex gap-1">
-                            <i class="font-medium ri-map-pin-user-line"></i>
-                            <h2>Dwi log in</h2>
-                            <p class="font-medium">21 menit yang lalu</p>
-                        </div>
-                        <div class="flex gap-1">
-                            <i class="font-medium ri-map-pin-user-line"></i>
-                            <h2>Dwi log in</h2>
-                            <p class="font-medium">21 menit yang lalu</p>
-                        </div>
-                        <div class="flex gap-1">
-                            <i class="font-medium ri-map-pin-user-line"></i>
-                            <h2>Dwi log in</h2>
-                            <p class="font-medium">21 menit yang lalu</p>
-                        </div>
+                    <div class="pt-2">
+                        <table >
+                            <tbody class="text-white">
+                                @foreach ($aktivitas as $aktivitas)
+                                    <tr>
+                                        <td class="text-sm p-1 ">
+                                            {{ $aktivitas->karyawan->nama }}
+                                        </td>
+                                        <td class="p-1 whitespace-nowrap text-xs ">
+                                            {{ $aktivitas->deskripsi }}
+                                        </td>
+                                        <td class="p-1 tracking-tighter whitespace-nowrap text-xs ">
+                                            {{ $aktivitas->created_at->diffForHumans() }}
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
+
                 </div>
             </div>
             <div class="h-48 bg-red-500 border-[1px] border-red-600 shadow-xl shadow-red-700/50 rounded-2xl">

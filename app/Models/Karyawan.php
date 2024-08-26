@@ -22,22 +22,30 @@ class Karyawan extends Model
         'telepon',
     ];
 
-    public function shift()  {
-        return $this->belongsTo(Shift::class,'shift_id');
+    public function shift()
+    {
+        return $this->belongsTo(Shift::class, 'shift_id');
     }
 
-    public function kantor(){
+    public function kantor()
+    {
         return $this->belongsTo(Kantor::class, 'kantor_id');
     }
-    public function divisi(){
+    public function divisi()
+    {
         return $this->belongsTo(Divisi::class, 'divisi_id');
     }
-    public function akun(){
+    public function akun()
+    {
         return $this->belongsTo(Users::class, 'akun_id');
     }
     public function absensi()
-{
-    return $this->hasMany(Absensi::class, 'karyawan_id', 'id');
-}
+    {
+        return $this->hasMany(Absensi::class, 'karyawan_id', 'id');
+    }
 
+    public function aktivitas() 
+    {
+        return $this->hasMany(Aktivitas::class,'karyawan_id');
+    }
 }
