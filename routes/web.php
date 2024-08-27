@@ -99,6 +99,12 @@ Route::middleware(['auth', 'web'])->group(function () {
         Route::put('/dashboard/pengaturan/editshift/{id}', [PengaturanController::class, 'PengaturanEditShift'])->name('dashboard.pengaturan.editshift');
         Route::delete('/dashboard/pengaturan/deleteshift/{id}', [PengaturanController::class, 'PengaturanDeleteShift'])->name('dashboard.pengaturan.deleteshift');
 
+        
+        Route::get('/dashboard/pengaturan/tanggal', [PengaturanController::class, 'PengaturanTanggal'])->name('dashboard.pengaturan.tanggal');
+        Route::post('/dashboard/pengaturan/tambahTanggal', [PengaturanController::class, 'PengaturanTambahTanggal'])->name('dashboard.pengaturan.tambahtanggal');
+        Route::put('/dashboard/pengaturan/edittanggal/{id}', [PengaturanController::class, 'PengaturanEditTanggal'])->name('dashboard.pengaturan.edittanggal');
+        Route::delete('/dashboard/pengaturan/deletetanggal/{id}', [PengaturanController::class, 'PengaturanDeleteTanggal'])->name('dashboard.pengaturan.deletetanggal');
+
 
         #Api Karyawan
         Route::get('/dashboard/karyawan', [KaryawanController::class, 'KaryawanAdmin'])->name('dashboard.karyawan');

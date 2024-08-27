@@ -133,10 +133,6 @@ class AuthController extends Controller
         if (Auth::user()->role->role == 'admin' && Auth::user()->status_akun == 1) {
             return redirect()->route('dashboard');
         } else if (Auth::user()->role->role == 'karyawan' && Auth::user()->status_akun == 1) {
-            Aktivitas::create([
-                'karyawan_id'=> auth()->user()->karyawan->id,
-                'deskripsi'=> 'Login',
-            ]);
             return redirect()->route('home');
         } else {
             auth()->logout();

@@ -8,6 +8,7 @@ use App\Models\Divisi;
 use App\Models\Shift;
 use App\Models\Users;
 use App\Models\Kantor;
+use App\Models\TanggalLibur;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
@@ -235,5 +236,56 @@ class PengaturanController extends Controller
         $shift->delete();
         return redirect()->back()->with('success', 'Data Shift berhasil dihapus');
     }
+
+    public function PengaturanTanggal() {
+        $title = 'Pengaturan Tanggal Libur';
+        $data = TanggalLibur::All();
+        return view('admin.pengaturan.tanggal', compact('title', 'data'));
+    }
+
+    public function PengaturanTambahTanggal(Request $request)
+    {
+        // Validate the request data
+        $request->validate([
+            'tanggal_libur' => 'required|date',
+        ]);
+
+        $tanggal = $request->input('tanggal_libur');
+
+        // Create a new Shift record
+        TanggalLibur::create([
+            'tanggal_libur'=> $tanggal,
+        ]);
+
+        // Redirect back with success message
+        return redirect()->back()->with('success', 'Data Tanggal libur berhasil ditambahkan');
+    }
+    
+    public function PengaturanDeleteTanggal($id)
+    {
+        $tanggalLibur = TanggalLibur::findOrFail($id);
+        $tanggalLibur->delete();
+        return redirect()->back()->with('success', 'Data Tanggal libur berhasil dihapus');
+    }
+
+    public function PengaturanEditTanggal(Request $request, $id)
+    {
+        // Validate the request data
+        $request->validate([
+            'tanggal_libur' => 'date',
+        ]);
+
+        $data = TanggalLibur::findOrFail($id);
+        $tanggal_libur = $request->input('tanggal_libur');
+
+        // Create a new Shift record
+        $data->update([
+            'tanggal_libur' => $tanggal_libur,
+        ]);
+
+        // Redirect back with success message
+        return redirect()->back()->with('success', 'Data Tanggal libur berhasil diubah');
+    }
+
 
 }

@@ -158,13 +158,11 @@ class UserController extends Controller
                         if ($field == 'jam_izin') {
                             $absensi->update([
                                 $field => Carbon::now('Asia/Jakarta')->format('H:i:s'),
-                                'status_kehadiran' => 'Izin'
                             ]);
                             $this->addAktivitas('Izin');
                         } else {
                             $absensi->update([
                                 $field => Carbon::now('Asia/Jakarta')->format('H:i:s'),
-                                'status_kehadiran' => 'Masuk'
                             ]);
                             $this->addAktivitas('Selesai izin');
                         }

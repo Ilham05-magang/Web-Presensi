@@ -31,13 +31,13 @@
                             <tbody class="text-white">
                                 @foreach ($aktivitas as $aktivitas)
                                     <tr>
-                                        <td class="text-sm p-1 ">
+                                        <td class="tracking-tighter whitespace-nowrap text-sm p-1 ">
                                             {{ $aktivitas->karyawan->nama }}
                                         </td>
-                                        <td class="p-1 whitespace-nowrap text-xs ">
+                                        <td class="p-1 tracking-tighter whitespace-nowrap text-xs ">
                                             {{ $aktivitas->deskripsi }}
                                         </td>
-                                        <td class="p-1 tracking-tighter whitespace-nowrap text-xs ">
+                                        <td class="p-1 font-normal tracking-tighter whitespace-nowrap text-xs ">
                                             {{ $aktivitas->created_at->diffForHumans() }}
                                         </td>
                                     </tr>

@@ -60,22 +60,24 @@
                     x-init="updateTime()" x-text="time"
                     >------</span>
             </div>
-            <div class="py-12 text-white font-semibold italic text-2xl max-md:text-base max-md:py-20"
-                x-data="{
-                    quotes: [
-                        'Change your life for a better future',
-                        'Embrace the journey, not just the destination',
-                        'Every day is a new opportunity to grow',
-                        'Success is the sum of small efforts repeated',
-                        'Believe in the power of your dreams'
-                    ],
-                    currentQuote: '---------------',
-                    updateQuote() {
-                        const hour = new Date().getHours();
-                        const index = hour % this.quotes.length;
-                        this.currentQuote = this.quotes[index];
-                    }
-                }" x-init="updateQuote()" x-text="currentQuote">
+            <div class="h-32 flex justify-center items-center">
+                <h2 class="mx-auto text-white font-semibold italic text-2xl max-md:text-base max-md:py-20"
+                    x-data="{
+                        quotes: [
+                            'Change your life for a better future',
+                            'Embrace the journey, not just the destination',
+                            'Every day is a new opportunity to grow',
+                            'Success is the sum of small efforts repeated',
+                            'Believe in the power of your dreams'
+                        ],
+                        currentQuote: '---------------',
+                        updateQuote() {
+                            const hour = new Date().getHours();
+                            const index = hour % this.quotes.length;
+                            this.currentQuote = this.quotes[index];
+                        }
+                    }" x-init="updateQuote()" x-text="currentQuote">
+                </h2>
             </div>
 
             <div class="w-full flex justify-between pb-5 max-md:pb-3 items-end">

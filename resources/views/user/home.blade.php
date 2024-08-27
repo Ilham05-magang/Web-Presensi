@@ -6,7 +6,7 @@
         <script>
             Swal.fire({
                 icon: 'success',
-                title: 'Success',
+                title: 'Sukses',
                 text: '{{ session('success') }}',
             });
         </script>
@@ -21,10 +21,9 @@
             });
         </script>
     @endif
-
     <div
-        class="grid grid-cols-4 max-md:grid-cols-3 max-sm:grid-cols-2 w-full relative py-5 px-16 max-md:px-8 mx-auto justify-center items-center gap-4 max-md:flex-col ">
-        <div class="max-w-52 flex flex-col py-10 gap-3 tracking-[.13em] max-md:hidden">
+        class="grid mt-4 grid-cols-4 max-md:grid-cols-3 max-sm:grid-cols-2 w-full relative py-5 px-16 max-md:px-8 mx-auto justify-center  gap-4 max-md:flex-col ">
+        <div class="max-w-48 flex flex-col gap-3 tracking-[.13em] max-md:hidden">
             <div class="text-center text-2xl font-bold ">{{ $user->karyawan->shift->nama ?? 'Shift ???' }}</div>
             <form class="flex" action="/presensi" method="POST">
                 @if ($method == 'POST')
@@ -56,7 +55,7 @@
             @endif
         </div>
         <div class="col-span-3">
-            <div class="gap-4 grid grid-cols-3 grid-rows-2 w-full">
+            <div class="gap-4 grid grid-cols-3 grid-rows-2 w-full max-md:grid-cols-2">
                 <x-presensi_card title="Masuk" presensi="{{ $absensi->jam_mulai ?? '---' }}"></x-presensi_card>
                 <x-presensi_card title="Istirahat" presensi="{{ $absensi->jam_istirahat ?? '---' }}"></x-presensi_card>
                 <x-presensi_card title="Izin" presensi="{{ $absensi->jam_izin ?? '---' }}"></x-presensi_card>
