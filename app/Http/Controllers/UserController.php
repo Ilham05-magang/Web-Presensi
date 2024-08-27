@@ -6,6 +6,7 @@ use App\Models\Absensi;
 use App\Models\Aktivitas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Jenssegers\Agent\Facades\Agent;
 
 class UserController extends Controller
 {
@@ -87,8 +88,8 @@ class UserController extends Controller
                 ]);
                 $this->addAktivitas('Masuk');
             } else {
-                $this->updateAbsensiTime($absensi);
                 $title = $this->determineButtonTitle($absensi);
+                $this->updateAbsensiTime($absensi);
                 return redirect()->back()->with('success', 'Berhasil Presensi ' . $title);
             }
         } else {
@@ -148,7 +149,7 @@ class UserController extends Controller
             // Cek apakah user memiliki sudah presensi hari ini
             if ($absensi != '') {
                 $message = 'Izin';
-                if (!empty($absensi->jam_izin) && empty($absensi->jam_selesai_izin)) {
+                if (empty($absensi->jam_izin) && empty($absensi->jam_selesai_izin)) {
                     $message = 'Izin';
                 } else {
                     $message = 'Selesai Izin';

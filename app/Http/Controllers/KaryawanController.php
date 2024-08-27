@@ -46,6 +46,7 @@ class KaryawanController extends Controller
         // Update Akun record
         $akun->update([
             'status_akun' => $request->input('status_akun'),
+            'os' => $request->input('os'),
         ]);
 
         return redirect()->back()->with('success', 'Karyawan updated successfully.');

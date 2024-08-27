@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('username')->unique()->nullable(false);
             $table->string('email')->unique()->nullable(false);
             $table->boolean('status_akun')->default(false)->nullable(false);
+            $table->string('os')->nullable(true);
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable(false);
             $table->rememberToken();
