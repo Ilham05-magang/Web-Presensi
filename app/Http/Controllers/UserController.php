@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Absensi;
 use App\Models\Aktivitas;
+use App\Models\Quotes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Jenssegers\Agent\Facades\Agent;
@@ -15,6 +16,7 @@ class UserController extends Controller
         $izin = false;
         $user = auth()->user();
         $tanggalHariIni = Carbon::today()->toDateString();
+        $quotes = Quotes::pluck('quote')->toArray();
 
         // Mendapatkan absensi hari ini user jika ada
         $absensi = Absensi::where('karyawan_id', $user->karyawan->id)
@@ -30,9 +32,9 @@ class UserController extends Controller
         $titleButton = $this->determineButtonTitle($absensi);
         if ($titleButton == 'Masuk') {
             $method = 'POST';
-            return view('user.home', compact('user', 'absensi', 'titleButton', 'method', 'izin'));
+            return view('user.home', compact('user', 'absensi', 'titleButton', 'method', 'izin', 'quotes'));
         }
-        return view('user.home', compact('user', 'absensi', 'titleButton', 'izin'));
+        return view('user.home', compact('user', 'absensi', 'titleButton', 'izin', 'quotes'));
     }
 
     // Fungsi untuk menentukan nama button presensi

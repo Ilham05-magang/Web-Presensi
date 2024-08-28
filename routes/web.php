@@ -105,6 +105,11 @@ Route::middleware(['auth', 'web'])->group(function () {
         Route::put('/dashboard/pengaturan/edittanggal/{id}', [PengaturanController::class, 'PengaturanEditTanggal'])->name('dashboard.pengaturan.edittanggal');
         Route::delete('/dashboard/pengaturan/deletetanggal/{id}', [PengaturanController::class, 'PengaturanDeleteTanggal'])->name('dashboard.pengaturan.deletetanggal');
 
+        Route::get('/dashboard/pengaturan/quotes', [PengaturanController::class, 'PengaturanQuotes'])->name('dashboard.pengaturan.quotes');
+        Route::post('/dashboard/pengaturan/tambahquote', [PengaturanController::class, 'PengaturanTambahQuote'])->name('dashboard.pengaturan.tambahquote');
+        Route::put('/dashboard/pengaturan/editquote/{id}', [PengaturanController::class, 'PengaturanEditQuote'])->name('dashboard.pengaturan.editquote');
+        Route::delete('/dashboard/pengaturan/deletequote/{id}', [PengaturanController::class, 'PengaturanDeleteQuote'])->name('dashboard.pengaturan.deletequote');
+
 
         #Api Karyawan
         Route::get('/dashboard/karyawan', [KaryawanController::class, 'KaryawanAdmin'])->name('dashboard.karyawan');

@@ -8,6 +8,7 @@ use App\Models\Divisi;
 use App\Models\Shift;
 use App\Models\Users;
 use App\Models\Kantor;
+use App\Models\Quotes;
 use App\Models\TanggalLibur;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -285,6 +286,56 @@ class PengaturanController extends Controller
 
         // Redirect back with success message
         return redirect()->back()->with('success', 'Data Tanggal libur berhasil diubah');
+    }
+
+    public function PengaturanQuotes() {
+        $title = 'Pengaturan Quotes';
+        $data = Quotes::All();
+        return view('admin.pengaturan.quotes', compact('title', 'data'));
+    }
+
+    public function PengaturanTambahQuote(Request $request)
+    {
+        // Validate the request data
+        $request->validate([
+            'quote' => 'required',
+        ]);
+
+        $quote = $request->input('quote');
+
+        // Create a new Shift record
+        Quotes::create([
+            'quote'=> $quote,
+        ]);
+
+        // Redirect back with success message
+        return redirect()->back()->with('success', 'Data Quotes berhasil ditambahkan');
+    }
+    
+    public function PengaturanDeleteQuote($id)
+    {
+        $quote = Quotes::findOrFail($id);
+        $quote->delete();
+        return redirect()->back()->with('success', 'Data Quotes berhasil dihapus');
+    }
+
+    public function PengaturanEditQuote(Request $request, $id)
+    {
+        // Validate the request data
+        $request->validate([
+            'quote' => 'string',
+        ]);
+
+        $data = Quotes::findOrFail($id);
+        $quote = $request->input('quote');
+
+        // Create a new Shift record
+        $data->update([
+            'quote' => $quote,
+        ]);
+
+        // Redirect back with success message
+        return redirect()->back()->with('success', 'Data Quotes berhasil diubah');
     }
 
 

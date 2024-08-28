@@ -1,7 +1,7 @@
 @props(['method' => 'PUT', 'izin' => false])
 <x-layout.layout>
     <x-slot:title>Presensi Karyawan</x-slot:title>
-    <x-navbar :user="$user"></x-navbar>
+    <x-navbar :user="$user" :quotes="$quotes"></x-navbar>
     @if (session('success'))
         <script>
             Swal.fire({

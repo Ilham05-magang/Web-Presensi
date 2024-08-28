@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             SeederDivisi::class,
             Seederkaryawan::class,
             SeederAbsensis::class,
+            SeederQuotes::class,
         ]);
     }
 }

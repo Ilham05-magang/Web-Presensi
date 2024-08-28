@@ -24,17 +24,17 @@
             </div>
             <div
                 class="row-span-2 h-full bg-gray-500/90 border-[1px] border-gray-700 shadow-xl shadow-gray-700/50 rounded-2xl">
-                <div class="p-5 overflow-y-auto">
+                <div class="p-3 w-full overflow-y-auto">
                     <h2>Aktivitas Terbaru</h2>
                     <div class="pt-2">
-                        <table >
+                        <table class="table-auto w-full">
                             <tbody class="text-white">
                                 @foreach ($aktivitas as $aktivitas)
                                     <tr>
                                         <td class="tracking-tighter whitespace-nowrap text-sm p-1 ">
                                             {{ $aktivitas->karyawan->nama }}
                                         </td>
-                                        <td class="p-1 tracking-tighter whitespace-nowrap text-xs ">
+                                        <td class="p-1 tracking-tighter font-medium whitespace-nowrap text-xs ">
                                             {{ $aktivitas->deskripsi }}
                                         </td>
                                         <td class="p-1 font-normal tracking-tighter whitespace-nowrap text-xs ">

@@ -1,4 +1,4 @@
-@props(['user'])
+@props(['user', 'quotes'])
 @php
     use Carbon\Carbon;
 
@@ -32,6 +32,7 @@
     // Format tahun
     $year = $carbonDate->format('Y');
     $formattedDate = $monthAbbreviation . $year;
+    $quotesJson = json_encode($quotes);
 @endphp
 <header>
     <div class="flex flex-wrap items-center justify-between mx-auto">
@@ -63,13 +64,7 @@
             <div class="h-32 flex justify-center items-center">
                 <h2 class="mx-auto text-white font-semibold italic text-2xl max-md:text-base max-md:py-20"
                     x-data="{
-                        quotes: [
-                            'Change your life for a better future',
-                            'Embrace the journey, not just the destination',
-                            'Every day is a new opportunity to grow',
-                            'Success is the sum of small efforts repeated',
-                            'Believe in the power of your dreams'
-                        ],
+                        quotes: {{$quotesJson}},
                         currentQuote: '---------------',
                         updateQuote() {
                             const hour = new Date().getHours();
