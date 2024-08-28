@@ -9,7 +9,7 @@
         </button>
     </div>
     <hr class="border-t-2 border-gray-200">
-    <div class="px-5 py-8">
+    <div class="px-5 py-8 capitalize">
         <table class="w-full text-sm text-left text-center text-black border-[1px]  border-[#242947]  bg-gray-100 rtl:text-right rounded-b-lg">
             <thead class="text-xs uppercase bg-gray-100 border-[1px] border-t-0  border-[#242947] ">
                 <tr>
@@ -77,4 +77,24 @@
         </table>
     </div>
     <x-admin.popup-tambah-data title="Tambah Shift" :action="route('dashboard.pengaturan.tambahshift')" id="tambahshift" />
+    @if (session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: '{{ session('success') }}',
+            });
+        </script>
+    @endif
+    @if ($errors->any())
+        @foreach ($errors->all() as $error)
+            <script>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: '{{ $error }}',
+                });
+            </script>
+        @endforeach
+    @endif
 </x-layout.layout-admin>

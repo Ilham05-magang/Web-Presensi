@@ -5,14 +5,13 @@ use App\Models\Karyawan;
 use App\Models\Absensi;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 class PresensiController extends Controller
 {
     public function PresensiAdmin()
     {
         $dateQuery = Carbon::now()->format('Y-m-d');
-        $datenow = Carbon::now()->format('d-m-Y');
-        $totalkaryawan = Karyawan::All()->count();
 
         $dataAbsensi = Karyawan::with(['absensi' => function($query) use ($dateQuery) {
             $query->whereDate('tanggal', $dateQuery);
@@ -20,77 +19,87 @@ class PresensiController extends Controller
 
         $totalmasuk = Absensi::where('status_kehadiran', 'Masuk')->whereDate('tanggal', $dateQuery)->count();
         $totalIzin = Absensi::where('status_kehadiran', 'Izin')->whereDate('tanggal', $dateQuery)->count();
-        $totaltidakmasuk = $totalkaryawan - $totalmasuk - $totalIzin;
+        $totaltidakmasuk = Absensi::where('status_kehadiran', 'Tidak Masuk')->whereDate('tanggal', $dateQuery)->count();
 
         $title = 'Presensi Karyawan';
         $title2 = 'Data Presensi Karyawan';
-        return view('admin.Presensi', compact('title','title2','datenow','dataAbsensi','totalmasuk','totaltidakmasuk','totalIzin'));
+        return view('admin.Presensi', compact('title','title2','dataAbsensi','totalmasuk','totaltidakmasuk','totalIzin','dateQuery'));
     }
 
-    public function SearchPresensiAdmin(Request $request){
-        $datenow = Carbon::now()->format('d-m-Y');
-        $dateQuery = Carbon::now()->format('Y-m-d');
+    public function SearchPresensiAdmin(Request $request, $tanggal){
+        $tanggalparse = $tanggal ?? Carbon::now()->format('Y-m-d');
+        $dateQuery = Carbon::create($tanggalparse)->format('Y-m-d');
         $searchQuery= $request->input('query');
+
 
         $dataAbsensi = Karyawan::with(['absensi' => function($query) use ($dateQuery) {
             $query->whereDate('tanggal', $dateQuery);
         }])
         ->where('nama', 'LIKE', '%' . $searchQuery . '%') // Filter by employee name
         ->get();
-        $totalkaryawan = Karyawan::All()->count();
+
         $totalmasuk = Absensi::where('status_kehadiran', 'Masuk')->whereDate('tanggal', $dateQuery)->count();
         $totalIzin = Absensi::where('status_kehadiran', 'Izin')->whereDate('tanggal', $dateQuery)->count();
-        $totaltidakmasuk = $totalkaryawan - $totalmasuk - $totalIzin;
+        $totaltidakmasuk = Absensi::where('status_kehadiran', 'Tidak Masuk')->whereDate('tanggal', $dateQuery)->count();
+
+
         $title = 'Presensi Karyawan';
         $title2 = 'Data Presensi Karyawan';
-        return view('admin.Presensi', compact('title','title2','totalIzin','datenow','dataAbsensi','totalmasuk','totaltidakmasuk'));
+        return view('admin.Presensi', compact('title','title2','totalIzin','dateQuery','dataAbsensi','totalmasuk','totaltidakmasuk'));
     }
     public function SearchPresensibyDateAdmin(Request $request) {
-        $datenow = Carbon::now()->format('d-m-Y');
         // Use Carbon to get the current date in the correct format for comparison
         $dateQuery = $request->input('date', Carbon::now()->format('Y-m-d'));
-
         // Fetch karyawan with absensi for the specified date
         $dataAbsensi = Karyawan::with(['absensi' => function($query) use ($dateQuery) {
             $query->whereDate('tanggal', $dateQuery);
         }])->get();
 
         // Calculate totals
-        $totalkaryawan = Karyawan::All()->count();
         $totalmasuk = Absensi::where('status_kehadiran', 'Masuk')->whereDate('tanggal', $dateQuery)->count();
         $totalIzin = Absensi::where('status_kehadiran', 'Izin')->whereDate('tanggal', $dateQuery)->count();
-        $totaltidakmasuk = $totalkaryawan - $totalmasuk - $totalIzin;
+        $totaltidakmasuk = Absensi::where('status_kehadiran', 'Tidak Masuk')->whereDate('tanggal', $dateQuery)->count();
 
         // Set title variables
         $title = 'Presensi Karyawan';
         $title2 = 'Data Presensi Karyawan';
 
         // Return the view with compacted variables
-        return view('admin.Presensi', compact('title','title2','totalIzin','datenow','dataAbsensi','totalmasuk','totaltidakmasuk'));
+        return view('admin.Presensi', compact('title','title2','totalIzin','dataAbsensi','totalmasuk','totaltidakmasuk','dateQuery'));
     }
 
     private function kalkulasiTotalProduktif($jamMulai, $jamPulang, $jamIstirahat, $jamSelesaiIstirahat, $jamIzin, $jamSelesaiIzin)
     {
-        $jamMulai = Carbon::createFromFormat('H:i:s', $jamMulai);
-        $jamPulang = Carbon::createFromFormat('H:i:s', $jamPulang);
-        $jamIstirahat = Carbon::createFromFormat('H:i:s', $jamIstirahat);
-        $jamSelesaiIstirahat = Carbon::createFromFormat('H:i:s', $jamSelesaiIstirahat);
-        $jamIzin = Carbon::createFromFormat('H:i:s', $jamIzin);
-        $jamSelesaiIzin = Carbon::createFromFormat('H:i:s', $jamSelesaiIzin);
+        if($jamIstirahat){
+            $jamIstirahat = Carbon::createFromFormat('H:i:s', $jamIstirahat);
+            $jamSelesaiIstirahat = Carbon::createFromFormat('H:i:s', $jamSelesaiIstirahat);
+            $durasiIstirahat = $jamSelesaiIstirahat->diffInSeconds($jamIstirahat);
+        }
+        if($jamIzin){
+            $jamIzin = Carbon::createFromFormat('H:i:s', $jamIzin);
+            $jamSelesaiIzin = Carbon::createFromFormat('H:i:s', $jamSelesaiIzin);
+            $durasiIzin = $jamSelesaiIzin->diffInSeconds($jamIzin);
+        }
+        if($jamMulai){
+            $jamMulai = Carbon::createFromFormat('H:i:s', $jamMulai);
+            $jamPulang = Carbon::createFromFormat('H:i:s', $jamPulang);
+            $durasiKerja = $jamPulang->diffInSeconds($jamMulai);
+        }
 
         // Hitung durasi kerja dan istirahat dalam detik
-        $durasiKerja = $jamPulang->diffInSeconds($jamMulai);
-        $durasiIzin = $jamSelesaiIzin->diffInSeconds($jamIzin);
-        $durasiIstirahat = $jamSelesaiIstirahat->diffInSeconds($jamIstirahat);
+        $totalProduktif = ($durasiKerja ?? null) - ($durasiIstirahat ?? null) - ($durasiIzin ?? null) ;
 
-        $totalProduktif = $durasiKerja - $durasiIstirahat - $durasiIzin;
+        if($totalProduktif){
+            // Konversi detik ke format H:i:s
+            $jam = floor($totalProduktif / 3600);
+            $menit = floor(($totalProduktif % 3600) / 60);
+            $detik = $totalProduktif % 60;
 
-        // Konversi detik ke format H:i:s
-        $jam = floor($totalProduktif / 3600);
-        $menit = floor(($totalProduktif % 3600) / 60);
-        $detik = $totalProduktif % 60;
+            return sprintf('%02d:%02d:%02d', $jam, $menit, $detik);
+        } else{
+            return null;
+        }
 
-        return sprintf('%02d:%02d:%02d', $jam, $menit, $detik);
     }
     public function EditPresensi(Request $request, $id){
         $request->validate([
@@ -101,18 +110,54 @@ class PresensiController extends Controller
             'jam_selesai_istirahat' => 'nullable|string',
             'jam_pulang' => 'nullable|string',
             'status_kehadiran' => 'nullable|string',
+            'keterangan' => 'nullable|string',
+            'file_input' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:1024',
+        ],[
+            'jam_mulai.string' => 'Jam Mulai Harus berupa teks',
+            'jam_istirahat.string' => 'Jam Istirahat Harus berupa teks',
+            'jam_izin.string' => 'Jam Izin Harus berupa teks',
+            'jam_selesai_izin.string' => 'Jam Selesai Izin Harus berupa teks',
+            'jam_selesai_istirahat.string' => 'Jam Selesai Istirahat Harus berupa teks',
+            'jam_pulang.string' => 'Jam Pulang Harus berupa teks',
+            'status_kehadiran.string' => 'Status Kehadiran Harus berupa teks',
+            'file_input.mimes' => 'File harus berupa format jpg, png, atau pdf.',
+            'file_input.max' => 'Ukuran file maksimal adalah 1MB.',
         ]);
 
         $absensi = Absensi::findOrFail($id);
+        $karyawan = Karyawan::findOrFail($absensi->karyawan_id);
+        $tanggal = Carbon::parse($absensi->tanggal)->locale('id')->translatedFormat('d - F - Y');
 
-        $jamMulai = $request->input('jam_mulai') ?? $absensi->jam_mulai ?? '00:00:00';
-        $jamPulang = $request->input('jam_pulang')?? $absensi->jam_pulang ?? '00:00:00';
-        $jamIstirahat = $request->input('jam_istirahat')?? $absensi->jam_istirahat ?? '00:00:00';
-        $jamSelesaiIstirahat = $request->input('jam_selesai_istirahat')?? $absensi->jam_selesai_istirahat ?? '00:00:00';
-        $jamIzin = $request->input('jam_izin')?? $absensi->jam_izin ?? '00:00:00';
-        $jamSelesaiIzin = $request->input('jam_selesai_izin')?? $absensi->jam_selesai_izin ?? '00:00:00';
+        $jamMulai = $request->input('jam_mulai') ?? $absensi->jam_mulai ?? null;
+        $jamPulang = $request->input('jam_pulang')?? $absensi->jam_pulang ?? null;
+        $jamIstirahat = $request->input('jam_istirahat')?? $absensi->jam_istirahat ?? null;
+        $jamSelesaiIstirahat = $request->input('jam_selesai_istirahat')?? $absensi->jam_selesai_istirahat ?? null;
+        $jamIzin = $request->input('jam_izin')?? $absensi->jam_izin ?? null;
+        $jamSelesaiIzin = $request->input('jam_selesai_izin')?? $absensi->jam_selesai_izin ?? null;
         $waktuProduktif = $this->kalkulasiTotalProduktif($jamMulai, $jamPulang, $jamIstirahat, $jamSelesaiIstirahat, $jamIzin, $jamSelesaiIzin);
 
+        $oldFile = $absensi->file_input;
+
+        if ($request->hasFile('file_input')) {
+            // Hapus file lama jika ada
+            if ($oldFile && Storage::disk('public')->exists($oldFile)) {
+                if (Storage::disk('public')->delete($oldFile)) {
+                    Log::info("File $oldFile berhasil dihapus.");
+                } else {
+                    Log::error("Gagal menghapus file $oldFile.");
+                }
+            }else {
+                Log::info("File $oldFile tidak ditemukan atau tidak ada.");
+            }
+            // Upload file baru
+            $file = $request->file('file_input') ?? null;
+            $filePath = $file->store('absensi_files', 'public') ?? null;
+        } else {
+            // Jika tidak ada file baru, gunakan file lama
+            $filePath = $oldFile ?? null;
+        }
+
+        // Update data
         $absensi->update([
             'jam_mulai' => $jamMulai,
             'jam_istirahat' => $jamIstirahat,
@@ -121,44 +166,18 @@ class PresensiController extends Controller
             'jam_selesai_istirahat' => $jamSelesaiIstirahat,
             'jam_pulang' => $jamPulang,
             'jam_total_produktif' => $waktuProduktif,
-            'status_kehadiran' => $request->input('status_kehadiran'),
+            'status_kehadiran'=>$request->input('status_kehadiran') ?? $absensi->status_kehadiran ?? null,
+            'keterangan' => $request->input('keterangan') ?? $absensi->keterangan  ?? null,
+            'file_input' => $filePath
         ]);
-        return redirect()->back()->with('success', 'Data Absensi berhasil diedit');
+        return redirect()->back()->with('success', "Data Absensi Tanggal $tanggal  pada Karyawan $karyawan->nama berhasil di Update");
     }
     public function DeleteAbsensi($id){
+        $karyawan = Karyawan::findOrFail($id);
         $absensi = Absensi::findOrFail($id);
+        $tanggal = Carbon::parse($absensi->tanggal)->locale('id')->translatedFormat('d-F-Y');
         $absensi->delete();
-        return redirect()->back()->with('success', 'Data Absensi berhasil dihapus');
-    }
-
-    private function getDaysWithoutSundaysBeforeToday($month, $year) {
-        // Buat tanggal pertama bulan dan tahun yang diberikan
-        $startDate = Carbon::create($year, $month, 1);
-        // Buat tanggal terakhir bulan tersebut
-        $endDate = $startDate->copy()->endOfMonth();
-        // Buat tanggal hari ini
-        $today = Carbon::now();
-
-        // Jika hari ini berada di luar bulan yang diberikan, ubah tanggal hari ini ke tanggal terakhir bulan tersebut
-        if ($today->month != $month || $today->year != $year) {
-            $today = $endDate;
-        }
-
-        // Salin tanggal hari ini untuk perhitungan
-        $todayCopy = $today->copy();
-
-        $daysCount = 0;
-
-        // Loop melalui setiap hari dalam bulan
-        while ($startDate->lte($todayCopy)) {
-            // Tambah hitungan jika hari tersebut bukan Minggu (Carbon::SUNDAY)
-            if ($startDate->dayOfWeek != Carbon::SUNDAY) {
-                $daysCount++;
-            }
-            $startDate->addDay();
-        }
-
-        return $daysCount;
+        return redirect()->back()->with('success', "Data Absensi Tanggal $tanggal pada Karyawan $karyawan->nama berhasil di Hapus");
     }
 
     public function ShowDetailAbsensi($id)
@@ -169,7 +188,6 @@ class PresensiController extends Controller
         $year = $datenow->year;
         $month = $datenow->month;
 
-        $totalHariPerbulan = $this->getDaysWithoutSundaysBeforeToday($month, $year);
 
         $totalmasuk = Absensi::where('status_kehadiran', 'Masuk')
             ->whereMonth('tanggal', $month)
@@ -183,7 +201,11 @@ class PresensiController extends Controller
             ->where('karyawan_id', $id)
             ->count();
 
-        $totaltidakmasuk = $totalHariPerbulan - $totalmasuk - $totalIzin;
+        $totaltidakmasuk = Absensi::where('status_kehadiran', 'Tidak Masuk')
+            ->whereMonth('tanggal', $month)
+            ->whereYear('tanggal', $year)
+            ->where('karyawan_id', $id)
+            ->count();
 
         $dataAbsensi = Absensi::whereMonth('tanggal', $month)
             ->whereYear('tanggal', $year)
@@ -195,7 +217,7 @@ class PresensiController extends Controller
 
         $title = "Data Absensi Karyawan";
 
-        return view('admin.show-detail-presensi', compact('title', 'datenow', 'dataAbsensi', 'karyawan', 'totalmasuk', 'totalIzin', 'totaltidakmasuk','selectedMonth'));
+        return view('admin.show-detail-presensi', compact('title', 'dataAbsensi', 'karyawan', 'totalmasuk', 'totalIzin', 'totaltidakmasuk','selectedMonth'));
     }
 
     public function SearchAbsensiByMonth(Request $request, $id)
@@ -203,9 +225,6 @@ class PresensiController extends Controller
         $selectedMonth = $request->input('month');
         $month = $request->input('month');
         $year = Carbon::now()->year;
-        $datenow = Carbon::now();
-
-        $totalHariPerbulan = $this->getDaysWithoutSundaysBeforeToday($month, $year);
 
         $totalmasuk = Absensi::where('status_kehadiran', 'Masuk')
             ->whereMonth('tanggal', $month)
@@ -219,7 +238,11 @@ class PresensiController extends Controller
             ->where('karyawan_id', $id)
             ->count();
 
-        $totaltidakmasuk = $totalHariPerbulan - $totalmasuk - $totalIzin;
+        $totaltidakmasuk = Absensi::where('status_kehadiran', 'Tidak Masuk')
+            ->whereMonth('tanggal', $month)
+            ->whereYear('tanggal', $year)
+            ->where('karyawan_id', $id)
+            ->count();
 
         $dataAbsensi = Absensi::whereMonth('tanggal', $month)
             ->whereYear('tanggal', $year)
@@ -231,8 +254,42 @@ class PresensiController extends Controller
         $title = "Data Absensi Karyawan";
 
         // Return view with the required data
-        return view('admin.show-detail-presensi', compact('title', 'datenow', 'dataAbsensi', 'karyawan', 'totalmasuk', 'totalIzin', 'totaltidakmasuk','selectedMonth'));
+        return view('admin.show-detail-presensi', compact('title', 'dataAbsensi', 'karyawan', 'totalmasuk', 'totalIzin', 'totaltidakmasuk','selectedMonth'));
     }
+
+    public function PostKehadiran(Request $request,$tanggal, $id)
+    {
+        $tanggalparse = $tanggal ?? Carbon::now()->format('Y-m-d');
+        $dateQuery = Carbon::create($tanggalparse)->format('Y-m-d');
+
+        // Validasi input
+        $request->validate([
+            'status_kehadiran' => 'nullable|string',
+            'keterangan' => 'nullable|string',
+            'file_input' => 'nullable|mimes:jpg,png,pdf|max:1048',
+        ],[
+            'file_input.mimes' => 'File harus berupa format jpg, png, atau pdf.',
+            'file_input.max' => 'Ukuran file maksimal adalah 1MB.',
+        ]);
+
+
+        // Temukan data karyawan berdasarkan ID
+        $karyawan = Karyawan::findOrFail($id);
+        $filePath = $request->hasFile('file_input') ? $request->file('file_input')->store('public/absensi_files'): null;
+        // Buat data absensi baru
+        Absensi::create([
+            'karyawan_id' => $id,
+            'shift_id' => $karyawan->shift_id,
+            'tanggal' => $dateQuery,
+            'status_kehadiran' => $request->input('status_kehadiran') ?? null,
+            'keterangan' => $request->input('keterangan') ?? null,
+            'file_input' => $filePath
+        ]);
+
+        // Redirect atau response
+        return redirect()->back()->with('success', "Data kehadiran karyawan $karyawan->nama berhasil diperbarui");
+    }
+
 
 
 

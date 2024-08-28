@@ -9,7 +9,7 @@
         </button>
     </div>
     <hr class="border-t-2 border-gray-200">
-    <div class="px-5 py-8">
+    <div class="px-5 py-8 capitalize">
         <table class="w-full text-base text-left text-center text-black border-[1px]  border-[#242947]  bg-gray-100 rtl:text-right rounded-b-lg">
             <thead class="text-base uppercase bg-gray-100 border-[1px] border-t-0  border-[#242947] ">
                 <tr>
@@ -34,7 +34,7 @@
                         <td class="p-2 border-[#242947] border-[1px] border-t-0">
                             {{ $kantor->nama }}
                         </td>
-                        <td class="p-3 border-[#242947] border-[1px] border-t-0">
+                        <td class="p-3 border-[#242947] border-[1px] border-t-0 normal-case">
                             <a href="{{ $kantor->link_gmaps}}" target="_blank" rel="noopener noreferrer" class="text-blue-500 hover:underline">{{ $kantor->link_gmaps ?? '--\\\--' }}</a>
                         </td>
                         <td class="px-3 py-2 border-[#242947] border-[1px] ">
@@ -53,4 +53,24 @@
         </table>
     </div>
     <x-admin.popup-tambah-data title="Tambah Kantor" :action="route('dashboard.pengaturan.tambahkantor')" id="tambahkantor" />
+    @if (session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: '{{ session('success') }}',
+            });
+        </script>
+    @endif
+    @if ($errors->any())
+        @foreach ($errors->all() as $error)
+            <script>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: '{{ $error }}',
+                });
+            </script>
+        @endforeach
+    @endif
 </x-layout.layout-admin>

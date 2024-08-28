@@ -1,19 +1,19 @@
 @php
     use Carbon\Carbon;
     Carbon::setLocale('id');
-    $datenow = Carbon::parse($datenow);
+    $tanggalselect = Carbon::parse($dateQuery)->locale('id')->translatedFormat('d - F - Y');
 @endphp
 <x-layout.layout-admin>
     <x-slot:title>{{ $title }}</x-slot:title>
     <div class="flex items-center justify-between w-full py-8 text-2xl px-7">
         <div class="flex flex-col gap-1">
             <h1>{{ $title2 }}</h1>
-            <p class="text-base font-medium">Data per Tanggal: {{ $datenow->format('d-F-Y') }}</p>
+            <p class="text-base font-medium">Data per Tanggal: {{ $tanggalselect }}</p>
         </div>
-        <x-admin.searchbutton :action="route('dashboard.searchpresensi')" />
+        <x-admin.searchbutton :action="route('dashboard.searchpresensi', $dateQuery)" />
     </div>
     <hr class="border-t-2 border-gray-200 ">
-    <div class="px-2 py-6">
+    <div class="px-2 py-6 capitalize">
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
             <div class="p-5 text-lg font-bold text-left text-black text-gray-900 border-[1px] border-b-0 border-[#242947]/50 rounded-t-lg">
                 Total Kehadiran
@@ -34,7 +34,7 @@
                         </div>
                     </div>
                     <div class="">
-                        <form class="max-w-md mx-auto" action="{{ route('dashboard.searchpresensibyid') }}" method="GET">
+                        <form class="max-w-md mx-auto" action="{{ route('dashboard.searchpresensibydate') }}" method="GET">
                             @csrf
                             <div class="relative">
                                 <div class="absolute inset-y-0 left-0 flex items-center pl-3">
@@ -44,7 +44,7 @@
                                         </svg>
                                     </button>
                                 </div>
-                                <input type="date" id="date" name="date" value="{{ $datenow->format('Y-m-d') }}"
+                                <input type="date" id="date" name="date" value="{{ $dateQuery }}"
                                     class="block w-full px-3 py-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     required />
 
@@ -54,7 +54,7 @@
                 </div>
             </div>
             <div class="px-2 border-[1px] border-t-0 border-b-0 border-[#242947]/50">
-                <table class="w-full text-sm text-left text-center text-black border-[1px]  border-[#242947]  bg-gray-100 rtl:text-right rounded-b-lg">
+                <table class="w-full text-sm text-center text-black border-[1px]  border-[#242947]  bg-gray-100 rtl:text-right rounded-b-lg">
                     <thead class="text-xs uppercase bg-gray-100 border-[1px] border-t-0  border-[#242947] ">
                         <tr>
                             <th scope="col" class="p-3 border-[#242947] border-[1px] border-t-0">
@@ -89,7 +89,7 @@
                     </thead>
                     <tbody>
                         @foreach ($dataAbsensi as $data)
-                        <tr class="border-[#242947] border-[1px] border-t-0 ">
+                        <tr class="text-center border-[#242947] border-[1px] border-t-0 ">
                             <td class="p-1 border-[#242947] border-[1px]">
                                 {{ $loop->iteration }}
                             </td>
@@ -118,39 +118,55 @@
                                     <td class="p-1 border-[#242947] border-[1px] border-t-0">
                                         {{ $absensi->status_kehadiran ?? 'Tidak Masuk' }}
                                     </td>
-                                    <td class="px-1 py-2">
-                                        <button data-modal-target="editpresensi{{ $absensi->id }}"
-                                            data-modal-toggle="editpresensi{{ $absensi->id }}"
-                                            class="px-2 py-1 mr-3 text-base font-medium text-center text-white bg-yellow-400 rounded-lg hover:bg-yellow-300 hover:text-gray-800">
-                                            <i class="ri-edit-2-line"></i>
-                                        </button>
+                                    <td class="px-3 py-2 text-center">
+                                        @if ($absensi->status_kehadiran == 'Izin' || $absensi->status_kehadiran == 'Tidak Masuk')
+                                            <button data-modal-target="editkehadiran{{ $absensi->id }}"
+                                                data-modal-toggle="editkehadiran{{ $absensi->id }}"
+                                                class="px-2 py-1 mr-3 text-base font-medium text-center text-white bg-yellow-400 rounded-lg hover:bg-yellow-300 hover:text-gray-800">
+                                                <i class="ri-edit-2-line"></i>
+                                            </button>
+                                            <x-admin.popup-presensi title="Edit Status Kehadiran" id="editkehadiran{{ $absensi->id }}" :action="route('dashboard.editpresensi', $absensi->id)" :data="$absensi" :nama="$data->nama" />
+                                        @else
+                                            <button data-modal-target="editpresensi{{ $absensi->id }}"
+                                                data-modal-toggle="editpresensi{{ $absensi->id }}"
+                                                class="px-2 py-1 mr-3 text-base font-medium text-center text-white bg-yellow-400 rounded-lg hover:bg-yellow-300 hover:text-gray-800">
+                                                <i class="ri-edit-2-line"></i>
+                                            </button>
+                                            <x-admin.popup-presensi title="Edit Absensi Karyawan {{ $data->nama }}" id="editpresensi{{ $absensi->id }}" :action="route('dashboard.editpresensi', $absensi->id)" :data="$absensi" />
+                                        @endif
+                                        @if ($absensi->status_kehadiran == 'Izin')
+                                            <button data-modal-target="previewstatus{{ $absensi->id }}"
+                                                data-modal-toggle="previewstatus{{ $absensi->id }}"
+                                                class="px-2 py-1 mr-3 text-base font-medium text-center text-white bg-yellow-400 rounded-lg hover:bg-yellow-300 hover:text-gray-800">
+                                                <i class="ri-eye-2-line"></i>
+                                            </button>
+                                            <x-admin.popup-presensi title="Preview Absensi" id="previewstatus{{ $absensi->id }}"  :data="$absensi" :nama="$data->nama" />
+                                        @endif
                                         <button data-modal-target="deletepresensi{{ $absensi->id }}" data-modal-toggle="deletepresensi{{ $absensi->id }}"
                                             class="px-2 py-1 text-base font-medium text-center text-white bg-red-500 rounded-lg hover:bg-red-400 hover:text-gray-800">
                                             <i class="ri-delete-bin-6-line"></i>
                                         </button>
                                     </td>
-                                    <x-admin.popup-presensi title="Edit Absensi Karyawan {{ $data->nama }}" id="editpresensi{{ $absensi->id }}" :action="route('dashboard.editpresensi', $absensi->id)" :data="$absensi" />
-                                    <x-admin.popup-presensi title="delete" id="deletepresensi{{ $absensi->id }}" :action="route('dashboard.deletepresensi',$absensi->id)" :data="$data" :tanggal="$datenow->format('d-F-Y')" />
+
+                                    <x-admin.popup-presensi title="delete" id="deletepresensi{{ $absensi->id }}" :action="route('dashboard.deletepresensi',$absensi->id)" :data="$data" :tanggal="$tanggalselect" />
                                 @endforeach
                             @else
                                 <td class="p-2 border-[#242947] border-[1px] border-t-0">--\\-- | --\\--</td>
                                 <td class="p-2 border-[#242947] border-[1px] border-t-0">--\\-- | --\\--</td>
                                 <td class="p-2 border-[#242947] border-[1px] border-t-0">--\\-- | --\\--</td>
                                 <td class="p-2 border-[#242947] border-[1px] border-t-0">--\\--</td>
-                                <td class="p-2 border-[#242947] border-[1px] border-t-0">Tidak Masuk</td>
-                            @endif
-                            @if ($absensiCount < 0)
-                                <td class="px-3 py-2 rounded-br-lg"></td>
+                                <td class="p-2 border-[#242947] border-[1px] border-t-0">--\\--</td>
+                                <td class="py-2 pl-3 rounded-br-lg">
+                                    <button data-modal-target="tambahstatus{{ $data->id }}"
+                                        data-modal-toggle="tambahstatus{{ $data->id }}"
+                                        class="px-2 py-1 mr-3 text-base font-medium text-center text-white bg-yellow-400 rounded-lg hover:bg-yellow-300 hover:text-gray-800">
+                                        <i class="ri-edit-2-line"></i>
+                                    </button>
+                                </td>
+                                <x-admin.popup-presensi title="Edit Tidak Masuk" id="tambahstatus{{ $data->id }}" :action="route('dashboard.postpresensi', [$dateQuery, $data->id])"  :data="$data" :nama="$data->nama" method="POST" />
                             @endif
                         </tr>
                         @endforeach
-                        @if ($errors->any())
-                            <div class="w-full mb-2 text-base text-center text-red-500">
-                                @foreach ($errors->all() as $error)
-                                    <div>{{ $error }}</div>
-                                @endforeach
-                            </div>
-                        @endif
                     </tbody>
                 </table>
             </div>
@@ -159,4 +175,24 @@
             </div>
         </div>
     </div>
+    @if (session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: '{{ session('success') }}',
+            });
+        </script>
+    @endif
+    @if ($errors->any())
+        @foreach ($errors->all() as $error)
+            <script>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: '{{ $error }}',
+                });
+            </script>
+        @endforeach
+    @endif
 </x-layout.layout-admin>

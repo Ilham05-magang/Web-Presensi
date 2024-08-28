@@ -36,8 +36,8 @@ class Karyawan extends Model
         return $this->belongsTo(Users::class, 'akun_id');
     }
     public function absensi()
-{
-    return $this->hasMany(Absensi::class, 'karyawan_id', 'id');
-}
+    {
+        return $this->hasMany(Absensi::class, 'karyawan_id', 'id');
+    }
 
 }

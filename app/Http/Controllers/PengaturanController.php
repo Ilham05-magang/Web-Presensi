@@ -32,21 +32,31 @@ class PengaturanController extends Controller
                 'string',
                 'max:255',
                 'nullable',
-                'unique:users'
+                'unique:users,username'
             ],
             'email' => [
                 'string',
                 'email',
                 'max:255',
                 'nullable',
-                'unique:users'
+                'unique:users,email'
             ],
             'telepon' => 'string|max:16|nullable',
             'passwordLama' => 'required_with:password,password_confirmation',
             'password' => 'required_with:passwordLama|confirmed',
         ], [
+            'username.string' => 'Username harus berupa teks.',
+            'username.max' => 'Username tidak boleh lebih dari 255 karakter.',
+            'username.unique' => 'Username sudah digunakan.',
+            'email.string' => 'Email harus berupa teks.',
+            'email.email' => 'Email harus berupa alamat email yang valid.',
+            'email.max' => 'Email tidak boleh lebih dari 255 karakter.',
+            'email.unique' => 'Email sudah digunakan.',
+            'telepon.string' => 'Telepon harus berupa teks.',
+            'telepon.max' => 'Telepon tidak boleh lebih dari 16 karakter.',
+            'passwordLama.required_with' => 'Password lama wajib diisi jika Password baru terisi.',
             'password.required_with' => 'Password baru wajib diisi jika Password lama terisi.',
-            'password_confirmation.required_with' => 'Konfirmasi password baru wajib diisi jika Password lama terisi.',
+            'password_confirmation.required_with' => 'Konfirmasi password baru wajib diisi jika Password baru terisi.',
             'password.confirmed' => 'Password baru dan konfirmasi password tidak sama.',
             'password.min' => 'Password baru harus memiliki minimal 8 karakter.',
         ]);
@@ -62,7 +72,7 @@ class PengaturanController extends Controller
                 'password' => Hash::make($request->input('password'))
             ]);
             $passwordUpdated = true;
-            $message = 'Data profile dan password berhasil diupdate';
+            $message = 'Mengganti Password telah Berhasil';
         } else {
             // If the old password is incorrect, set the message and update only other fields
             $message = 'Inputan password lama salah';
@@ -87,16 +97,6 @@ class PengaturanController extends Controller
         return redirect()->back()->with('success', $message);
     }
 
-
-
-
-
-
-
-
-
-
-
     #Controller Kantor
     public function PengaturanKantor()
     {
@@ -108,35 +108,47 @@ class PengaturanController extends Controller
     public function PengaturanTambahKantor(Request $request)
     {
         $request->validate([
-            'nama' => 'required',
+            'nama' => 'required|unique:kantors,nama',
             'link_gmaps' => 'nullable|String'
+        ],[
+            'nama.unique' => 'Nama Kantor Sudah Tersedia',
+            'nama.string' => 'Nama Kantor Harus berupa teks',
+            'nama.required' => 'Nama Kantor Harus Diisi',
+            'link_gmaps.string' => 'Nama link Gmaps Harus berupa teks',
         ]);
-        Kantor::create([
+        $kantor = Kantor::create([
             'nama' => $request->input('nama'),
             'link_gmaps' => $request->input('link_gmaps'),
         ]);
-        return redirect()->back()->with('success', "Data Kantor berhasil diperbarui");
+        return redirect()->back()->with('success', "Data $kantor->nama berhasil di Tambah");
     }
 
     public function PengaturanEditKantor(Request $request, $id)
     {
         $request->validate([
-            'nama' => 'required|string',
+            'nama' => 'nullable|string|unique:kantors,nama',
             'link_gmaps' => 'nullable|string'
-        ]);
-        $kantor = Kantor::findOrFail($id);
-        $kantor->update([
-            'nama' => $request->input('nama'),
-            'link_gmaps' => $request->input('link_gmaps'),
+        ],[
+            'nama.unique' => 'Nama Kantor Sudah Tersedia',
+            'nama.string' => 'Nama Kantor Harus berupa teks',
+            'link_gmaps.string' => 'Nama link Gmaps Harus berupa teks',
         ]);
 
-        return redirect()->back()->with('success', "Data Kantor '{$kantor->nama}' berhasil diperbarui");
+        $kantor = Kantor::findOrFail($id);
+        $kantor->update([
+            'nama' => $request->input('nama') ?? $kantor->nama,
+            'link_gmaps' => $request->input('link_gmaps') ?? $kantor->link_gmaps,
+        ]);
+
+        return redirect()->back()->with('success', "Data $kantor->nama berhasil di Update");
     }
+
+
     public function PengaturanDeleteKantor($id)
     {
         $kantor = Kantor::findOrFail($id);
         $kantor->delete();
-        return redirect()->back()->with('success', "Kantor berhasil diperbarui");
+        return redirect()->back()->with('success', "Data $kantor->nama Berhasil Dihapus");
     }
 
 
@@ -171,11 +183,23 @@ class PengaturanController extends Controller
     {
         // Validate the request data
         $request->validate([
-            'nama' => 'required|string',
+            'nama' => 'required|string|unique:shifts,nama',
             'jam_mulai' => 'required|string',
             'jam_istirahat' => 'required|string',
             'jam_selesai_istirahat' => 'required|string',
             'jam_pulang' => 'required|string',
+        ], [
+            'nama.required' => 'Nama Shift Harus Diisi',
+            'nama.string' => 'Nama Shift Harus berupa teks',
+            'nama.unique' => 'Nama Shift Sudah Tersedia',
+            'jam_mulai.required' => 'Jam Mulai Harus Diisi',
+            'jam_mulai.string' => 'Jam Mulai Harus berupa teks',
+            'jam_istirahat.required' => 'Jam Istirahat Harus Diisi',
+            'jam_istirahat.string' => 'Jam Istirahat Harus berupa teks',
+            'jam_selesai_istirahat.required' => 'Jam Selesai Istirahat Harus Diisi',
+            'jam_selesai_istirahat.string' => 'Jam Selesai Istirahat Harus berupa teks',
+            'jam_pulang.required' => 'Jam Pulang Harus Diisi',
+            'jam_pulang.string' => 'Jam Pulang Harus berupa teks',
         ]);
 
         $jamMulai = $request->input('jam_mulai');
@@ -185,7 +209,7 @@ class PengaturanController extends Controller
 
         $waktuProduktif = $this->kalkulasiTotalProduktif($jamMulai, $jamPulang, $jamIstirahat, $jamSelesaiIstirahat);
         // Create a new Shift record
-        Shift::create([
+        $shift = Shift::create([
             'nama' => $request->input('nama'),
             'jam_mulai' => $jamMulai,
             'jam_istirahat' => $jamIstirahat,
@@ -195,18 +219,27 @@ class PengaturanController extends Controller
         ]);
 
         // Redirect back with success message
-        return redirect()->back()->with('success', 'Data Shift berhasil ditambahkan');
+        return redirect()->back()->with('success', "Data $shift->nama berhasil ditambahkan");
     }
     public function PengaturanEditShift(Request $request, $id)
     {
         // Validate the request data
         $request->validate([
-            'nama' => 'nullable|string',
+            'nama' => 'nullable|string|unique:shifts,nama',
             'jam_mulai' => 'nullable|string',
             'jam_istirahat' => 'nullable|string',
             'jam_selesai_istirahat' => 'nullable|string',
             'jam_pulang' => 'nullable|string',
+        ],[
+            'nama.string' => 'Nama Shift Harus berupa teks',
+            'nama.unique' => 'Nama Shift Sudah Tersedia',
+            'jam_mulai.string' => 'Jam Mulai Harus berupa teks',
+            'jam_istirahat.string' => 'Jam Istirahat Harus berupa teks',
+            'jam_selesai_istirahat.required' => 'Jam Selesai Istirahat Harus Diisi',
+            'jam_selesai_istirahat.string' => 'Jam Selesai Istirahat Harus berupa teks',
+            'jam_pulang.string' => 'Jam Pulang Harus berupa teks',
         ]);
+
 
         $shift = Shift::findOrFail($id);
         $jamMulai = $request->input('jam_mulai') ?? $shift->jam_mulai;
@@ -227,13 +260,13 @@ class PengaturanController extends Controller
         ]);
 
         // Redirect back with success message
-        return redirect()->back()->with('success', 'Data Shift berhasil diubah');
+        return redirect()->back()->with('success', "Data $shift->nama berhasil diubah");
     }
     public function PengaturanDeleteShift($id)
     {
         $shift = Shift::findOrFail($id);
         $shift->delete();
-        return redirect()->back()->with('success', 'Data Shift berhasil dihapus');
+        return redirect()->back()->with('success', "Data $shift->nama berhasil dihapus");
     }
 
 }

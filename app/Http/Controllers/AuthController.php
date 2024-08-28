@@ -33,7 +33,8 @@ class AuthController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'telepon' => 'required|string|max:16',
             'nip' => 'string|max:20',
-            'ttl' => 'string',
+            'tempat_lahir' => 'string',
+            'tanggal_lahir' => 'date',
             'password' => 'required|string|confirmed',
         ]);
     }
@@ -57,7 +58,8 @@ class AuthController extends Controller
             'nama' => $validatedData['nama'],
             'telepon' => '+62' . $validatedData['telepon'],
             'nip' => $validatedData['nip'],
-            'ttl' => $validatedData['ttl'],
+            'tempat_lahir' => $validatedData['tempat_lahir'],
+            'tanggal_lahir' => $validatedData['tanggal_lahir'],
 
         ]);
 
@@ -115,7 +117,7 @@ class AuthController extends Controller
         return redirect()->route('login')->with('error', 'Username/email tidak ditemukan')->withInput();
     }
 
-    // Mengecek apakah password 
+    // Mengecek apakah password
     if (!Hash::check($request->password, $user->password)) {
         return redirect()->route('login')->with('error', 'Password yang dimasukkan salah')->withInput();
     }
@@ -128,7 +130,7 @@ class AuthController extends Controller
 
     if (Auth::attempt($infologin, $remember)) {
         Cookie::queue('email', $request->email, 60 * 24 * 30); // Store for 30 days
-        
+
         if (Auth::user()->role->role == 'admin' && Auth::user()->status_akun == 1) {
             return redirect()->route('dashboard');
         } else if (Auth::user()->role->role == 'karyawan' && Auth::user()->status_akun == 1) {

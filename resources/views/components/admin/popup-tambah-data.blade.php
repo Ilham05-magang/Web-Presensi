@@ -62,7 +62,7 @@
                                 <input type="text" name="nama" id="nama"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                     placeholder="{{ $data->nama ?? 'Nama Kantor...' }}"
-                                    value="" required>
+                                    value="{{ $data->nama ?? '' }}" required>
                             </div>
                             <div class="col-span-2">
                                 <label for="link_gmaps" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama</label>
@@ -77,27 +77,27 @@
                                 <input type="text" name="nama" id="nama"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                     placeholder="{{ $data->nama ?? 'Nama Shift...' }}"
-                                    value=""> <!-- Ensure value is pre-filled -->
+                                    value="" required> <!-- Ensure value is pre-filled -->
                             </div>
                             <div class="col-span-1">
                                 <label for="jam_mulai" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Jam Mulai</label>
                                 <input type="text" name="jam_mulai" id="time-picker" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                placeholder="{{ $data->jam_mulai ?? 'Jam mulai...' }}" required />
+                                placeholder="{{ $data->jam_mulai ?? 'Jam mulai...' }}" value="" required >
                             </div>
                             <div class="col-span-1">
                                 <label for="jam_istirahat" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Jam Istirahat</label>
                                 <input type="text" name="jam_istirahat" id="time-picker" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                placeholder="{{ $data->jam_istirahat ?? 'Jam Istirahat...' }}" required />
+                                placeholder="{{ $data->jam_istirahat ?? 'Jam Istirahat...' }}" value="" required >
                             </div>
                             <div class="col-span-1">
                                 <label for="jam_selesai_istirahat" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Jam Selesai Istirahat</label>
                                 <input type="text" name="jam_selesai_istirahat" id="time-picker" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                placeholder="{{ $data->jam_selesai_istirahat ?? 'Jam Selesai Istirahat...' }}" required />
+                                placeholder="{{ $data->jam_selesai_istirahat ?? 'Jam Selesai Istirahat...' }}" value="" required >
                             </div>
                             <div class="col-span-1">
                                 <label for="jam_pulang" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Jam Pulang</label>
                                 <input type="text" name="jam_pulang" id="time-picker" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                placeholder="{{ $data->jam_pulang ?? 'Jam Pulang...' }}" required />
+                                placeholder="{{ $data->jam_pulang ?? 'Jam Pulang...' }}" value="" required >
                             </div>
                         @endif
                     </div>

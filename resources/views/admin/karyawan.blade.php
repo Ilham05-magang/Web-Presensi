@@ -5,71 +5,70 @@
         <x-admin.searchbutton :action="route('dashboard.searchkaryawan')" />
     </div>
     <hr class="border-t-2 border-gray-200">
-    <div class="p-5">
-        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-            <table class="w-full text-sm text-left text-center text-white bg-gray-400 rtl:text-right">
-                <thead class="text-xs uppercase bg-gray-700">
+    <div class="p-5 capitalize">
+        <div class="relative overflow-x-auto ">
+            <table class="w-full text-sm text-center text-black border-[1px]  border-[#242947]  bg-gray-100 rtl:text-right rounded-b-lg">
+                <thead class="text-xs uppercase bg-gray-100 border-[1px] border-t-0  border-[#242947] ">
                     <tr>
-                        <th scope="col" class="p-3">
+                        <th scope="col" class="p-1 border-[#242947] border-[1px]">
                             No
                         </th>
-                        <th scope="col" class="px-6 py-3">
+                        <th scope="col" class="px-2 py-1 border-[#242947] border-[1px]">
                             Nama
                         </th>
-                        <th scope="col" class="px-6 py-3">
+                        <th scope="col" class="px-2 py-1 border-[#242947] border-[1px]">
                             Divisi
                         </th>
-                        <th scope="col" class="px-6 py-3">
+                        <th scope="col" class="px-2 py-1 border-[#242947] border-[1px]">
                             Kantor
                         </th>
-                        <th scope="col" class="px-6 py-3">
+                        <th scope="col" class="px-2 py-1 border-[#242947] border-[1px]">
                             Shift
                         </th>
-                        <th scope="col" class="px-6 py-3 ">
+                        <th scope="col" class="px-2 py-1 border-[#242947] border-[1px] ">
                             Status Akun
                         </th>
-                        <th></th>
+                        <th scope="col" class="px-2 py-1 border-[#242947] border-[1px] ">
+                            Aksi
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($datakaryawan as $data)
-                    <tr class="bg-[#242947] border-b border-gray-700">
-                        <td class="p-3">
+                    <tr class="border-[#242947] border-[1px] border-t-0">
+                        <td class="p-1 border-[#242947] border-[1px]">
                             {{ $loop->iteration }}
                         </td>
-                        <td class="px-5 py-3">
+                        <td class="px-3 py-1 border-[#242947] border-[1px]">
                             {{ $data->nama }}
                         </td>
-                        <td class="px-5 py-3">
+                        <td class="px-3 py-1 border-[#242947] border-[1px] text-left">
                             {{ $data->divisi->divisi ?? '--//--' }}
                         </td>
-                        <td class="px-5 py-3">
+                        <td class="px-3 py-1 border-[#242947] border-[1px]">
                             {{ $data->kantor->nama ?? '--//--' }}
                         </td>
-                        <td class="px-5 py-3">
+                        <td class="px-3 py-1 border-[#242947] border-[1px]">
                             {{ $data->shift->nama?? '--//--' }}
                         </td>
-                        <td class="px-5 py-3 ">
+                        <td class="px-3 py-1 border-[#242947] border-[1px] ">
                             @if ($data->akun->status_akun == 1)
                             Akun Aktif
                             @else
                             Akun Belum Aktif
                             @endif
                         </td>
-                        <td class="py-3">
-                            <button data-modal-target="editkaryawan{{ $data->id }}"
-                                data-modal-toggle="editkaryawan{{ $data->id }}"
-                                class="text-white hover:bg-yellow-300 hover:text-gray-800 bg-yellow-400 px-2 rounded-lg py-1.5 text-center text-xl font-medium mr-3">
-                                <i class="ri-edit-2-line"></i>
-                            </button>
+                        <td class="py-2 text-center">
+                            <a href="{{ route('dashboard.karyawan.show', $data->id) }}"
+                                class="px-2 py-2 pl-3 text-sm font-medium text-center text-white bg-yellow-400 rounded-lg hover:bg-yellow-300 hover:text-gray-800">
+                                Detail
+                            </a>
                             <button data-modal-target="delete{{ $data->id }}" data-modal-toggle="delete{{ $data->id }}"
-                                class="text-white hover:bg-red-400 hover:text-gray-800 bg-red-500 px-2 rounded-lg py-1.5 text-center text-xl font-medium">
+                                class="px-2 py-1 ml-4 text-base font-medium text-center text-white bg-red-500 rounded-lg hover:bg-red-400 hover:text-gray-800">
                                 <i class="ri-delete-bin-6-line"></i>
                             </button>
                         </td>
                     </tr>
-                    <x-admin.popup-admin title="Edit Data Karyawan" :action="route('dashboard.editkaryawan', $data->id)"
-                        :id="'editkaryawan' . $data->id" :data="$data" :datadivisi="$datadivisi" :datakantor="$datakantor" :datashift="$datashift" />
                     <x-admin.popup-admin title="delete" :action="route('dashboard.deletekaryawan',$data->id)"
                         :id="'delete' . $data->id" :data="$data->nama" />
                     @endforeach
@@ -78,4 +77,24 @@
             </table>
         </div>
     </div>
+    @if (session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: '{{ session('success') }}',
+            });
+        </script>
+    @endif
+    @if ($errors->any())
+        @foreach ($errors->all() as $error)
+            <script>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: '{{ $error }}',
+                });
+            </script>
+        @endforeach
+    @endif
 </x-layout.layout-admin>

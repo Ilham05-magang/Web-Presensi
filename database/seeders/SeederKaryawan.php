@@ -25,12 +25,18 @@ class SeederKaryawan extends Seeder
         ];
 
         $month = [
-            'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+            'Januari' => '01', 'Februari' => '02', 'Maret' => '03', 'April' => '04',
+            'Mei' => '05', 'Juni' => '06', 'Juli' => '07', 'Agustus' => '08',
+            'September' => '09', 'Oktober' => '10', 'November' => '11', 'Desember' => '12'
         ];
 
         $data = [];
         for ($i=1; $i<=10; $i++){
             $tahun = rand(1995, 2005);
+            $bulan = array_rand($month); // Ambil bulan secara acak
+            $tanggal = rand(1, 28); // Tetap gunakan 28 hari untuk menghindari tanggal yang tidak valid
+            $tanggal_lahir = $tahun . '-' . $month[$bulan] . '-' . str_pad($tanggal, 2, '0', STR_PAD_LEFT);
+
             $data[] = [
                 'akun_id' => $i,
                 'kantor_id' => rand(1,2),
@@ -39,7 +45,8 @@ class SeederKaryawan extends Seeder
                 'nama' => $name[$i-1],
                 'nip' => rand(100000000, 999999999),
                 'telepon' => '08'.rand(1000000000, 9999999999),
-                'ttl' => $city[rand(0, count($city)-1)].', '.rand(1, 31).' '.$month[rand(0, count($month)-1)].' '.$tahun
+                'tempat_lahir' => $city[rand(0, count($city)-1)],
+                'tanggal_lahir' => $tanggal_lahir
             ];
         }
         Karyawan::insert($data);

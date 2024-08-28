@@ -26,6 +26,8 @@ return new class extends Migration
             $table->time('jam_pulang')->nullable();
             $table->string('status_kehadiran')->nullable();
             $table->time('jam_total_produktif')->nullable();
+            $table->string('file_input')->nullable();
+            $table->string('keterangan')->nullable();
             $table->timestamps();
         });
     }

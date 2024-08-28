@@ -11,7 +11,7 @@
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                 </svg>
-                <h3 class="mb-5 text-lg font-semibold text-gray-700 dark:text-gray-400">Apakah Anda Yakin ingin menghapus Karyawan {{ $data }}? <br><span class="text-base font-medium text-red-600 font-italic" >(<span class="text-yellow-500">Attention: </span>Mengakibatkan Data Akun, Data Absensi, dan Data Karyawan terhapus untuk karyawan <span class="{{ $data }}"></span>)</span></h3>
+                <h3 class="mb-5 text-lg font-semibold text-gray-700 dark:text-gray-400">Apakah Anda Yakin ingin menghapus Karyawan {{ $data }}? <br><span class="text-base font-medium text-red-600 font-italic" >(<span class="text-yellow-500">Attention: </span>Mengakibatkan Data Akun, Data Absensi, dan Data Karyawan terhapus untuk karyawan <span class="text-yellow-500 text-bold">{{ $data }}</span>)</span></h3>
                 <form action="{{ $action }}" method="POST">
                     @csrf
                     @method('DELETE')
