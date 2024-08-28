@@ -61,8 +61,7 @@
                                 <label for="nama" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama</label>
                                 <input type="text" name="nama" id="nama"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                    placeholder="{{ $data->nama ?? 'Nama Kantor...' }}"
-                                    value="{{ $data->nama ?? '' }}" required>
+                                    placeholder="{{ $data->nama ?? 'Nama Kantor...' }}">
                             </div>
                             <div class="col-span-2">
                                 <label for="link_gmaps" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama</label>
@@ -76,8 +75,7 @@
                                 <label for="nama" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama</label>
                                 <input type="text" name="nama" id="nama"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                    placeholder="{{ $data->nama ?? 'Nama Shift...' }}"
-                                    value="" required> <!-- Ensure value is pre-filled -->
+                                    placeholder="{{ $data->nama ?? 'Nama Shift...' }}"> <!-- Ensure value is pre-filled -->
                             </div>
                             <div class="col-span-1">
                                 <label for="jam_mulai" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Jam Mulai</label>

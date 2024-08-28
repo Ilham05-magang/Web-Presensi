@@ -18,7 +18,11 @@ class Karyawan extends Model
         'shift_id',
         'nama',
         'nip',
-        'ttl',
+        'tempat_lahir',
+        'tanggal_lahir',
+        'tanggal_masuk',
+        'tanggal_keluar',
+        'os',
         'telepon',
     ];
 

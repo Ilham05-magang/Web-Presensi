@@ -6,36 +6,36 @@
     </div>
     <hr class="border-t-2 border-gray-200">
     <div class="p-5 capitalize">
-        <div class="relative overflow-x-auto ">
-            <table class="w-full text-sm text-center text-black border-[1px]  border-[#242947]  bg-gray-100 rtl:text-right rounded-b-lg">
-                <thead class="text-xs uppercase bg-gray-100 border-[1px] border-t-0  border-[#242947] ">
+        <div class="relative overflow-x-auto shadow-md sm:rounded-t-xl">
+            <table class="w-full text-sm text-center text-black bg-blue-100 rounded-b-lg rtl:text-right">
+                <thead class="text-xs uppercase bg-[#242947] py-14 border-[1px] border-[#242947] text-white">
                     <tr>
-                        <th scope="col" class="p-1 border-[#242947] border-[1px]">
+                        <th scope="col" class="p-1" >
                             No
                         </th>
-                        <th scope="col" class="px-2 py-1 border-[#242947] border-[1px]">
+                        <th scope="col" class="px-2 py-5">
                             Nama
                         </th>
-                        <th scope="col" class="px-2 py-1 border-[#242947] border-[1px]">
+                        <th scope="col" class="px-2 py-5" >
                             Divisi
                         </th>
-                        <th scope="col" class="px-2 py-1 border-[#242947] border-[1px]">
+                        <th scope="col" class="px-2 py-5" >
                             Kantor
                         </th>
-                        <th scope="col" class="px-2 py-1 border-[#242947] border-[1px]">
+                        <th scope="col" class="px-2 py-5" >
                             Shift
                         </th>
-                        <th scope="col" class="px-2 py-1 border-[#242947] border-[1px] ">
+                        <th scope="col" class="px-2 py-5">
                             Status Akun
                         </th>
-                        <th scope="col" class="px-2 py-1 border-[#242947] border-[1px] ">
+                        <th scope="col" class="px-2 py-5">
                             Aksi
                         </th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($datakaryawan as $data)
-                    <tr class="border-[#242947] border-[1px] border-t-0">
+                    <tr class="border-[#242947] border-[1px]">
                         <td class="p-1 border-[#242947] border-[1px]">
                             {{ $loop->iteration }}
                         </td>

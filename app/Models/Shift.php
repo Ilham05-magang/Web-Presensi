@@ -16,4 +16,8 @@ class Shift extends Model
         'jam_pulang',
         'jam_total_produktif',
     ];
+    public function karyawan()
+    {
+        return $this->hasMany(Karyawan::class, 'kantor_id');
+    }
 }
