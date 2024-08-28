@@ -1,14 +1,21 @@
 <x-layout.layout-admin>
     <x-slot:title>{{ $title }}</x-slot:title>
     <div class="flex items-center justify-between w-full py-10 text-2xl capitalize px-7">
-        <div class="flex items-center gap-3 text-lg font-bold capitalize">
-            <a href="{{ route('dashboard.divisi') }}"><i class="py-1 pr-3 text-2xl hover:text-blue-600 ri-arrow-left-line"></i></a>
-            <div class="px-3 py-2 text-2xl bg-gray-300 rounded-full">
-                <i class="{{ $dataPerDivisi->icon ?? 'ri-heart-add-2-line' }} font-semibold"></i>
+        <div class="flex items-center justify-between w-full gap-3 text-lg font-bold capitalize">
+            <div class="flex items-center gap-3">
+                <a href="{{ route('dashboard.divisi') }}"><i class="py-1 pr-3 text-2xl hover:text-blue-600 ri-arrow-left-line"></i></a>
+                <div class="px-3 py-2 text-2xl bg-gray-300 rounded-full">
+                    <i class="{{ $dataPerDivisi->icon ?? 'ri-heart-add-2-line' }} font-semibold"></i>
+                </div>
+                <div class="flex flex-col text-3xl">
+                    <h1>Divisi {{ $dataPerDivisi->divisi }}</h1>
+                </div>
             </div>
-            <div class="flex flex-col text-3xl">
-                <h1>Divisi {{ $dataPerDivisi->divisi }}</h1>
-            </div>
+            <button data-modal-target="delete{{ $dataPerDivisi->id }}" data-modal-toggle="delete{{ $dataPerDivisi->id }}"
+                class="px-2.5 py-1.5 ml-4 text-2xl font-medium text-center text-white bg-red-500 rounded-lg hover:bg-red-400 hover:text-gray-800">
+                <i class="ri-delete-bin-6-line"></i>
+            </button>
+            <x-admin.popup-divisi title="delete" id="delete{{ $dataPerDivisi->id }}" :action="route('dashboard.divisi.Delete',$dataPerDivisi->id)" :data="$dataPerDivisi"/>
         </div>
     </div>
     <hr class="border-t-2 border-gray-200">
@@ -81,6 +88,29 @@
 
                 </tbody>
             </table>
+            @if($dataPerDivisi->karyawan->count()<1)
+                <div class="w-full py-10 text-base font-semibold text-center">Data Kosong</div>
+            @endif
         </div>
     </div>
+    @if (session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: '{{ session('success') }}',
+            });
+        </script>
+    @endif
+    @if ($errors->any())
+        @foreach ($errors->all() as $error)
+            <script>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: '{{ $error }}',
+                });
+            </script>
+        @endforeach
+    @endif
 </x-layout.layout-admin>

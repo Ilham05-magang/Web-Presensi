@@ -42,7 +42,7 @@
                         <td class="px-3 py-1 border-[#242947] border-[1px]">
                             {{ $data->nama }}
                         </td>
-                        <td class="px-3 py-1 border-[#242947] border-[1px] text-left">
+                        <td class="px-3 py-1 border-[#242947] border-[1px]">
                             {{ $data->divisi->divisi ?? '--//--' }}
                         </td>
                         <td class="px-3 py-1 border-[#242947] border-[1px]">

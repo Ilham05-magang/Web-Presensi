@@ -59,10 +59,18 @@ class DivisiController extends Controller
         ]);
         return redirect()->back()->with('success', "Data $divisi->divisi Berhasil Ditambah");
     }
-    public function DeleteDivisi($id){
+    public function DeleteDivisi($id) {
+        $title = 'Divisi';
+        $title2 = 'Daftar Divisi';
         $divisi = Divisi::findOrFail($id);
+
+        $divisiName = $divisi->divisi;
         $divisi->delete();
-        return redirect()->back()->with('success', "Data $divisi->divisi Berhasil Ditambah");
+
+        $dataPerDivisi = Divisi::with('karyawan')->get()->groupBy('divisi_id');
+
+        return redirect()->route('dashboard.divisi', compact('title', 'title2', 'dataPerDivisi'))
+               ->with('success', "Divisi $divisiName Berhasil Dihapus");
     }
     public function SearchDivisi(Request $request){
         $search = $request->input('query');
