@@ -27,6 +27,7 @@ class Users extends Authenticatable
         'password',
         'status_akun',
         'os',
+        'browser',
         'email_verified_at',
         'remember_token'
     ];
