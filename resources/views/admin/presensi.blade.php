@@ -2,7 +2,7 @@
     use Carbon\Carbon;
     Carbon::setLocale('id');
     $tanggalselect = Carbon::parse($dateQuery)->locale('id')->translatedFormat('d - F - Y');
-    $datenow = Carbon::parse($datenow);
+    $datenow = Carbon::parse($dateQuery);
     $day = \Carbon\Carbon::parse(request('date') ?? $datenow->format('Y-m-d'))->dayOfWeek;
 @endphp
 <x-layout.layout-admin>

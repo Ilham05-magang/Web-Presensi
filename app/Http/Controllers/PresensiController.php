@@ -25,7 +25,7 @@ class PresensiController extends Controller
 
         $title = 'Presensi Karyawan';
         $title2 = 'Data Presensi Karyawan';
-        return view('admin.Presensi', compact('title', 'title2', 'datenow', 'dataAbsensi', 'totalmasuk', 'totaltidakmasuk', 'totalIzin', 'dataTanggalLibur','dateQuery'));
+        return view('admin.Presensi', compact('title', 'title2', 'dataAbsensi', 'totalmasuk', 'totaltidakmasuk', 'totalIzin', 'dataTanggalLibur','dateQuery'));
     }
 
     public function SearchPresensiAdmin(Request $request, $tanggal){
@@ -223,11 +223,12 @@ class PresensiController extends Controller
 
         $title = "Data Absensi Karyawan";
 
-        return view('admin.show-detail-presensi', compact('title', 'dataAbsensi', 'karyawan', 'totalmasuk', 'totalIzin', 'totaltidakmasuk', 'selectedMonth', 'dataTanggalLibur'));
+        return view('admin.show-detail-presensi', compact('title', 'dataAbsensi', 'karyawan', 'totalmasuk', 'totalIzin', 'totaltidakmasuk', 'selectedMonth', 'dataTanggalLibur','dateQuery','datenow'));
     }
 
     public function SearchAbsensiByMonth(Request $request, $id)
     {
+        $datenow = Carbon::now();
         $selectedMonth = $request->input('month');
         $month = $request->input('month');
         $year = Carbon::now()->year;
@@ -262,7 +263,7 @@ class PresensiController extends Controller
         $title = "Data Absensi Karyawan";
 
         // Return view with the required data
-        return view('admin.show-detail-presensi', compact('title', 'datenow', 'dataAbsensi', 'karyawan', 'totalmasuk', 'totalIzin', 'totaltidakmasuk', 'selectedMonth', 'dataTanggalLibur'));
+        return view('admin.show-detail-presensi', compact('title', 'datenow', 'dataAbsensi', 'karyawan', 'totalmasuk', 'totalIzin', 'totaltidakmasuk', 'selectedMonth', 'dataTanggalLibur','datenow'));
     }
 
     public function PostKehadiran(Request $request,$tanggal, $id)

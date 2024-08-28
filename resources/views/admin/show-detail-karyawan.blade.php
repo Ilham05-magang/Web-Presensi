@@ -10,7 +10,7 @@
                 <a href="{{ route('dashboard.karyawan') }}"><i class="py-1 pr-3 text-2xl hover:text-blue-600 ri-arrow-left-line"></i></a>
                 <div>
                     <h1>"{{ $datakaryawan->nama }}"</h1>
-                    <p class="text-lg">Divisi {{ $datakaryawan->divisi->divisi }}</p>
+                    <p class="text-lg">Divisi {{ $datakaryawan->divisi->divisi ?? '--//--' }}</p>
                 </div>
             </div>
             <div>
@@ -118,12 +118,12 @@
                     <label for="os" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">OS</label>
                     <select id="os" name="os" disabled
                         class="editstatus bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                        {{-- <option value="Windows" {{ $data->akun->os == 'Windows' ? 'selected' : '' }}>Windows</option>
-                        <option value="macOS" {{ $data->akun->os == 'macOS' ? 'selected' : '' }}>macOS</option>
-                        <option value="Ubuntu" {{ $data->akun->os == 'Ubuntu' ? 'selected' : '' }}>Ubuntu</option>
-                        <option value="Linux" {{ $data->akun->os == 'Linux' ? 'selected' : '' }}>Linux</option>
-                        <option value="Android" {{ $data->akun->os == 'Android' ? 'selected' : '' }}>Android</option>
-                        <option value="IOS" {{ $data->akun->os == 'IOS' ? 'selected' : '' }}>IOS</option> --}}
+                        <option value="Windows" {{ $datakaryawan->akun->os == 'Windows' ? 'selected' : '' }}>Windows</option>
+                        <option value="macOS" {{ $datakaryawan->akun->os == 'macOS' ? 'selected' : '' }}>macOS</option>
+                        <option value="Ubuntu" {{ $datakaryawan->akun->os == 'Ubuntu' ? 'selected' : '' }}>Ubuntu</option>
+                        <option value="Linux" {{ $datakaryawan->akun->os == 'Linux' ? 'selected' : '' }}>Linux</option>
+                        <option value="Android" {{ $datakaryawan->akun->os == 'Android' ? 'selected' : '' }}>Android</option>
+                        <option value="IOS" {{ $datakaryawan->akun->os == 'IOS' ? 'selected' : '' }}>IOS</option>
                     </select>
                 </div>
                 <div class="flex flex-col gap-1">

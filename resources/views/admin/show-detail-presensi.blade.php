@@ -1,12 +1,13 @@
 @php
     use Carbon\Carbon;
     Carbon::setLocale('id');
-    $tanggal = Carbon::create($datenow)->locale('id')->translatedFormat('F - Y');
-    $day = \Carbon\Carbon::parse(request('date') ?? $datenow->format('Y-m-d'))->dayOfWeek;
+    
 
     $year = now()->year;
     $dateString = $year . '-' . $selectedMonth;
     $tanggalsearch = Carbon::parse($dateString)->locale('id')->translatedFormat('F - Y');
+    $tanggal = Carbon::create($dateString)->locale('id')->translatedFormat('F - Y');
+    $day = \Carbon\Carbon::parse(request('date') ?? $datenow->format('Y-m-d'))->dayOfWeek;
 @endphp
 
 <x-layout.layout-admin>
