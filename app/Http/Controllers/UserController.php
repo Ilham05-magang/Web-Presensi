@@ -89,6 +89,7 @@ class UserController extends Controller
                     'status_kehadiran' => 'Masuk',
                 ]);
                 $this->addAktivitas('Masuk');
+                return redirect()->back()->with('success', 'Berhasil Presensi Masuk');
             } else {
                 $title = $this->determineButtonTitle($absensi);
                 $this->updateAbsensiTime($absensi);

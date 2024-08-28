@@ -61,8 +61,8 @@
                     x-init="updateTime()" x-text="time"
                     >------</span>
             </div>
-            <div class="h-32 flex justify-center items-center">
-                <h2 class="mx-auto text-white font-semibold italic text-2xl max-md:text-base max-md:py-20"
+            <div class="h-40 flex justify-center items-center">
+                <h2 class="mx-auto text-white font-semibold italic text-3xl max-md:text-base max-md:py-20"
                     x-data="{
                         quotes: {{$quotesJson}},
                         currentQuote: '---------------',
@@ -77,15 +77,15 @@
 
             <div class="w-full flex justify-between pb-5 max-md:pb-3 items-end">
                 <div
-                    class="flex gap-2 items-center pr-9 bg-[#00000066] rounded-[32px] p-1 max-md:p-[2px] max-md:pr-9 max-md:gap-1">
+                    class="flex gap-3 items-center pr-9 bg-[#00000066] rounded-[32px] p-1 max-md:p-[2px] max-md:pr-9 max-md:gap-1">
                     <div
-                        class="w-12 h-12 max-md:w-7 max-md:h-7 rounded-full bg-red-600 flex items-center justify-center">
+                        class="w-14 h-14 max-md:w-7 max-md:h-7 rounded-full bg-red-600 flex items-center justify-center">
                         <i class="ri-user-fill text-3xl max-md:text-base text-white"></i>
                     </div>
                     <div class="flex flex-col gap-[2px] ">
-                        <div class="font-medium text-white text-base max-md:text-xs max-md:leading-none">
+                        <div class="font-medium text-white text-lg max-md:text-xs max-md:leading-none">
                             {{ $user->karyawan->nama }}</div>
-                        <div class="font-light text-white text-xs max-md:text-[10px] max-md:leading-none">
+                        <div class="font-light text-white text-sm max-md:text-[10px] max-md:leading-none">
                             K/{{ $user->karyawan->divisi->divisi ?? '???' }}/{{ $user->karyawan->nip ?? '???' }}/{{ $formattedDate }}/{{ $user->karyawan->id ?? '???' }}
                         </div>
                     </div>

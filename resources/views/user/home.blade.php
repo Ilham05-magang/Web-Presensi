@@ -32,7 +32,7 @@
                     @method('PUT')
                 @endif
                 @csrf
-                <button {{ ($absensi && $absensi->jam_pulang) || $izin || !$user->karyawan->shift_id ? 'disabled' : '' }} type="submit"
+                <button {{ ($absensi && $absensi->jam_pulang) || $izin || !$user->karyawan->shift_id || ($absensi && $absensi->status_kehadiran == 'Izin')  ? 'disabled' : '' }} type="submit"
                     class="disabled:opacity-20 bg-button w-full text-white font-semibold rounded-xl px-3 py-3 text-sm justify-center gap-1 ">{{ $titleButton ?? 'Masuk' }}</button>
             </form>
             <form action="{{ route('izin') }}" method="post">
