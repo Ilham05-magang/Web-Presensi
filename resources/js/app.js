@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
             dropdownIcon.classList.add('ri-arrow-drop-up-line');
         }
     });
+
 });
 flatpickr("#time-picker", {
     enableTime: true,
@@ -30,4 +31,3 @@ flatpickr("#time-picker", {
     minuteIncrement: 1, // Allow minute increments
     secondIncrement: 1 // Allow second increments
 });
-

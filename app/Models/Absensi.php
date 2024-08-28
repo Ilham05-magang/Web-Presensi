@@ -21,6 +21,8 @@ class Absensi extends Model
         'status_kehadiran',
         'jam_total_produktif',
         'status_kehadiran',
+        'file_input',
+        'keterangan'
     ];
     public function karyawan()
     {

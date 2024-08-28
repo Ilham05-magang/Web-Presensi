@@ -37,9 +37,14 @@
                                 </div>
                             </div>
                             <div class="flex flex-col gap-5">
-                                <div class="flex flex-col gap-1">
-                                    <label for="ttl" class="font-semibold">Tempat, Tanggal Lahir*</label>
-                                    <input type="text" name="ttl" id="ttl" class="text-sm rounded-lg" placeholder="Cth: Semarang, 10 September 2021" value="{{ old('ttl') }}" required>
+                                <div class="grid grid-cols-2 gap-1">
+                                    <label for="tempat_lahir" class="col-span-2 font-semibold">Tempat, Tanggal Lahir*</label>
+                                    <div class="col-span-1">
+                                        <input type="text" name="tempat_lahir" id="tempat_lahir" class="w-full text-sm rounded-lg " placeholder="Tempat..." value="{{ old('tempat_lahir') }}" required>
+                                    </div>
+                                    <div class="col-span-1">
+                                        <input type="date" name="tanggal_lahir" id="tanggal_lahir" class="w-full text-sm rounded-lg " value="{{ old('tanggal_lahir') }}" required>
+                                    </div>
                                 </div>
                                 <div class="flex flex-col gap-1">
                                     <label for="nip" class="font-semibold">NIP*</label>

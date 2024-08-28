@@ -24,7 +24,10 @@ return new class extends Migration
             $table->string('nama')->nullable(false);
             $table->string('nip')->nullable();
             $table->string('telepon')->nullable(false);
-            $table->string('ttl')->nullable(false);
+            $table->string('tempat_lahir')->nullable(false);
+            $table->date('tanggal_lahir')->nullable(false);
+            $table->date('tanggal_masuk')->nullable(false);
+            $table->date('tanggal_keluar')->nullable(false);
             $table->timestamps();
         });
     }

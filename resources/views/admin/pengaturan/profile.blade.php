@@ -6,11 +6,40 @@
     </div>
 
     <hr class="border-t-2 border-gray-200">
-    <div class="p-8 text-left">
+    <div class="p-8 text-left capitalize">
         <form action="{{ route('dashboard.pengaturan.editprofile', $data->admin->id) }}" method="POST">
             @csrf
             @method('PUT')
-
+            @if (session('success'))
+                @if (session('success') == 'Inputan password lama salah')
+                    <script>
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: '{{ session('success') }}',
+                        });
+                    </script>
+                @else
+                    <script>
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: '{{ session('success') }}',
+                        });
+                    </script>
+                @endif
+            @endif
+            @if ($errors->any())
+                @foreach ($errors->all() as $error)
+                    <script>
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: '{{ $error }}',
+                        });
+                    </script>
+                @endforeach
+            @endif
             <div class="grid grid-cols-2 gap-5 text-xl font-semibold">
                 <div class="flex flex-col gap-6">
                     <div class="flex flex-col gap-1">
@@ -50,28 +79,7 @@
                         <input type="password" name="password_confirmation" class="rounded-lg" placeholder="**********">
                     </div>
 
-                    @if (session('success'))
-                        @if (session('success') == 'Inputan password lama salah')
-                            <div class="w-full mb-1 text-lg text-center text-red-600">
-                                {{ session('success') }}
-                            </div>
-                        @else
-                            <div class="w-full mb-1 text-lg text-center text-green-500">
-                                {{ session('success') }}
-                            </div>
-                        @endif
-                    @endif
-
-
-                    @if ($errors->any())
-                        <div class="w-full mb-2 text-base text-center text-red-500">
-                            @foreach ($errors->all() as $error)
-                                <div>{{ $error }}</div>
-                            @endforeach
-                        </div>
-                    @endif
-
-                    <button type="submit" class="px-4 py-3 bg-[#242947] rounded-xl text-white text-center">Ganti</button>
+                    <button type="submit" class="px-5 py-1.5 bg-[#242947] rounded-xl text-white text-lg font-medium text-center hover:bg-[#5B6390]">Simpan</button>
                 </div>
             </div>
         </form>

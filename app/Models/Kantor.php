@@ -12,4 +12,8 @@ class Kantor extends Model
         'nama',
         'link_gmaps'
     ];
+    public function karyawan()
+    {
+        return $this->hasMany(Karyawan::class, 'kantor_id');
+    }
 }

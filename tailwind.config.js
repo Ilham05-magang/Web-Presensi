@@ -6,19 +6,21 @@ module.exports = {
         "./node_modules/flowbite/**/*.js"
     ],
     theme: {
-        backgroundImage: {
-            'user-background': "url('assets/user-dashboard.svg')"
-        },
+
         colors: {
             'login':'#212529',
             'button':'#6C757D',
             'red-button': '#A4161A'
         },
         extend: {
+            backgroundImage: {
+                'user-background': "url('../assets/user-dashboard.svg')",
+                'karyawan-bg': "url('../assets/karyawan-admin.svg')"
+            },
             fontFamily: {
               inter: ['Inter', 'sans-serif'],
-            },
-        },
+            },
+        },
     },
     plugins: [
         require('flowbite/plugin'),

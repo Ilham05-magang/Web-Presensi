@@ -18,7 +18,11 @@ class Karyawan extends Model
         'shift_id',
         'nama',
         'nip',
-        'ttl',
+        'tempat_lahir',
+        'tanggal_lahir',
+        'tanggal_masuk',
+        'tanggal_keluar',
+        'os',
         'telepon',
     ];
 
@@ -36,8 +40,8 @@ class Karyawan extends Model
         return $this->belongsTo(Users::class, 'akun_id');
     }
     public function absensi()
-{
-    return $this->hasMany(Absensi::class, 'karyawan_id', 'id');
-}
+    {
+        return $this->hasMany(Absensi::class, 'karyawan_id', 'id');
+    }
 
 }

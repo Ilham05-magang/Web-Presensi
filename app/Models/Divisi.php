@@ -9,6 +9,15 @@ class Divisi extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'divisi'
+        'divisi',
+        'icon'
     ];
+    public function karyawan()
+    {
+        return $this->hasMany(Karyawan::class, 'divisi_id');
+    }
+    public function kantor()
+    {
+        return $this->belongsTo(Kantor::class, 'kantor_id');
+    }
 }
