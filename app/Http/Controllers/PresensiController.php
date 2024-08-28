@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Karyawan;
 use App\Models\Absensi;
+use App\Models\TanggalLibur;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -13,9 +14,10 @@ class PresensiController extends Controller
     {
         $dateQuery = Carbon::now()->format('Y-m-d');
 
-        $dataAbsensi = Karyawan::with(['absensi' => function($query) use ($dateQuery) {
+        $dataAbsensi = Karyawan::with(['absensi' => function ($query) use ($dateQuery) {
             $query->whereDate('tanggal', $dateQuery);
         }])->get();
+        $dataTanggalLibur = TanggalLibur::All();
 
         $totalmasuk = Absensi::where('status_kehadiran', 'Masuk')->whereDate('tanggal', $dateQuery)->count();
         $totalIzin = Absensi::where('status_kehadiran', 'Izin')->whereDate('tanggal', $dateQuery)->count();
@@ -23,7 +25,7 @@ class PresensiController extends Controller
 
         $title = 'Presensi Karyawan';
         $title2 = 'Data Presensi Karyawan';
-        return view('admin.Presensi', compact('title','title2','dataAbsensi','totalmasuk','totaltidakmasuk','totalIzin','dateQuery'));
+        return view('admin.Presensi', compact('title', 'title2', 'datenow', 'dataAbsensi', 'totalmasuk', 'totaltidakmasuk', 'totalIzin', 'dataTanggalLibur','dateQuery'));
     }
 
     public function SearchPresensiAdmin(Request $request, $tanggal){
@@ -32,12 +34,13 @@ class PresensiController extends Controller
         $searchQuery= $request->input('query');
 
 
-        $dataAbsensi = Karyawan::with(['absensi' => function($query) use ($dateQuery) {
+        $dataAbsensi = Karyawan::with(['absensi' => function ($query) use ($dateQuery) {
             $query->whereDate('tanggal', $dateQuery);
         }])
-        ->where('nama', 'LIKE', '%' . $searchQuery . '%') // Filter by employee name
-        ->get();
-
+            ->where('nama', 'LIKE', '%' . $searchQuery . '%') // Filter by employee name
+            ->get();
+        $dataTanggalLibur = TanggalLibur::All();
+        $totalkaryawan = Karyawan::All()->count();
         $totalmasuk = Absensi::where('status_kehadiran', 'Masuk')->whereDate('tanggal', $dateQuery)->count();
         $totalIzin = Absensi::where('status_kehadiran', 'Izin')->whereDate('tanggal', $dateQuery)->count();
         $totaltidakmasuk = Absensi::where('status_kehadiran', 'Tidak Masuk')->whereDate('tanggal', $dateQuery)->count();
@@ -45,15 +48,17 @@ class PresensiController extends Controller
 
         $title = 'Presensi Karyawan';
         $title2 = 'Data Presensi Karyawan';
-        return view('admin.Presensi', compact('title','title2','totalIzin','dateQuery','dataAbsensi','totalmasuk','totaltidakmasuk'));
+        return view('admin.Presensi', compact('title','title2','totalIzin','dateQuery','dataAbsensi','totalmasuk','totaltidakmasuk','dataTanggalLibur'));
     }
-    public function SearchPresensibyDateAdmin(Request $request) {
+    public function SearchPresensibyDateAdmin(Request $request)
+    {
         // Use Carbon to get the current date in the correct format for comparison
         $dateQuery = $request->input('date', Carbon::now()->format('Y-m-d'));
         // Fetch karyawan with absensi for the specified date
-        $dataAbsensi = Karyawan::with(['absensi' => function($query) use ($dateQuery) {
+        $dataAbsensi = Karyawan::with(['absensi' => function ($query) use ($dateQuery) {
             $query->whereDate('tanggal', $dateQuery);
         }])->get();
+        $dataTanggalLibur = TanggalLibur::All();
 
         // Calculate totals
         $totalmasuk = Absensi::where('status_kehadiran', 'Masuk')->whereDate('tanggal', $dateQuery)->count();
@@ -65,7 +70,7 @@ class PresensiController extends Controller
         $title2 = 'Data Presensi Karyawan';
 
         // Return the view with compacted variables
-        return view('admin.Presensi', compact('title','title2','totalIzin','dataAbsensi','totalmasuk','totaltidakmasuk','dateQuery'));
+        return view('admin.Presensi', compact('title','title2','totalIzin','dataAbsensi','totalmasuk','totaltidakmasuk','dateQuery','dataTanggalLibur'));
     }
 
     private function kalkulasiTotalProduktif($jamMulai, $jamPulang, $jamIstirahat, $jamSelesaiIstirahat, $jamIzin, $jamSelesaiIzin)
@@ -211,13 +216,14 @@ class PresensiController extends Controller
             ->whereYear('tanggal', $year)
             ->where('karyawan_id', $id)
             ->get();
+        $dataTanggalLibur = TanggalLibur::All();
 
         // Fetch karyawan details
         $karyawan = Karyawan::find($id);
 
         $title = "Data Absensi Karyawan";
 
-        return view('admin.show-detail-presensi', compact('title', 'dataAbsensi', 'karyawan', 'totalmasuk', 'totalIzin', 'totaltidakmasuk','selectedMonth'));
+        return view('admin.show-detail-presensi', compact('title', 'dataAbsensi', 'karyawan', 'totalmasuk', 'totalIzin', 'totaltidakmasuk', 'selectedMonth', 'dataTanggalLibur'));
     }
 
     public function SearchAbsensiByMonth(Request $request, $id)
@@ -249,12 +255,14 @@ class PresensiController extends Controller
             ->where('karyawan_id', $id)
             ->get();
 
+        $dataTanggalLibur = TanggalLibur::All();
+
         $karyawan = Karyawan::find($id);
 
         $title = "Data Absensi Karyawan";
 
         // Return view with the required data
-        return view('admin.show-detail-presensi', compact('title', 'dataAbsensi', 'karyawan', 'totalmasuk', 'totalIzin', 'totaltidakmasuk','selectedMonth'));
+        return view('admin.show-detail-presensi', compact('title', 'datenow', 'dataAbsensi', 'karyawan', 'totalmasuk', 'totalIzin', 'totaltidakmasuk', 'selectedMonth', 'dataTanggalLibur'));
     }
 
     public function PostKehadiran(Request $request,$tanggal, $id)

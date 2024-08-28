@@ -11,7 +11,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
-    <Main class="h-screen max-w-screen-xl mx-auto">
+    <Main class="h-screen max-w-screen-2xl mx-auto">
         {{ $slot }}
     </Main>
 </body>

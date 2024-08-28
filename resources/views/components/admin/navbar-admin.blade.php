@@ -83,6 +83,8 @@
                         <x-admin.li-navbar route="dashboard.pengaturan.profile" title="Profile" />
                         <x-admin.li-navbar route="dashboard.pengaturan.kantor" title="Kantor" />
                         <x-admin.li-navbar route="dashboard.pengaturan.shift" title="Shift" />
+                        <x-admin.li-navbar route="dashboard.pengaturan.tanggal" title="Tanggal" />
+                        <x-admin.li-navbar route="dashboard.pengaturan.quotes" title="Quotes" />
                     </ul>
                 </div>
             </div>

@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Absensi;
+use App\Models\Aktivitas;
+use App\Models\Quotes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Jenssegers\Agent\Facades\Agent;
 
 class UserController extends Controller
 {
@@ -13,6 +16,7 @@ class UserController extends Controller
         $izin = false;
         $user = auth()->user();
         $tanggalHariIni = Carbon::today()->toDateString();
+        $quotes = Quotes::pluck('quote')->toArray();
 
         // Mendapatkan absensi hari ini user jika ada
         $absensi = Absensi::where('karyawan_id', $user->karyawan->id)
@@ -28,9 +32,9 @@ class UserController extends Controller
         $titleButton = $this->determineButtonTitle($absensi);
         if ($titleButton == 'Masuk') {
             $method = 'POST';
-            return view('user.home', compact('user', 'absensi', 'titleButton', 'method', 'izin'));
+            return view('user.home', compact('user', 'absensi', 'titleButton', 'method', 'izin', 'quotes'));
         }
-        return view('user.home', compact('user', 'absensi', 'titleButton', 'izin'));
+        return view('user.home', compact('user', 'absensi', 'titleButton', 'izin', 'quotes'));
     }
 
     // Fungsi untuk menentukan nama button presensi
@@ -76,15 +80,19 @@ class UserController extends Controller
                     'jam_mulai' => Carbon::now('Asia/Jakarta')->format('H:i:s'),
                     'status_kehadiran' => 'Masuk',
                 ]);
+                $this->addAktivitas('Masuk');
+
                 return redirect()->back()->with('success', 'Berhasil Presensi Masuk');
-            } else if ($absensi->jam_mulai == '')  {
+            } else if ($absensi->jam_mulai == '') {
                 $absensi->update([
                     'jam_mulai' => Carbon::now('Asia/Jakarta')->format('H:i:s'),
                     'status_kehadiran' => 'Masuk',
                 ]);
+                $this->addAktivitas('Masuk');
+                return redirect()->back()->with('success', 'Berhasil Presensi Masuk');
             } else {
-                $this->updateAbsensiTime($absensi);
                 $title = $this->determineButtonTitle($absensi);
+                $this->updateAbsensiTime($absensi);
                 return redirect()->back()->with('success', 'Berhasil Presensi ' . $title);
             }
         } else {
@@ -110,13 +118,18 @@ class UserController extends Controller
                         $field => Carbon::now('Asia/Jakarta')->format('H:i:s'),
                         'jam_total_produktif' => $jamProduktif
                     ]);
-                    break;
+                    $this->addAktivitas('Pulang');
                 } else {
                     $absensi->update([
                         $field => Carbon::now('Asia/Jakarta')->format('H:i:s'),
                     ]);
-                    break;
                 }
+                if ($field == 'jam_istirahat') {
+                    $this->addAktivitas('Istirahat');
+                } else if ($field == 'jam_selesai_istirahat') {
+                    $this->addAktivitas('Selesai istirahat');
+                }
+                break;
             }
         }
     }
@@ -139,23 +152,23 @@ class UserController extends Controller
             // Cek apakah user memiliki sudah presensi hari ini
             if ($absensi != '') {
                 $message = 'Izin';
-                if (!empty($absensi->jam_izin) && empty($absensi->jam_selesai_izin)) {
+                if (empty($absensi->jam_izin) && empty($absensi->jam_selesai_izin)) {
                     $message = 'Izin';
                 } else {
                     $message = 'Selesai Izin';
                 }
                 foreach ($fields as $field) {
                     if (empty($absensi->$field)) {
-                        if ($field == 'jam_izin'){
+                        if ($field == 'jam_izin') {
                             $absensi->update([
                                 $field => Carbon::now('Asia/Jakarta')->format('H:i:s'),
-                                'status_kehadiran' => 'Izin'
                             ]);
+                            $this->addAktivitas('Izin');
                         } else {
                             $absensi->update([
                                 $field => Carbon::now('Asia/Jakarta')->format('H:i:s'),
-                                'status_kehadiran' => 'Masuk'
                             ]);
+                            $this->addAktivitas('Selesai izin');
                         }
                         break;
                     }
@@ -200,5 +213,16 @@ class UserController extends Controller
         $totalWaktuKerjaFormatted = sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
 
         return $totalWaktuKerjaFormatted;
+    }
+
+    // Fungsi untuk menambahkan setiap aktivitas yang dilakukan user
+    private function addAktivitas($deskripsi)
+    {
+        $user = auth()->user();
+
+        Aktivitas::create([
+            'karyawan_id' => $user->karyawan->id,
+            'deskripsi' => $deskripsi,
+        ]);
     }
 }

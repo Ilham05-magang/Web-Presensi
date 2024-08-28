@@ -29,6 +29,7 @@ class SeederUser extends Seeder
                 'email' => 'karyawan' . $i . '@example.com',
                 'password' => Hash::make('12345'),
                 'status_akun' => true,
+                'os' => 'Windows',
                 'email_verified_at' => now(),
                 'remember_token' => Str::random(20),
                 'created_at' => now(),

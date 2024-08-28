@@ -2,6 +2,8 @@
     use Carbon\Carbon;
     Carbon::setLocale('id');
     $tanggalselect = Carbon::parse($dateQuery)->locale('id')->translatedFormat('d - F - Y');
+    $datenow = Carbon::parse($datenow);
+    $day = \Carbon\Carbon::parse(request('date') ?? $datenow->format('Y-m-d'))->dayOfWeek;
 @endphp
 <x-layout.layout-admin>
     <x-slot:title>{{ $title }}</x-slot:title>
@@ -90,7 +92,9 @@
                         </thead>
                         <tbody>
                             @foreach ($dataAbsensi as $data)
-                            <tr class="text-center border-[#242947] border-[1px]">
+                            <tr class="border-[#242947] border-[1px] border-t-0 
+                        {{in_array( request('date') ?? $datenow->format('Y-m-d'), $dataTanggalLibur->pluck('tanggal_libur')->toArray()) || $day == \Carbon\Carbon::SUNDAY ? 'bg-red-300' : ''}}
+                        ">
                                 <td class="p-1 border-[#242947] border-[1px]">
                                     {{ $loop->iteration }}
                                 </td>

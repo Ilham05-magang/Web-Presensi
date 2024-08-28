@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Models\Karyawan;
 use App\Models\Admins;
 use App\Models\Absensi;
+use App\Models\Aktivitas;
 use App\Models\Divisi;
 use App\Models\Shift;
 use App\Models\Users;
@@ -28,6 +29,7 @@ class AdminController extends Controller
         $totalmasuk = $statusMasuk;
         $totaltidakmasuk = $totalkaryawan - $statusMasuk - $totalIzin;
         $title = 'Dashboard Karyawan';
-        return view('admin.dashboard', compact('title','totalkaryawan','totalmasuk','totaltidakmasuk','totalIzin'));
+        $aktivitas = Aktivitas::with('karyawan')->latest()->limit(12)->get();
+        return view('admin.dashboard', compact('title','totalkaryawan','totalmasuk','totaltidakmasuk','totalIzin','aktivitas'));
     }
 }

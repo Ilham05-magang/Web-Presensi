@@ -103,18 +103,23 @@ class KaryawanController extends Controller
         ]);
 
         // Update Akun record
+        $akun->update([
+            'status_akun' => $request->input('status_akun'),
+        ]);
         if ($request->filled('password')) {
             $akun->update([
                 'username' => $request->input('username')?? $akun->username,
                 'email' => $request->input('email')?? $akun->email,
                 'password' => Hash::make($request->input('password')),
                 'status_akun' => $request->input('status_akun') ?? $akun->status_akun,
+                'os' => $request->input('os'),
             ]);
         } else{
             $akun->update([
                 'username' => $request->input('username')?? $akun->username,
                 'email' => $request->input('email')?? $akun->email,
                 'status_akun' => $request->input('status_akun') ?? $akun->status_akun,
+                'os' => $request->input('os'),
             ]);
         }
 

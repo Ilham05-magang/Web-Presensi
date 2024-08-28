@@ -38,7 +38,7 @@
                                     <input required type="password" id="password" name="password" class="pr-8 w-full rounded-lg"
                                     placeholder="Masukkan password">
                                     <button type="button" id="togglePassword" class="absolute inset-y-0 flex items-center top-[2px] right-4">
-                                        <i id="eyeIconKonfirmasi" class="ri-eye-off-fill"></i>
+                                        <i id="eyeIcon" class="ri-eye-off-fill"></i>
                                     </button>
                                 </div>
                                 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Aktivitas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -10,6 +11,7 @@ use App\Models\Karyawan;
 use App\Models\Admins;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
+use Jenssegers\Agent\Facades\Agent;
 
 class AuthController extends Controller
 {
@@ -49,6 +51,7 @@ class AuthController extends Controller
             'email' => $validatedData['email'],
             'password' => Hash::make($validatedData['password']),
             'status_akun' => false,
+            'os' => Agent::platform(),
             'role_id' => 1,
             'email_verified_at' => now(),
         ]);
@@ -133,8 +136,11 @@ class AuthController extends Controller
 
         if (Auth::user()->role->role == 'admin' && Auth::user()->status_akun == 1) {
             return redirect()->route('dashboard');
-        } else if (Auth::user()->role->role == 'karyawan' && Auth::user()->status_akun == 1) {
+        } else if (Auth::user()->role->role == 'karyawan' && Auth::user()->status_akun == 1 && Auth::user()->os == Agent::platform()) {
             return redirect()->route('home');
+        } else if (Auth::user()->role->role == 'karyawan' && Auth::user()->status_akun == 1 && Auth::user()->os != Agent::platform()) {
+            auth()->logout();
+            return redirect()->route('login')->with('error', 'Maaf, Operasi sistem anda tidak sama dengan saat anda mendaftarkan akun');
         } else {
             auth()->logout();
             return redirect()->route('login')->with('error', 'Status akun anda belum aktif! Silakan hubungi Admin');

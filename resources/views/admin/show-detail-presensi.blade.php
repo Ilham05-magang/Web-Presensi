@@ -1,6 +1,8 @@
 @php
     use Carbon\Carbon;
     Carbon::setLocale('id');
+    $tanggal = Carbon::create($datenow)->locale('id')->translatedFormat('F - Y');
+    $day = \Carbon\Carbon::parse(request('date') ?? $datenow->format('Y-m-d'))->dayOfWeek;
 
     $year = now()->year;
     $dateString = $year . '-' . $selectedMonth;
@@ -102,7 +104,8 @@
                         </thead>
                         <tbody>
                             @foreach ($dataAbsensi as $absensi)
-                                <tr class="border-[#242947] border-[1px]">
+                            <tr class="border-[#242947] border-[1px] border-t-0 
+                            {{in_array(\Carbon\Carbon::parse($absensi->tanggal)->format('Y-m-d'), $dataTanggalLibur->pluck('tanggal_libur')->toArray()) || \Carbon\Carbon::parse($absensi->tanggal)->dayOfWeek == \Carbon\Carbon::SUNDAY ? 'bg-red-300' : ''}}">
                                     @php
                                         $absensiCount = $absensi->count();
                                         $tanggal = \Carbon\Carbon::parse($absensi->tanggal)->locale('id')->translatedFormat('d-F-Y');
