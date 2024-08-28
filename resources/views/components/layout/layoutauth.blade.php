@@ -7,6 +7,7 @@
     @vite(['resources/css/app.css','resources/js/app.js'])
     <title>{{ $title }}</title>
     <link rel="shortcut icon" href="assets/logo.png" type="image/x-icon">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
     <Main class="font-inter">

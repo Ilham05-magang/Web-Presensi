@@ -8,15 +8,23 @@
             <div class="bg-white h-screen w-full rounded-tl-[100px] flex justify-center">
                 <div class=" flex flex-col gap-6 items-center justify-center w-full">
                     <div class="flex flex-col items-center">
-                        @if (session('error'))
-                            <div class="bg-gray-100 p-5 text-red-600 rounded-md">
-                                {{ session('error') }}
-                            </div>
-                        @endif
                         @if (session('success'))
-                            <div class="bg-gray-100 p-5 text-green-400 rounded-md">
-                                {{ session('success') }}
-                            </div>
+                            <script>
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Success',
+                                    text: '{{ session('success') }}',
+                                });
+                            </script>
+                        @endif
+                        @if (session('error'))
+                            <script>
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: '{{ session('error') }}',
+                                });
+                            </script>
                         @endif
                         <i class="ri-lock-2-fill text-2xl md:block hidden"></i>
                         <img src="assets/logo.png" class="bg-login rounded-full p-2 md:hidden block w-12"
@@ -29,19 +37,20 @@
                         <div class="flex flex-col gap-4 text-base">
                             <div class="flex flex-col gap-1">
                                 <label for="" class="font-semibold">Username/Email</label>
-                                <input type="text" required name="email" value="{{old('email')}}" class="rounded-lg"
-                                    placeholder="Masukkan username / email">
+                                <input type="text" required name="email" value="{{ old('email') }}"
+                                    class="rounded-lg" placeholder="Masukkan username / email">
                             </div>
                             <div class="flex flex-col gap-1">
                                 <label for="" class="font-semibold">Password</label>
                                 <div class="relative w-full">
-                                    <input required type="password" id="password" name="password" class="pr-8 w-full rounded-lg"
-                                    placeholder="Masukkan password">
-                                    <button type="button" id="togglePassword" class="absolute inset-y-0 flex items-center top-[2px] right-4">
+                                    <input required type="password" id="password" name="password"
+                                        class="pr-8 w-full rounded-lg" placeholder="Masukkan password">
+                                    <button type="button" id="togglePassword"
+                                        class="absolute inset-y-0 flex items-center top-[2px] right-4">
                                         <i id="eyeIcon" class="ri-eye-off-fill"></i>
                                     </button>
                                 </div>
-                                
+
                             </div>
                         </div>
                         <div class="flex justify-between text-sm">
@@ -51,7 +60,7 @@
                             </div>
                             <div class="flex gap-1">
                                 <p>Lupa Kata Sandi?</p>
-                                <a href="{{route('password.request')}}" class="text-red-700 hover:underline">Reset</a>
+                                <a href="{{ route('password.request') }}" class="text-red-700 hover:underline">Reset</a>
                             </div>
                         </div>
                         <div class="flex justify-center">
@@ -78,9 +87,8 @@
             eyeIcon.classList.toggle('ri-eye-off-fill', !isPassword);
         }
 
-        document.getElementById('togglePassword').addEventListener('click', function () {
+        document.getElementById('togglePassword').addEventListener('click', function() {
             togglePasswordVisibility('password', 'eyeIcon');
         });
-
     </script>
 </x-layout.layoutauth>

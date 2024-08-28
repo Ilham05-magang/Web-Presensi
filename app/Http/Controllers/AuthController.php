@@ -18,7 +18,7 @@ class AuthController extends Controller
     public function loginindex()
     {
         $title = 'Masuk Akun';
-        return view('auth.login', compact('title'))->with('error','ini errorlah');
+        return view('auth.login', compact('title'))->with('error', 'ini errorlah');
     }
 
     public function registerindex()
@@ -52,6 +52,7 @@ class AuthController extends Controller
             'password' => Hash::make($validatedData['password']),
             'status_akun' => false,
             'os' => Agent::platform(),
+            'browser' => Agent::browser(),
             'role_id' => 1,
             'email_verified_at' => now(),
         ]);
@@ -104,51 +105,51 @@ class AuthController extends Controller
     }
 
     public function loginUser(Request $request)
-{
-    $request->validate([
-        'email' => 'required',
-        'password' => 'required'
-    ]);
+    {
+        $request->validate([
+            'email' => 'required',
+            'password' => 'required'
+        ]);
 
-    // Menentukan input email atau username
-    $loginType = filter_var($request->email, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+        // Menentukan input email atau username
+        $loginType = filter_var($request->email, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
 
-    // Mengecek apakah tedapat email atau username yang sama di tabel user
-    $user = Users::where($loginType, $request->email)->first();
+        // Mengecek apakah tedapat email atau username yang sama di tabel user
+        $user = Users::where($loginType, $request->email)->first();
 
-    if (!$user) {
-        return redirect()->route('login')->with('error', 'Username/email tidak ditemukan')->withInput();
-    }
-
-    // Mengecek apakah password
-    if (!Hash::check($request->password, $user->password)) {
-        return redirect()->route('login')->with('error', 'Password yang dimasukkan salah')->withInput();
-    }
-
-    $infologin = [
-        $loginType => $request->email,
-        'password' => $request->password,
-    ];
-    $remember = $request->input('remember_me');
-
-    if (Auth::attempt($infologin, $remember)) {
-        Cookie::queue('email', $request->email, 60 * 24 * 30); // Store for 30 days
-
-        if (Auth::user()->role->role == 'admin' && Auth::user()->status_akun == 1) {
-            return redirect()->route('dashboard');
-        } else if (Auth::user()->role->role == 'karyawan' && Auth::user()->status_akun == 1 && Auth::user()->os == Agent::platform()) {
-            return redirect()->route('home');
-        } else if (Auth::user()->role->role == 'karyawan' && Auth::user()->status_akun == 1 && Auth::user()->os != Agent::platform()) {
-            auth()->logout();
-            return redirect()->route('login')->with('error', 'Maaf, Operasi sistem anda tidak sama dengan saat anda mendaftarkan akun');
-        } else {
-            auth()->logout();
-            return redirect()->route('login')->with('error', 'Status akun anda belum aktif! Silakan hubungi Admin');
+        if (!$user) {
+            return redirect()->route('login')->with('error', 'Username/email tidak ditemukan')->withInput();
         }
-    } else {
-        return redirect()->route('login')->with('error', 'Username/email dan password tidak sesuai')->withInput();
+
+        // Mengecek apakah password
+        if (!Hash::check($request->password, $user->password)) {
+            return redirect()->route('login')->with('error', 'Password yang dimasukkan salah')->withInput();
+        }
+
+        $infologin = [
+            $loginType => $request->email,
+            'password' => $request->password,
+        ];
+        $remember = $request->input('remember_me');
+
+        if (Auth::attempt($infologin, $remember)) {
+            Cookie::queue('email', $request->email, 60 * 24 * 30); // Store for 30 days
+
+            if (Auth::user()->role->role == 'admin' && Auth::user()->status_akun == 1) {
+                return redirect()->route('dashboard');
+            } else if (Auth::user()->role->role == 'karyawan' && Auth::user()->status_akun == 1 && Auth::user()->os == Agent::platform() && Auth::user()->browser == Agent::browser()) {
+                return redirect()->route('home');
+            } else if (Auth::user()->role->role == 'karyawan' && Auth::user()->status_akun == 1 && Auth::user()->os != Agent::platform() || Auth::user()->browser != Agent::browser()) {
+                auth()->logout();
+                return redirect()->route('login')->with('error', 'Maaf, Operasi sistem/browser anda tidak sama dengan saat anda mendaftarkan akun');
+            } else {
+                auth()->logout();
+                return redirect()->route('login')->with('error', 'Status akun anda belum aktif! Silakan hubungi Admin');
+            }
+        } else {
+            return redirect()->route('login')->with('error', 'Username/email dan password tidak sesuai')->withInput();
+        }
     }
-}
 
     public function logout(Request $request)
     {

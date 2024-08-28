@@ -30,6 +30,7 @@ class SeederUser extends Seeder
                 'password' => Hash::make('12345'),
                 'status_akun' => true,
                 'os' => 'Windows',
+                'browser' => 'Chrome',
                 'email_verified_at' => now(),
                 'remember_token' => Str::random(20),
                 'created_at' => now(),
