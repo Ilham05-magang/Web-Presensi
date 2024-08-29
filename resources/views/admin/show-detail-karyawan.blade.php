@@ -10,7 +10,7 @@
                 <a href="{{ route('dashboard.karyawan') }}"><i class="py-1 pr-3 text-2xl hover:text-blue-600 ri-arrow-left-line"></i></a>
                 <div>
                     <h1>"{{ $datakaryawan->nama }}"</h1>
-                    <p class="text-lg">Divisi {{ $datakaryawan->divisi->divisi ?? '--//--' }}</p>
+                    <p class="text-lg">Divisi {{ $datakaryawan->divisi->divisi ?? '--\\--' }}</p>
                 </div>
             </div>
             <div>

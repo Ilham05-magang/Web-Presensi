@@ -85,19 +85,19 @@
                                 {{ $data->nama }}
                             </td>
                             <td class="px-2 py-4 border-[#242947] border-[1px] border-t-0">
-                                {{ $data->nip ?? '--//--' }}
+                                {{ $data->nip ?? '--\\--' }}
                             </td>
                             <td class="px-2 py-4 border-[#242947] border-[1px] border-t-0">
-                                {{ $data->telepon ?? '--//--' }}
+                                {{ $data->telepon ?? '--\\--' }}
                             </td>
                             <td class="px-2 py-4 border-[#242947] border-[1px] border-t-0">
-                                {{ $data->tempat_lahir . ', ' . $tanggalLahir ?? '--//--' }}
+                                {{ $data->tempat_lahir . ', ' . $tanggalLahir ?? '--\\--' }}
                             </td>
                             <td class="px-2 py-4 border-[#242947] border-[1px] border-t-0">
-                                {{ $data->kantor->nama ?? '--//--' }}
+                                {{ $data->kantor->nama ?? '--\\--' }}
                             </td>
                             <td class="px-2 py-4 border-[#242947] border-[1px] border-t-0">
-                                {{ $data->shift->nama ?? '--//--' }}
+                                {{ $data->shift->nama ?? '--\\--' }}
                             </td>
                             <td class="px-2 py-4 border-[#242947] border-[1px] border-t-0">
                                 <a href="{{ route('dashboard.karyawan.show', $data->id) }}"

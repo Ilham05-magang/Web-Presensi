@@ -189,18 +189,23 @@ class PresensiController extends Controller
         return redirect()->back()->with('success', "Data Absensi Tanggal $tanggal pada Karyawan $karyawan->nama berhasil di Hapus");
     }
 
-    function getDaysOfCurrentMonth($selectedMonth)
+    public function getDaysOfCurrentMonth($selectedMulai, $tanggalSelesai)
     {
-        $dates = [];
-        $startOfMonth = Carbon::create($selectedMonth)->startOfMonth();
-        $endOfMonth = Carbon::create($selectedMonth)->endOfMonth();
+        // Parse the input dates
+        $startDate = Carbon::parse($selectedMulai);
+        $endDate = Carbon::parse($tanggalSelesai);
 
-        for ($date = $startOfMonth; $date->lte($endOfMonth); $date->addDay()) {
+        // Initialize an array to hold the dates
+        $dates = [];
+
+        // Iterate from the start date to the end date
+        for ($date = $startDate; $date->lte($endDate); $date->addDay()) {
             $dates[] = $date->toDateString();
         }
 
         return $dates;
     }
+
 
     public function ShowDetailAbsensi($id)
     {
@@ -209,7 +214,8 @@ class PresensiController extends Controller
         $dateQuery = $datenow->format('m-Y');
         $year = $datenow->year;
         $month = $datenow->month;
-        $tanggalPerBulan = $this->getDaysOfCurrentMonth($datenow);
+        $tanggalPerPeriode = null;
+        $tanggalMulai = null;
 
         $totalmasuk = Absensi::where('status_kehadiran', 'Masuk')
             ->whereMonth('tanggal', $month)
@@ -240,17 +246,21 @@ class PresensiController extends Controller
 
         $title = "Data Absensi Karyawan";
 
-        return view('admin.show-detail-presensi', compact('title', 'dataAbsensi', 'karyawan', 'totalmasuk', 'totalIzin', 'totaltidakmasuk', 'selectedMonth', 'dataTanggalLibur','dateQuery','datenow','tanggalPerBulan'));
+        return view('admin.show-detail-presensi', compact('title', 'dataAbsensi', 'karyawan', 'totalmasuk', 'totalIzin', 'totaltidakmasuk', 'selectedMonth', 'dataTanggalLibur','dateQuery','datenow','tanggalPerPeriode','tanggalMulai'));
     }
 
-    public function SearchAbsensiByMonth(Request $request, $id)
+    public function SearchAbsensiByPeriode(Request $request, $id)
     {
+        $tanggalMulai = $request->input('tanggal_mulai');
+        $tanggalSelesai = $request->input('tanggal_selesai');
+
+
         $datenow = Carbon::now();
         $selectedMonth = $request->input('month');
         $month = $request->input('month');
         $year = Carbon::now()->year;
         $tanggalInput = Carbon::create($year, $selectedMonth, 1);
-        $tanggalPerBulan = $this->getDaysOfCurrentMonth($tanggalInput);
+        $tanggalPerPeriode = $this->getDaysOfCurrentMonth($tanggalMulai,$tanggalSelesai);
 
         $totalmasuk = Absensi::where('status_kehadiran', 'Masuk')
             ->whereMonth('tanggal', $month)
@@ -270,8 +280,7 @@ class PresensiController extends Controller
             ->where('karyawan_id', $id)
             ->count();
 
-        $dataAbsensi = Absensi::whereMonth('tanggal', $month)
-            ->whereYear('tanggal', $year)
+        $dataAbsensi = Absensi::whereBetween('tanggal', [$tanggalMulai, $tanggalSelesai])
             ->where('karyawan_id', $id)
             ->get();
 
@@ -282,7 +291,7 @@ class PresensiController extends Controller
         $title = "Data Absensi Karyawan";
 
         // Return view with the required data
-        return view('admin.show-detail-presensi', compact('title', 'datenow', 'dataAbsensi', 'karyawan', 'totalmasuk', 'totalIzin', 'totaltidakmasuk', 'selectedMonth', 'dataTanggalLibur','datenow', 'tanggalPerBulan'));
+        return view('admin.show-detail-presensi', compact('title', 'datenow', 'dataAbsensi', 'karyawan', 'totalmasuk', 'totalIzin', 'totaltidakmasuk', 'selectedMonth', 'dataTanggalLibur','datenow', 'tanggalPerPeriode','tanggalMulai','tanggalSelesai'));
     }
 
     public function PostKehadiran(Request $request,$tanggal, $id)

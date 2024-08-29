@@ -106,7 +106,7 @@ Route::middleware(['auth', 'web'])->group(function () {
         Route::put('/dashboard/pengaturan/editshift/{id}', [PengaturanController::class, 'PengaturanEditShift'])->name('dashboard.pengaturan.editshift');
         Route::delete('/dashboard/pengaturan/deleteshift/{id}', [PengaturanController::class, 'PengaturanDeleteShift'])->name('dashboard.pengaturan.deleteshift');
 
-        
+
         Route::get('/dashboard/pengaturan/tanggal', [PengaturanController::class, 'PengaturanTanggal'])->name('dashboard.pengaturan.tanggal');
         Route::post('/dashboard/pengaturan/tambahTanggal', [PengaturanController::class, 'PengaturanTambahTanggal'])->name('dashboard.pengaturan.tambahtanggal');
         Route::put('/dashboard/pengaturan/edittanggal/{id}', [PengaturanController::class, 'PengaturanEditTanggal'])->name('dashboard.pengaturan.edittanggal');
@@ -128,7 +128,7 @@ Route::middleware(['auth', 'web'])->group(function () {
         #Api Presensi
         Route::get('/dashboard/presensi', [PresensiController::class, 'PresensiAdmin'])->name('dashboard.presensi');
         Route::get('/dashboard/presensi/{id}', [PresensiController::class, 'ShowDetailAbsensi'])->name('dashboard.presensi.detail');
-        Route::get('/dashboard/Searchpresensi/{id}', [PresensiController::class, 'SearchAbsensiByMonth'])->name('dashboard.presensi.searchdetail');
+        Route::get('/dashboard/Searchpresensi/{id}', [PresensiController::class, 'SearchAbsensiByPeriode'])->name('dashboard.presensi.searchdetail');
         Route::get('/dashboard/pencarianpresensi/{tanggal}', [PresensiController::class, 'SearchPresensiAdmin'])->name('dashboard.searchpresensi');
         Route::get('/dashboard/pencarianbydatepresensi', [PresensiController::class, 'SearchPresensibyDateAdmin'])->name('dashboard.searchpresensibydate');
         Route::post('/dashboard/postpresensi/{tanggal}/{id}', [PresensiController::class, 'PostKehadiran'])->name('dashboard.postpresensi');

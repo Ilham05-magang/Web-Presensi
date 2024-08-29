@@ -46,13 +46,13 @@
                             {{ $data->nama }}
                         </td>
                         <td class="px-3 py-1 border-[#242947] border-[1px]">
-                            {{ $data->divisi->divisi ?? '--//--' }}
+                            {{ $data->divisi->divisi ?? '--\\--' }}
                         </td>
                         <td class="px-3 py-1 border-[#242947] border-[1px]">
-                            {{ $data->kantor->nama ?? '--//--' }}
+                            {{ $data->kantor->nama ?? '--\\--' }}
                         </td>
                         <td class="px-3 py-1 border-[#242947] border-[1px]">
-                            {{ $data->shift->nama?? '--//--' }}
+                            {{ $data->shift->nama?? '--\\--' }}
                         </td>
                         <td class="px-3 py-1 border-[#242947] border-[1px] ">
                             @if ($data->akun->status_akun == 1)
@@ -70,7 +70,7 @@
                             </td>
                         @else
                             <td class="px-3 py-1 border-[#242947] border-[1px]">
-                                --//--
+                                --\\--
                             </td>
                         @endif
                         <td class="py-2 text-center">
