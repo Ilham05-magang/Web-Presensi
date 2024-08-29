@@ -8,6 +8,9 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
+
 class PresensiController extends Controller
 {
     public function PresensiAdmin()
@@ -195,50 +198,46 @@ class PresensiController extends Controller
         $startDate = Carbon::parse($selectedMulai);
         $endDate = Carbon::parse($tanggalSelesai);
 
-        // Initialize an array to hold the dates
-        $dates = [];
+        // Initialize a collection to hold the dates
+        $dates = collect();
 
         // Iterate from the start date to the end date
         for ($date = $startDate; $date->lte($endDate); $date->addDay()) {
-            $dates[] = $date->toDateString();
+            $dates->push($date->toDateString());
         }
 
-        return $dates;
-    }
+        // Paginate the results (40 items per page)
+        $paginatedDates = $this->paginateCollection($dates, 40);
 
+        // dd($paginatedDates);
+        return $paginatedDates;
+    }
+    protected function paginateCollection(Collection $collection, $perPage)
+    {
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+
+        $currentItems = $collection->slice(($currentPage - 1) * $perPage, $perPage)->values();
+
+        return new LengthAwarePaginator(
+            $currentItems,
+            $collection->count(),
+            $perPage,
+            $currentPage,
+            ['path' => LengthAwarePaginator::resolveCurrentPath()]
+        );
+    }
 
     public function ShowDetailAbsensi($id)
     {
         $selectedMonth = Carbon::now()->format('m');
         $datenow = Carbon::now();
         $dateQuery = $datenow->format('m-Y');
-        $year = $datenow->year;
-        $month = $datenow->month;
         $tanggalPerPeriode = null;
         $tanggalMulai = null;
+        $totalmasuk = 0;
+        $totalIzin = 0;
+        $totaltidakmasuk = 0;
 
-        $totalmasuk = Absensi::where('status_kehadiran', 'Masuk')
-            ->whereMonth('tanggal', $month)
-            ->whereYear('tanggal', $year)
-            ->where('karyawan_id', $id)
-            ->count();
-
-        $totalIzin = Absensi::where('status_kehadiran', 'Izin')
-            ->whereMonth('tanggal', $month)
-            ->whereYear('tanggal', $year)
-            ->where('karyawan_id', $id)
-            ->count();
-
-        $totaltidakmasuk = Absensi::where('status_kehadiran', 'Tidak Masuk')
-            ->whereMonth('tanggal', $month)
-            ->whereYear('tanggal', $year)
-            ->where('karyawan_id', $id)
-            ->count();
-
-        $dataAbsensi = Absensi::whereMonth('tanggal', $month)
-            ->whereYear('tanggal', $year)
-            ->where('karyawan_id', $id)
-            ->get();
         $dataTanggalLibur = TanggalLibur::All();
 
         // Fetch karyawan details
@@ -246,7 +245,7 @@ class PresensiController extends Controller
 
         $title = "Data Absensi Karyawan";
 
-        return view('admin.show-detail-presensi', compact('title', 'dataAbsensi', 'karyawan', 'totalmasuk', 'totalIzin', 'totaltidakmasuk', 'selectedMonth', 'dataTanggalLibur','dateQuery','datenow','tanggalPerPeriode','tanggalMulai'));
+        return view('admin.show-detail-presensi', compact('title', 'karyawan', 'totalmasuk', 'totalIzin', 'totaltidakmasuk', 'selectedMonth', 'dataTanggalLibur','dateQuery','datenow','tanggalPerPeriode','tanggalMulai'));
     }
 
     public function SearchAbsensiByPeriode(Request $request, $id)
@@ -263,20 +262,17 @@ class PresensiController extends Controller
         $tanggalPerPeriode = $this->getDaysOfCurrentMonth($tanggalMulai,$tanggalSelesai);
 
         $totalmasuk = Absensi::where('status_kehadiran', 'Masuk')
-            ->whereMonth('tanggal', $month)
-            ->whereYear('tanggal', $year)
+            ->whereBetween('tanggal', [$tanggalMulai, $tanggalSelesai])
             ->where('karyawan_id', $id)
             ->count();
 
         $totalIzin = Absensi::where('status_kehadiran', 'Izin')
-            ->whereMonth('tanggal', $month)
-            ->whereYear('tanggal', $year)
+            ->whereBetween('tanggal', [$tanggalMulai, $tanggalSelesai])
             ->where('karyawan_id', $id)
             ->count();
 
         $totaltidakmasuk = Absensi::where('status_kehadiran', 'Tidak Masuk')
-            ->whereMonth('tanggal', $month)
-            ->whereYear('tanggal', $year)
+            ->whereBetween('tanggal', [$tanggalMulai, $tanggalSelesai])
             ->where('karyawan_id', $id)
             ->count();
 
@@ -288,12 +284,17 @@ class PresensiController extends Controller
         $totalTelat = 0;
         $totalPulangCepat = 0;
 
-        foreach ($dataAbsensi as $absensi ) { 
+        $tanggalTelat = [];
+        $tanggalPulangCepat = [];
+
+        foreach ($dataAbsensi as $absensi ) {
             if ($absensi->jam_mulai > $absensi->shift->jam_mulai && $absensi->jam_mulai) {
                 $totalTelat++;
+                $tanggalTelat[] = $absensi->tanggal;
             }
             if ($absensi->jam_pulang < $absensi->shift->jam_pulang && $absensi->jam_pulang ) {
                 $totalPulangCepat++;
+                $tanggalPulangCepat[] = $absensi->tanggal;
             }
         }
 
@@ -302,7 +303,7 @@ class PresensiController extends Controller
         $title = "Data Absensi Karyawan";
 
         // Return view with the required data
-        return view('admin.show-detail-presensi', compact('title', 'datenow', 'dataAbsensi', 'karyawan', 'totalmasuk', 'totalIzin', 'totaltidakmasuk', 'selectedMonth', 'dataTanggalLibur','datenow', 'tanggalPerPeriode','tanggalMulai','tanggalSelesai','totalTelat','totalPulangCepat'));
+        return view('admin.show-detail-presensi', compact('title', 'tanggalPulangCepat' , 'tanggalTelat' ,'datenow', 'dataAbsensi', 'karyawan', 'totalmasuk', 'totalIzin', 'totaltidakmasuk', 'selectedMonth', 'dataTanggalLibur','datenow', 'tanggalPerPeriode','tanggalMulai','tanggalSelesai','totalTelat','totalPulangCepat'));
     }
 
     public function PostKehadiran(Request $request,$tanggal, $id)

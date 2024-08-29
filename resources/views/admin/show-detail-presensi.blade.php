@@ -73,11 +73,11 @@ $day = \Carbon\Carbon::parse(request('date') ?? $datenow->format('Y-m-d'))->dayO
                         </div>
                         <div class="flex gap-1">
                             <h2>Total Telat:</h2>
-                            <p class="px-1.5 py-0.5 bg-red-600 text-white rounded-lg"> {{ $totalTelat ?? '0'}}</p>
+                            <p class="px-1.5 py-0.5 bg-yellow-300 text-white rounded-lg"> {{ $totalTelat ?? '0'}}</p>
                         </div>
                         <div class="flex gap-1">
                             <h2>Total Pulang Lebih Awal:</h2>
-                            <p class="px-1.5 py-0.5 bg-red-600 text-white rounded-lg"> {{ $totalPulangCepat ?? '0'}}</p>
+                            <p class="px-1.5 py-0.5 bg-green-400 text-white rounded-lg"> {{ $totalPulangCepat ?? '0'}}</p>
                         </div>
                     </div>
                 </div>
@@ -123,13 +123,20 @@ $day = \Carbon\Carbon::parse(request('date') ?? $datenow->format('Y-m-d'))->dayO
                                     <td colspan="7" class="py-5 text-center">Silakan Masukan Periode Terlebih Dahulu</td>
                                 </tr>
                             @else
+                            {{-- @dd($tanggalPerPeriode); --}}
                                 @foreach ($tanggalPerPeriode as $tanggal)
                                 @php
                                     $found = false;
                                     $formattedDate = \Carbon\Carbon::parse($tanggal)->locale('id')->translatedFormat('d-F-Y');
                                 @endphp
                                 <tr class="border-[#242947] border-[1px] border-t-0
-                                        {{ in_array(\Carbon\Carbon::parse($tanggal)->format('Y-m-d'), $dataTanggalLibur->pluck('tanggal_libur')->toArray()) || \Carbon\Carbon::parse($tanggal)->dayOfWeek == \Carbon\Carbon::SUNDAY ? 'bg-red-300' : '' }}">
+                                        {{
+                                            in_array(\Carbon\Carbon::parse($tanggal)->format('Y-m-d'), $dataTanggalLibur->pluck('tanggal_libur')->toArray()) ||
+                                                \Carbon\Carbon::parse($tanggal)->dayOfWeek === \Carbon\Carbon::SUNDAY ?
+                                                'bg-red-300' :
+                                                (in_array(\Carbon\Carbon::parse($tanggal)->format('Y-m-d'), $tanggalTelat) ? 'bg-yellow-200' :
+                                                (in_array(\Carbon\Carbon::parse($tanggal)->format('Y-m-d'), $tanggalPulangCepat) ? 'bg-green-300' : '')
+                                            ) }}">
                                         <td class="p-1 border-[#242947] border-[1px]">
                                             {{ $loop->iteration }}
                                         </td>
@@ -183,7 +190,7 @@ $day = \Carbon\Carbon::parse(request('date') ?? $datenow->format('Y-m-d'))->dayO
                                     </td>
                                 </tr>
                                 <x-admin.popup-presensi title="Edit Absensi Karyawan {{ $karyawan->nama }}" id="editdetailpresensi{{ $absensi->id }}" :action="route('dashboard.editpresensi', $absensi->id)" :data="$absensi" />
-                                <x-admin.popup-presensi title="delete" id="deletedetailpresensi{{ $absensi->id }}" :action="route('dashboard.deletepresensi', $absensi->id)" :data="$absensi" :tanggal="$tanggal" />
+                                <x-admin.popup-presensi title="delete" id="deletedetailpresensi{{ $absensi->id }}" :action="route('dashboard.deletepresensi', $absensi->id)" :data="$absensi" :tanggal="$formattedDate" />
                                 @endif
                                 @endforeach
 
@@ -209,6 +216,25 @@ $day = \Carbon\Carbon::parse(request('date') ?? $datenow->format('Y-m-d'))->dayO
                 </div>
             </div>
             <div class="border-[1px] border-t-0 border-[#242947]/50 rounded-b-lg pt-5 pb-2">
+                @if ($tanggalPerPeriode !== null)
+                    <nav aria-label="Page navigation example" class="w-full text-center flex justify-center pb-5">
+                        <ul class="inline-flex -space-x-px text-sm">
+                            @foreach ($tanggalPerPeriode->links()->elements as $element)
+                                @if (is_array($element))
+                                    @foreach ($element as $page => $url)
+                                        <li>
+                                            <a href="{{ $url }}&tanggal_mulai={{ request('tanggal_mulai') }}&tanggal_selesai={{ request('tanggal_selesai') }}"
+                                            class="flex items-center justify-center px-3 h-8 border-white border-[1px] text-lg bg-[#242947] text-white rounded-lg
+                                            {{ $tanggalPerPeriode->currentPage() == $page ? 'bg-[#5B6390] pointer-events-none' : 'hover:bg-[#5B6390]  dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white' }}">
+                                                {{ $page }}
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                @endif
+                            @endforeach
+                        </ul>
+                    </nav>
+                @endif
                 <span class="block text-sm text-center text-gray-500">© 2024 <a class="hover:underline">Seven Inc™</a>.
                     All Rights Reserved.</span>
             </div>
