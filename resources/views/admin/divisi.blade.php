@@ -9,26 +9,36 @@
         <div class="grid grid-cols-4 gap-10">
             @foreach ($dataPerDivisi as $divisiCollection)
                 @foreach ($divisiCollection as $divisi)
-                    <a href="{{ route('dashboard.divisi.show',$divisi->id) }}"  class="flex items-center gap-3 text-lg font-bold hover:text-blue-600">
-                        <div class="px-3 py-2 text-2xl bg-gray-300 rounded-full">
-                            <i class="{{ $divisi->icon ?? 'ri-heart-add-2-line' }} font-semibold"></i>
-                        </div>
+                    <a href="{{ route('dashboard.divisi.show', $divisi->id) }}"
+                        class="flex items-center gap-3 text-lg font-bold hover:text-blue-600">
+                        @if ($divisi->icon)
+                            <div class="px-3 py-3 text-2xl bg-gray-300 rounded-full">
+                                <img class="object-cover w-8"
+                                    src="{{ asset('storage/divisi/' . basename($divisi->icon)) }}" alt="icon divisi">
+                            </div>
+                        @else
+                            <div class="px-4 py-3 text-2xl bg-gray-300 rounded-full">
+                                <i class="{{ $divisi->icon ?? 'ri-heart-add-2-line' }} font-semibold"></i>
+                            </div>
+                        @endif
                         <div class="flex flex-col capitalize">
                             <h1>{{ $divisi->divisi }}</h1>
-                            <div class="text-sm font-semibold text-blue-600">{{ $divisi->karyawan->count() }} Anggota</div>
+                            <div class="text-sm font-semibold text-blue-600">{{ $divisi->karyawan->count() }} Anggota
+                            </div>
                         </div>
                     </a>
                 @endforeach
             @endforeach
-            <button data-modal-target="TambahDivisi" data-modal-toggle="TambahDivisi" class="flex items-center gap-3 text-lg font-bold hover:text-blue-700">
-                <div class="px-3 py-2 text-2xl bg-gray-300 rounded-full">
+            <button data-modal-target="TambahDivisi" data-modal-toggle="TambahDivisi"
+                class="flex items-center gap-3 text-lg font-bold hover:text-blue-700">
+                <div class="px-4 py-3 text-2xl bg-gray-300 rounded-full">
                     <i class="font-semibold ri-add-circle-line"></i>
                 </div>
                 <div class="flex flex-col">
                     <h1>Tambah Divisi</h1>
                 </div>
             </button>
-            <x-admin.popup-divisi title="Tambah Divisi" id="TambahDivisi" :action="route('dashboard.divisi.Tambah')"/>
+            <x-admin.popup-divisi title="Tambah Divisi" id="TambahDivisi" :action="route('dashboard.divisi.Tambah')" />
         </div>
         @if (session('success'))
             <script>
