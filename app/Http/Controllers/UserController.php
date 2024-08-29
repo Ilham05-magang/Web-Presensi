@@ -73,21 +73,37 @@ class UserController extends Controller
         if ($shiftId != '') {
             // Cek apakah user memiliki sudah presensi hari ini
             if ($absensi == '') {
-                Absensi::create([
-                    'karyawan_id' => $karyawanId,
-                    'shift_id' => $shiftId,
-                    'tanggal' => Carbon::now()->format('Y-m-d'),
-                    'jam_mulai' => Carbon::now('Asia/Jakarta')->format('H:i:s'),
-                    'status_kehadiran' => 'Masuk',
-                ]);
+                if (Carbon::now('Asia/Jakarta')->format('H:i:s') > $user->karyawan->shift->jam_mulai) {
+                    Absensi::create([
+                        'karyawan_id' => $karyawanId,
+                        'shift_id' => $shiftId,
+                        'tanggal' => Carbon::now()->format('Y-m-d'),
+                        'jam_mulai' => Carbon::now('Asia/Jakarta')->format('H:i:s'),
+                        'status_kehadiran' => 'Masuk',
+                    ]);
+                } else {
+                    Absensi::create([
+                        'karyawan_id' => $karyawanId,
+                        'shift_id' => $shiftId,
+                        'tanggal' => Carbon::now()->format('Y-m-d'),
+                        'jam_mulai' => $user->karyawan->shift->jam_mulai,
+                        'status_kehadiran' => 'Masuk',
+                    ]);
+                }
                 $this->addAktivitas('Masuk');
-
                 return redirect()->back()->with('success', 'Berhasil Presensi Masuk');
             } else if ($absensi->jam_mulai == '') {
-                $absensi->update([
-                    'jam_mulai' => Carbon::now('Asia/Jakarta')->format('H:i:s'),
-                    'status_kehadiran' => 'Masuk',
-                ]);
+                if (Carbon::now('Asia/Jakarta')->format('H:i:s') > $user->karyawan->shift->jam_mulai) {
+                    $absensi->update([
+                        'jam_mulai' => Carbon::now('Asia/Jakarta')->format('H:i:s'),
+                        'status_kehadiran' => 'Masuk',
+                    ]);
+                } else {
+                    $absensi->update([
+                        'jam_mulai' => $user->karyawan->shift->jam_mulai,
+                        'status_kehadiran' => 'Masuk',
+                    ]);
+                }
                 $this->addAktivitas('Masuk');
                 return redirect()->back()->with('success', 'Berhasil Presensi Masuk');
             } else {
