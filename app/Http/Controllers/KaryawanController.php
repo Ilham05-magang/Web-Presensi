@@ -49,6 +49,7 @@ class KaryawanController extends Controller
             'tempat_lahir' => 'nullable|string|max:255',
             'telepon' => 'nullable|string|max:255',
             'os' => 'nullable|string|max:255',
+            'browser' => 'nullable|string|max:255',
             'tanggal_lahir' => 'nullable|date',
             'tanggal_masuk' => 'nullable|date',
             'tanggal_keluar' => 'nullable|date',
@@ -72,6 +73,8 @@ class KaryawanController extends Controller
             'telepon.max' => 'Telepon Tidak Boleh Lebih dari 255 Karakter',
             'os.string' => 'OS Harus berupa teks',
             'os.max' => 'OS Tidak Boleh Lebih dari 255 Karakter',
+            'browser.string' => 'browser Harus berupa teks',
+            'browser.max' => 'browser Tidak Boleh Lebih dari 255 Karakter',
             'tanggal_lahir.date' => 'Tanggal Lahir Harus berupa tanggal yang valid',
             'tanggal_masuk.date' => 'Tanggal Masuk Harus berupa tanggal yang valid',
             'tanggal_keluar.date' => 'Tanggal Keluar Harus berupa tanggal yang valid',
@@ -112,14 +115,16 @@ class KaryawanController extends Controller
                 'email' => $request->input('email')?? $akun->email,
                 'password' => Hash::make($request->input('password')),
                 'status_akun' => $request->input('status_akun') ?? $akun->status_akun,
-                'os' => $request->input('os'),
+                'os' => $request->input('os') ?? $akun->browser,
+                'browser' => $request->input('browser') ?? $akun->browser,
             ]);
         } else{
             $akun->update([
                 'username' => $request->input('username')?? $akun->username,
                 'email' => $request->input('email')?? $akun->email,
                 'status_akun' => $request->input('status_akun') ?? $akun->status_akun,
-                'os' => $request->input('os'),
+                'os' => $request->input('os') ?? $akun->browser,
+                'browser' => $request->input('browser') ?? $akun->browser,
             ]);
         }
 

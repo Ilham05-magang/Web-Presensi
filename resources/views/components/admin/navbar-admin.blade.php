@@ -42,13 +42,6 @@
                                 {{ $dataadmin->email }}
                             </p>
                         </div>
-                        <ul class="py-1" role="none">
-                            <li>
-                                <a href="{{ route('dashboard.pengaturan.profile') }}"
-                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                                    role="menuitem">Profile</a>
-                            </li>
-                        </ul>
                     </div>
                 </div>
             </div>
@@ -60,7 +53,7 @@
     class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
     aria-label="Sidebar">
     <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
-        <ul class="font-medium ">
+        <ul class="font-medium text-base">
             <div class="flex flex-col gap-2">
                 <x-admin.li-navbar route="dashboard" title="Dashboard" icon="ri-pie-chart-2-fill" />
                 <x-admin.li-navbar route="dashboard.presensi" title="Presensi" icon="ri-database-2-fill" />
@@ -78,7 +71,7 @@
                 </button>
                 <div id="dropdownPengaturan"
                     class="z-10 hidden w-56 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700">
-                    <ul class="py-2 text-base text-gray-700 dark:text-gray-200"
+                    <ul class="py-2 text-sm text-gray-700 dark:text-gray-200"
                         aria-labelledby="dropdownPengaturanButton">
                         <x-admin.li-navbar route="dashboard.pengaturan.profile" title="Profile" />
                         <x-admin.li-navbar route="dashboard.pengaturan.kantor" title="Kantor" />
@@ -87,13 +80,8 @@
                         <x-admin.li-navbar route="dashboard.pengaturan.quotes" title="Quotes" />
                     </ul>
                 </div>
+                <x-admin.li-navbar route="logout" title="Sign out" icon="ri-logout-box-fill" addclass="absolute bottom-5 w-[231px] "/>
             </div>
-            <li class="absolute w-full pr-6 bottom-7 ">
-                <a href="{{ route('logout') }}"
-                    class="flex items-center p-2 font-semibold text-gray-700 rounded-lg dark:text-white hover:bg-[#242947] hover:text-white">
-                    <i class="flex-shrink-0 text-xl font-medium transition duration-75 ri-logout-box-line "><span class="pl-2">Sign out</span></i>
-                </a>
-            </li>
         </ul>
     </div>
 </aside>

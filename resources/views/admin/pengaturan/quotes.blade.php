@@ -27,8 +27,8 @@
     <div class="flex items-center justify-between w-full px-10 py-8 text-2xl">
         <h1>{{ $title }}</h1>
         <button data-modal-target="tambahquote" data-modal-toggle="tambahquote"
-            class="text-white hover:bg-[#5B6390] border-2 border-[#242947] bg-[#242947] px-2 rounded-lg py-1.5 text-center text-xl font-medium mr-3">
-            <i class="items-center ri-add-circle-line"><span class="px-2 text-center">Tambah Quotes</span></i>
+            class="text-white hover:bg-[#5B6390] border-2 border-[#242947] font-bold bg-[#242947] px-2 rounded-lg py-1 text-center text-xl font-medium">
+            <i class="text-2xl ri-add-circle-line"></i>
         </button>
     </div>
     <hr class="border-t-2 border-gray-200">

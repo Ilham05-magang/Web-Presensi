@@ -127,6 +127,18 @@
                     </select>
                 </div>
                 <div class="flex flex-col gap-1">
+                    <label for="browser" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Browser</label>
+                    <select id="browser" name="browser" disabled
+                        class="editstatus bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                        <option value="Chrome" {{ $datakaryawan->akun->browser == 'Chrome' ? 'selected' : '' }}>Chrome</option>
+                        <option value="Edge" {{ $datakaryawan->akun->browser == 'Edge' ? 'selected' : '' }}>Edge</option>
+                        <option value="Firefox" {{ $datakaryawan->akun->browser == 'Firefox' ? 'selected' : '' }}>Firefox</option>
+                        <option value="IE" {{ $datakaryawan->akun->browser == 'IE' ? 'selected' : '' }}>IE</option>
+                        <option value="Safari" {{ $datakaryawan->akun->browser == 'Safari' ? 'selected' : '' }}>Safari</option>
+                        <option value="Opera" {{ $datakaryawan->akun->browser == 'Opera' ? 'selected' : '' }}>Opera</option>
+                    </select>
+                </div>
+                <div class="flex flex-col gap-1">
                     <label for="kantor_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Kantor</label>
                     <select id="kantor_id" name="kantor_id" disabled
                         class="editstatus bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">

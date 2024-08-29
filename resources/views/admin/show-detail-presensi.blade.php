@@ -1,13 +1,13 @@
 @php
-    use Carbon\Carbon;
-    Carbon::setLocale('id');
-    
+use Carbon\Carbon;
+Carbon::setLocale('id');
+// dd($tanggalPerBulan);
 
-    $year = now()->year;
-    $dateString = $year . '-' . $selectedMonth;
-    $tanggalsearch = Carbon::parse($dateString)->locale('id')->translatedFormat('F - Y');
-    $tanggal = Carbon::create($dateString)->locale('id')->translatedFormat('F - Y');
-    $day = \Carbon\Carbon::parse(request('date') ?? $datenow->format('Y-m-d'))->dayOfWeek;
+$year = now()->year;
+$dateString = $year . '-' . $selectedMonth;
+$tanggalsearch = Carbon::parse($dateString)->locale('id')->translatedFormat('F - Y');
+// $tanggal = Carbon::create($dateString)->locale('id')->translatedFormat('F - Y');
+$day = \Carbon\Carbon::parse(request('date') ?? $datenow->format('Y-m-d'))->dayOfWeek;
 @endphp
 
 <x-layout.layout-admin>
@@ -16,8 +16,8 @@
         <div class="flex items-center justify-center gap-2">
             <a href="{{ route('dashboard.presensi') }}"><i class="py-1 pr-3 text-2xl hover:text-blue-600 ri-arrow-left-line"></i></a>
             <div class="flex flex-col gap-1">
-                <h1>{{ $title }}:  {{ $karyawan->nama }}</h1>
-                <p class="text-base font-medium">Data per Bulan: {{ $tanggalsearch  }}</p>
+                <h1>{{ $title }}: {{ $karyawan->nama }}</h1>
+                <p class="text-base font-medium">Data per Bulan: {{ $tanggalsearch }}</p>
             </div>
         </div>
         <div class="p-4">
@@ -27,12 +27,12 @@
                     <select name="month" id="month" class="block w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                         <option value="" disabled {{ $selectedMonth ? '' : 'selected' }}>Pilih Bulan</option>
                         @foreach (range(1, 12) as $month)
-                            @php
-                                $monthName = Carbon::create()->month($month)->locale('id')->translatedFormat('F');
-                            @endphp
-                            <option value="{{ $month }}" {{ $month == $selectedMonth ? 'selected' : '' }}>
-                                {{ $monthName }}
-                            </option>
+                        @php
+                        $monthName = Carbon::create()->month($month)->locale('id')->translatedFormat('F');
+                        @endphp
+                        <option value="{{ $month }}" {{ $month==$selectedMonth ? 'selected' : '' }}>
+                            {{ $monthName }}
+                        </option>
                         @endforeach
                     </select>
                 </div>
@@ -104,74 +104,93 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($dataAbsensi as $absensi)
-                            <tr class="border-[#242947] border-[1px] border-t-0 
-                            {{in_array(\Carbon\Carbon::parse($absensi->tanggal)->format('Y-m-d'), $dataTanggalLibur->pluck('tanggal_libur')->toArray()) || \Carbon\Carbon::parse($absensi->tanggal)->dayOfWeek == \Carbon\Carbon::SUNDAY ? 'bg-red-300' : ''}}">
-                                    @php
-                                        $absensiCount = $absensi->count();
-                                        $tanggal = \Carbon\Carbon::parse($absensi->tanggal)->locale('id')->translatedFormat('d-F-Y');
-                                    @endphp
+                            @foreach ($tanggalPerBulan as $tanggal)
+                            @php
+                                $found = false;
+                                $formattedDate = \Carbon\Carbon::parse($tanggal)->locale('id')->translatedFormat('d-F-Y');
+                            @endphp
+                            <tr class="border-[#242947] border-[1px] border-t-0
+                                    {{ in_array(\Carbon\Carbon::parse($tanggal)->format('Y-m-d'), $dataTanggalLibur->pluck('tanggal_libur')->toArray()) || \Carbon\Carbon::parse($tanggal)->dayOfWeek == \Carbon\Carbon::SUNDAY ? 'bg-red-300' : '' }}">
                                     <td class="p-1 border-[#242947] border-[1px]">
                                         {{ $loop->iteration }}
                                     </td>
                                     <td class="p-1 border-[#242947] border-[1px]">
-                                        {{ $tanggal }}
+                                        {{ $formattedDate }}
                                     </td>
+                            @foreach ($dataAbsensi as $absensi)
+                            @if (\Carbon\Carbon::parse($absensi->tanggal)->format('Y-m-d') == $tanggal)
+                                @php
+                                    $found = true;
+                                @endphp
+                                <td class="p-1 border-[#242947] border-[1px]">
+                                    {{ $absensi->jam_mulai ?? '--\\\--' }} | {{ $absensi->jam_pulang ?? '--\\\--' }}
+                                </td>
+                                <td class="p-1 border-[#242947] border-[1px]">
+                                    {{ $absensi->jam_istirahat ?? '--\\\--' }} | {{ $absensi->jam_selesai_istirahat ??
+                                    '--\\\--' }}
+                                </td>
+                                <td class="p-1 border-[#242947] border-[1px]">
+                                    {{ $absensi->jam_izin ?? '--\\\--' }} | {{ $absensi->jam_selesai_izin ?? '--\\\--'
+                                    }}
+                                </td>
+                                <td class="p-1 border-[#242947] border-[1px]">
+                                    {{ $absensi->jam_total_produktif ?? '--\\\--' }}
+                                </td>
+                                <td class="p-1 border-[#242947] border-[1px]">
+                                    {{ $absensi->status_kehadiran ?? 'Tidak Masuk' }}
+                                </td>
+                                <td class="px-3 py-2 text-center">
+                                    @if ($absensi->status_kehadiran == 'Izin' || $absensi->status_kehadiran == 'Tidak
+                                    Masuk')
+                                    <button data-modal-target="editkehadiran{{ $absensi->id }}" data-modal-toggle="editkehadiran{{ $absensi->id }}" class="px-2 py-1 mr-3 text-base font-medium text-center text-white bg-yellow-400 rounded-lg hover:bg-yellow-300 hover:text-gray-800">
+                                        <i class="ri-edit-2-line"></i>
+                                    </button>
+                                    <x-admin.popup-presensi title="Edit Status Kehadiran" id="editkehadiran{{ $absensi->id }}" :action="route('dashboard.editpresensi', $absensi->id)" :data="$absensi" :nama="$karyawan->nama" />
+                                    @else
+                                    <button data-modal-target="editpresensi{{ $absensi->id }}" data-modal-toggle="editpresensi{{ $absensi->id }}" class="px-2 py-1 mr-3 text-base font-medium text-center text-white bg-yellow-400 rounded-lg hover:bg-yellow-300 hover:text-gray-800">
+                                        <i class="ri-edit-2-line"></i>
+                                    </button>
+                                    <x-admin.popup-presensi title="Edit Absensi Karyawan {{ $karyawan->nama }}" id="editpresensi{{ $absensi->id }}" :action="route('dashboard.editpresensi', $absensi->id)" :data="$absensi" />
+                                    @endif
+                                    @if ($absensi->status_kehadiran == 'Izin')
+                                    <button data-modal-target="previewstatus{{ $absensi->id }}" data-modal-toggle="previewstatus{{ $absensi->id }}" class="px-2 py-1 mr-3 text-base font-medium text-center text-white bg-yellow-400 rounded-lg hover:bg-yellow-300 hover:text-gray-800">
+                                        <i class="ri-eye-2-line"></i>
+                                    </button>
+                                    <x-admin.popup-presensi title="Preview Absensi" id="previewstatus{{ $absensi->id }}" :data="$absensi" :nama="$karyawan->nama" />
+                                    @endif
+                                    <button data-modal-target="deletedetailpresensi{{ $absensi->id }}" data-modal-toggle="deletedetailpresensi{{ $absensi->id }}" class="px-2 py-1 text-base font-medium text-center text-white bg-red-500 rounded-lg hover:bg-red-400 hover:text-gray-800">
+                                        <i class="ri-delete-bin-6-line"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <x-admin.popup-presensi title="Edit Absensi Karyawan {{ $karyawan->nama }}" id="editdetailpresensi{{ $absensi->id }}" :action="route('dashboard.editpresensi', $absensi->id)" :data="$absensi" />
+                            <x-admin.popup-presensi title="delete" id="deletedetailpresensi{{ $absensi->id }}" :action="route('dashboard.deletepresensi', $absensi->id)" :data="$absensi" :tanggal="$tanggal" />
+                            @endif
+                            @endforeach
 
-                                    <td class="p-1 border-[#242947] border-[1px]">
-                                        {{ $absensi->jam_mulai ?? '--\\\--' }} | {{ $absensi->jam_pulang ?? '--\\\--' }}
-                                    </td>
-                                    <td class="p-1 border-[#242947] border-[1px]">
-                                        {{ $absensi->jam_istirahat ?? '--\\\--' }} | {{ $absensi->jam_selesai_istirahat ?? '--\\\--' }}
-                                    </td>
-                                    <td class="p-1 border-[#242947] border-[1px]">
-                                        {{ $absensi->jam_izin ?? '--\\\--' }} | {{ $absensi->jam_selesai_izin ?? '--\\\--' }}
-                                    </td>
-                                    <td class="p-1 border-[#242947] border-[1px]">
-                                        {{ $absensi->jam_total_produktif ?? '--\\\--' }}
-                                    </td>
-                                    <td class="p-1 border-[#242947] border-[1px]">
-                                        {{ $absensi->status_kehadiran ?? 'Tidak Masuk' }}
-                                    </td>
-                                    <td class="px-3 py-2 text-center">
-                                        @if ($absensi->status_kehadiran == 'Izin' || $absensi->status_kehadiran == 'Tidak Masuk')
-                                            <button data-modal-target="editkehadiran{{ $absensi->id }}"
-                                                data-modal-toggle="editkehadiran{{ $absensi->id }}"
-                                                class="px-2 py-1 mr-3 text-base font-medium text-center text-white bg-yellow-400 rounded-lg hover:bg-yellow-300 hover:text-gray-800">
-                                                <i class="ri-edit-2-line"></i>
-                                            </button>
-                                            <x-admin.popup-presensi title="Edit Status Kehadiran" id="editkehadiran{{ $absensi->id }}" :action="route('dashboard.editpresensi', $absensi->id)" :data="$absensi" :nama="$karyawan->nama" />
-                                        @else
-                                            <button data-modal-target="editpresensi{{ $absensi->id }}"
-                                                data-modal-toggle="editpresensi{{ $absensi->id }}"
-                                                class="px-2 py-1 mr-3 text-base font-medium text-center text-white bg-yellow-400 rounded-lg hover:bg-yellow-300 hover:text-gray-800">
-                                                <i class="ri-edit-2-line"></i>
-                                            </button>
-                                            <x-admin.popup-presensi title="Edit Absensi Karyawan {{ $karyawan->nama }}" id="editpresensi{{ $absensi->id }}" :action="route('dashboard.editpresensi', $absensi->id)" :data="$absensi" />
-                                        @endif
-                                        @if ($absensi->status_kehadiran == 'Izin')
-                                            <button data-modal-target="previewstatus{{ $absensi->id }}"
-                                                data-modal-toggle="previewstatus{{ $absensi->id }}"
-                                                class="px-2 py-1 mr-3 text-base font-medium text-center text-white bg-yellow-400 rounded-lg hover:bg-yellow-300 hover:text-gray-800">
-                                                <i class="ri-eye-2-line"></i>
-                                            </button>
-                                            <x-admin.popup-presensi title="Preview Absensi" id="previewstatus{{ $absensi->id }}"  :data="$absensi" :nama="$karyawan->nama" />
-                                        @endif
-                                        <button data-modal-target="deletedetailpresensi{{ $absensi->id }}" data-modal-toggle="deletedetailpresensi{{ $absensi->id }}"
-                                            class="px-2 py-1 text-base font-medium text-center text-white bg-red-500 rounded-lg hover:bg-red-400 hover:text-gray-800">
-                                            <i class="ri-delete-bin-6-line"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <x-admin.popup-presensi title="Edit Absensi Karyawan {{ $karyawan->nama }}" id="editdetailpresensi{{ $absensi->id }}" :action="route('dashboard.editpresensi', $absensi->id)" :data="$absensi" />
-                                <x-admin.popup-presensi title="delete" id="deletedetailpresensi{{ $absensi->id }}" :action="route('dashboard.deletepresensi',$absensi->id)" :data="$absensi" :tanggal="$tanggal" />
+                            @if (!$found)
+                                <td class="p-2 border-[#242947] border-[1px] border-t-0">--\\-- | --\\--</td>
+                                <td class="p-2 border-[#242947] border-[1px] border-t-0">--\\-- | --\\--</td>
+                                <td class="p-2 border-[#242947] border-[1px] border-t-0">--\\-- | --\\--</td>
+                                <td class="p-2 border-[#242947] border-[1px] border-t-0">--\\--</td>
+                                <td class="p-2 border-[#242947] border-[1px] border-t-0">--\\--</td>
+                                <td class="py-2 pl-3 rounded-br-lg">
+                                    <button data-modal-target="tambahstatus{{ $tanggal }}"
+                                        data-modal-toggle="tambahstatus{{ $tanggal }}"
+                                        class="px-2 py-1 mr-3 text-base font-medium text-center text-white bg-yellow-400 rounded-lg hover:bg-yellow-300 hover:text-gray-800">
+                                        <i class="ri-edit-2-line"></i>
+                                    </button>
+                                </td>
+                                <x-admin.popup-presensi title="Edit Tidak Masuk" id="tambahstatus{{ $tanggal }}" :action="route('dashboard.postpresensi', [$tanggal, $karyawan->id])"  :data="$karyawan" :nama="$karyawan->nama" method="POST" :tanggal="$formattedDate" />
+                            @endif
                             @endforeach
                         </tbody>
                     </table>
                 </div>
             </div>
             <div class="border-[1px] border-t-0 border-[#242947]/50 rounded-b-lg pt-5 pb-2">
-                <span class="block text-sm text-center text-gray-500">© 2024 <a class="hover:underline">Seven Inc™</a>. All Rights Reserved.</span>
+                <span class="block text-sm text-center text-gray-500">© 2024 <a class="hover:underline">Seven Inc™</a>.
+                    All Rights Reserved.</span>
             </div>
         </div>
     </div>
@@ -184,13 +203,16 @@
             });
         </script>
     @endif
-    @if (session('error'))
-        <script>
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: '{{ session('error') }}',
-            });
-        </script>
+    @if ($errors->any())
+        @foreach ($errors->all() as $error)
+            <script>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: '{{ $error }}',
+                });
+            </script>
+        @endforeach
     @endif
 </x-layout.layout-admin>
+

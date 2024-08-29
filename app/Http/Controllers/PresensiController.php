@@ -16,7 +16,11 @@ class PresensiController extends Controller
 
         $dataAbsensi = Karyawan::with(['absensi' => function ($query) use ($dateQuery) {
             $query->whereDate('tanggal', $dateQuery);
-        }])->get();
+        }])
+        ->whereHas('akun', function ($query) {
+            $query->where('status_akun', 1);
+        })->get();
+
         $dataTanggalLibur = TanggalLibur::All();
 
         $totalmasuk = Absensi::where('status_kehadiran', 'Masuk')->whereDate('tanggal', $dateQuery)->count();
@@ -185,6 +189,19 @@ class PresensiController extends Controller
         return redirect()->back()->with('success', "Data Absensi Tanggal $tanggal pada Karyawan $karyawan->nama berhasil di Hapus");
     }
 
+    function getDaysOfCurrentMonth($selectedMonth)
+    {
+        $dates = [];
+        $startOfMonth = Carbon::create($selectedMonth)->startOfMonth();
+        $endOfMonth = Carbon::create($selectedMonth)->endOfMonth();
+
+        for ($date = $startOfMonth; $date->lte($endOfMonth); $date->addDay()) {
+            $dates[] = $date->toDateString();
+        }
+
+        return $dates;
+    }
+
     public function ShowDetailAbsensi($id)
     {
         $selectedMonth = Carbon::now()->format('m');
@@ -192,7 +209,7 @@ class PresensiController extends Controller
         $dateQuery = $datenow->format('m-Y');
         $year = $datenow->year;
         $month = $datenow->month;
-
+        $tanggalPerBulan = $this->getDaysOfCurrentMonth($datenow);
 
         $totalmasuk = Absensi::where('status_kehadiran', 'Masuk')
             ->whereMonth('tanggal', $month)
@@ -223,7 +240,7 @@ class PresensiController extends Controller
 
         $title = "Data Absensi Karyawan";
 
-        return view('admin.show-detail-presensi', compact('title', 'dataAbsensi', 'karyawan', 'totalmasuk', 'totalIzin', 'totaltidakmasuk', 'selectedMonth', 'dataTanggalLibur','dateQuery','datenow'));
+        return view('admin.show-detail-presensi', compact('title', 'dataAbsensi', 'karyawan', 'totalmasuk', 'totalIzin', 'totaltidakmasuk', 'selectedMonth', 'dataTanggalLibur','dateQuery','datenow','tanggalPerBulan'));
     }
 
     public function SearchAbsensiByMonth(Request $request, $id)
@@ -232,6 +249,8 @@ class PresensiController extends Controller
         $selectedMonth = $request->input('month');
         $month = $request->input('month');
         $year = Carbon::now()->year;
+        $tanggalInput = Carbon::create($year, $selectedMonth, 1);
+        $tanggalPerBulan = $this->getDaysOfCurrentMonth($tanggalInput);
 
         $totalmasuk = Absensi::where('status_kehadiran', 'Masuk')
             ->whereMonth('tanggal', $month)
@@ -263,7 +282,7 @@ class PresensiController extends Controller
         $title = "Data Absensi Karyawan";
 
         // Return view with the required data
-        return view('admin.show-detail-presensi', compact('title', 'datenow', 'dataAbsensi', 'karyawan', 'totalmasuk', 'totalIzin', 'totaltidakmasuk', 'selectedMonth', 'dataTanggalLibur','datenow'));
+        return view('admin.show-detail-presensi', compact('title', 'datenow', 'dataAbsensi', 'karyawan', 'totalmasuk', 'totalIzin', 'totaltidakmasuk', 'selectedMonth', 'dataTanggalLibur','datenow', 'tanggalPerBulan'));
     }
 
     public function PostKehadiran(Request $request,$tanggal, $id)
@@ -286,7 +305,7 @@ class PresensiController extends Controller
         $karyawan = Karyawan::findOrFail($id);
         $filePath = $request->hasFile('file_input') ? $request->file('file_input')->store('public/absensi_files'): null;
         // Buat data absensi baru
-        Absensi::create([
+        $absensi = Absensi::create([
             'karyawan_id' => $id,
             'shift_id' => $karyawan->shift_id,
             'tanggal' => $dateQuery,
@@ -294,12 +313,8 @@ class PresensiController extends Controller
             'keterangan' => $request->input('keterangan') ?? null,
             'file_input' => $filePath
         ]);
-
+        $AbsensiTanggal = Carbon::parse($absensi->tanggal)->locale('id')->translatedFormat('d-F-Y');
         // Redirect atau response
-        return redirect()->back()->with('success', "Data kehadiran karyawan $karyawan->nama berhasil diperbarui");
+        return redirect()->back()->with('success', "Data kehadiran karyawan $karyawan->nama pada tanggal $AbsensiTanggal berhasil diperbarui");
     }
-
-
-
-
 }

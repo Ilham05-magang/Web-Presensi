@@ -4,8 +4,8 @@
         <h1>{{ $title }}</h1>
         <button data-modal-target="tambahshift"
             data-modal-toggle="tambahshift"
-            class="text-white hover:bg-[#5B6390] border-2 border-[#242947] font-bold bg-[#242947] px-2 rounded-lg py-1.5 text-center text-xl font-medium mr-3">
-            <i class="items-center ri-add-circle-line"><span class="px-2 text-center">Tambah Shift</span></i>
+                class="text-white hover:bg-[#5B6390] border-2 border-[#242947] font-bold bg-[#242947] px-2 rounded-lg py-1 text-center text-xl font-medium">
+                <i class="text-2xl ri-add-circle-line"></i>
         </button>
     </div>
     <hr class="border-t-2 border-gray-200">

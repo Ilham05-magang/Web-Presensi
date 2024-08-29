@@ -29,6 +29,9 @@
                             Status Akun
                         </th>
                         <th scope="col" class="px-2 py-5">
+                            Presensi
+                        </th>
+                        <th scope="col" class="px-2 py-5">
                             Aksi
                         </th>
                     </tr>
@@ -58,6 +61,18 @@
                             Akun Belum Aktif
                             @endif
                         </td>
+                        @if ($data->akun->status_akun == 1)
+                            <td class="px-3 py-1 border-[#242947] border-[1px] pl-6">
+                                <a href="{{ route('dashboard.presensi.detail',$data->id) }}"
+                                    class="px-2.5 py-1.5 mr-3 text-xl font-medium text-center text-white bg-yellow-400 rounded-lg hover:bg-yellow-300 hover:text-gray-800">
+                                    <i class="ri-eye-2-line"></i>
+                                </a>
+                            </td>
+                        @else
+                            <td class="px-3 py-1 border-[#242947] border-[1px]">
+                                --//--
+                            </td>
+                        @endif
                         <td class="py-2 text-center">
                             <a href="{{ route('dashboard.karyawan.show', $data->id) }}"
                                 class="px-2 py-2 pl-3 text-sm font-medium text-center text-white bg-yellow-400 rounded-lg hover:bg-yellow-300 hover:text-gray-800">
