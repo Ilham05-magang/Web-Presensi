@@ -29,20 +29,14 @@ class DivisiController extends Controller
         // Validate the request
         $request->validate([
             'divisi' => 'required|string|unique:divisis,divisi',
-            'icon' => 'nullable|mimes:jpg,jpeg,png|max:1024|dimensions:ratio=1/1'
         ], [
             'divisi.unique' => 'Nama Divisi Sudah Tersedia',
             'divisi.string' => 'Nama Divisi Harus berupa teks',
             'divisi.required' => 'Nama Divisi Harus Diisi',
-            'icon.mimes' => 'File harus berupa format jpg, png.',
-            'icon.max' => 'Ukuran file maksimal adalah 1MB.',
-            'icon.dimensions' => 'Ukuran rasio gambar harus 1:1.',
         ]);
-        $filePath = $request->hasFile('icon') ? $request->file('icon')->store('public/divisi') : null;
 
         $divisi = Divisi::create([
             'divisi' => $request->input('divisi'),
-            'icon' => $filePath
         ]);
 
         // Redirect back with success message
@@ -57,41 +51,15 @@ class DivisiController extends Controller
                 'string',
                 Rule::unique('divisis', 'divisi')->ignore($id), // Mengabaikan record dengan ID saat ini
             ],
-            'icon' => 'nullable|file|mimes:jpg,jpeg,png|max:1024|dimensions:ratio=1/1'
         ], [
             'divisi.unique' => 'Nama Divisi Sudah Tersedia',
             'divisi.string' => 'Nama Divisi Harus berupa teks',
-            'icon.mimes' => 'File harus berupa format jpg, png.',
-            'icon.max' => 'Ukuran file maksimal adalah 1MB.',
-            'icon.dimensions' => 'Ukuran rasio gambar harus 1:1.',
         ]);
 
         $divisi = Divisi::findOrFail($id);
 
-        $oldFile = $divisi->icon;
-
-        if ($request->hasFile('icon')) {
-            // Hapus file lama jika ada
-            if ($oldFile && Storage::disk('public')->exists($oldFile)) {
-                if (Storage::disk('public')->delete($oldFile)) {
-                    Log::info("File $oldFile berhasil dihapus.");
-                } else {
-                    Log::error("Gagal menghapus file $oldFile.");
-                }
-            } else {
-                Log::info("File $oldFile tidak ditemukan atau tidak ada.");
-            }
-            // Upload file baru
-            $file = $request->file('icon') ?? null;
-            $filePath = $file->store('divisi', 'public') ?? null;
-        } else {
-            // Jika tidak ada file baru, gunakan file lama
-            $filePath = $oldFile ?? null;
-        }
-
         $divisi->update([
             'divisi' => $request->input('divisi'),
-            'icon' => $filePath
         ]);
         return redirect()->back()->with('success', "Data $divisi->divisi Berhasil Ditambah");
     }

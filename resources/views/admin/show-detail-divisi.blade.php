@@ -5,16 +5,10 @@
             <div class="flex items-center gap-3">
                 <a href="{{ route('dashboard.divisi') }}"><i
                         class="py-1 pr-3 text-2xl hover:text-blue-600 ri-arrow-left-line"></i></a>
-                @if ($dataPerDivisi->icon)
-                    <div class="px-3 py-3 text-2xl bg-gray-300 rounded-full">
-                        <img class="object-cover w-8"
-                            src="{{ asset('storage/divisi/' . basename($dataPerDivisi->icon)) }}" alt="icon divisi">
-                    </div>
-                @else
-                    <div class="px-4 py-3 text-2xl bg-gray-300 rounded-full">
-                        <i class="{{ $dataPerDivisi->icon ?? 'ri-heart-add-2-line' }} font-semibold"></i>
-                    </div>
-                @endif
+                <div class="px-3 py-3 text-2xl bg-gray-300 rounded-full">
+                    <img class="object-cover w-8" src="https://api.dicebear.com/9.x/identicon/svg?seed={{$dataPerDivisi->divisi}}"
+                        alt="icon divisi">
+                </div>
                 <div class="flex flex-col text-3xl">
                     <h1>Divisi {{ $dataPerDivisi->divisi }}</h1>
                 </div>
