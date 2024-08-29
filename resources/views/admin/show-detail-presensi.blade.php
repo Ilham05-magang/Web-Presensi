@@ -71,6 +71,14 @@ $day = \Carbon\Carbon::parse(request('date') ?? $datenow->format('Y-m-d'))->dayO
                             <h2>Total Tidak Masuk:</h2>
                             <p class="px-1.5 py-0.5 bg-red-600 text-white rounded-lg"> {{ $totaltidakmasuk }}</p>
                         </div>
+                        <div class="flex gap-1">
+                            <h2>Total Telat:</h2>
+                            <p class="px-1.5 py-0.5 bg-red-600 text-white rounded-lg"> {{ $totalTelat ?? '0'}}</p>
+                        </div>
+                        <div class="flex gap-1">
+                            <h2>Total Pulang Lebih Awal:</h2>
+                            <p class="px-1.5 py-0.5 bg-red-600 text-white rounded-lg"> {{ $totalPulangCepat ?? '0'}}</p>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -285,13 +285,24 @@ class PresensiController extends Controller
             ->get();
 
         $dataTanggalLibur = TanggalLibur::All();
+        $totalTelat = 0;
+        $totalPulangCepat = 0;
+
+        foreach ($dataAbsensi as $absensi ) { 
+            if ($absensi->jam_mulai > $absensi->shift->jam_mulai && $absensi->jam_mulai) {
+                $totalTelat++;
+            }
+            if ($absensi->jam_pulang < $absensi->shift->jam_pulang && $absensi->jam_pulang ) {
+                $totalPulangCepat++;
+            }
+        }
 
         $karyawan = Karyawan::find($id);
 
         $title = "Data Absensi Karyawan";
 
         // Return view with the required data
-        return view('admin.show-detail-presensi', compact('title', 'datenow', 'dataAbsensi', 'karyawan', 'totalmasuk', 'totalIzin', 'totaltidakmasuk', 'selectedMonth', 'dataTanggalLibur','datenow', 'tanggalPerPeriode','tanggalMulai','tanggalSelesai'));
+        return view('admin.show-detail-presensi', compact('title', 'datenow', 'dataAbsensi', 'karyawan', 'totalmasuk', 'totalIzin', 'totaltidakmasuk', 'selectedMonth', 'dataTanggalLibur','datenow', 'tanggalPerPeriode','tanggalMulai','tanggalSelesai','totalTelat','totalPulangCepat'));
     }
 
     public function PostKehadiran(Request $request,$tanggal, $id)
