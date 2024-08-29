@@ -28,4 +28,8 @@ class Absensi extends Model
     {
         return $this->belongsTo(Karyawan::class, 'karyawan_id', 'id');
     }
+    public function shift()
+    {
+        return $this->belongsTo(Shift::class, 'shift_id', 'id');
+    }
 }
