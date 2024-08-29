@@ -13,8 +13,8 @@ class SeederDivisi extends Seeder
      */
     public function run(): void
     {
-        Divisi::create(['divisi' => 'UI/UX', 'icon' =>'ri-pen-nib-line']);
-        Divisi::create(['divisi' => 'Programming', 'icon'=>'ri-code-s-slash-line']);
+        Divisi::create(['divisi' => 'UI/UX']);
+        Divisi::create(['divisi' => 'Programming']);
         Divisi::create(['divisi' => 'administrasi']);
         Divisi::create(['divisi' => 'HR']);
         Divisi::create(['divisi' => 'Marketing']);
