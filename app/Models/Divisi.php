@@ -10,7 +10,6 @@ class Divisi extends Model
     use HasFactory;
     protected $fillable = [
         'divisi',
-        'icon'
     ];
     public function karyawan()
     {
