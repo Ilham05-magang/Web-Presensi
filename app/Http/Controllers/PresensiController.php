@@ -287,16 +287,25 @@ class PresensiController extends Controller
         $tanggalTelat = [];
         $tanggalPulangCepat = [];
 
-        foreach ($dataAbsensi as $absensi ) {
-            if ($absensi->jam_mulai > $absensi->shift->jam_mulai && $absensi->jam_mulai) {
-                $totalTelat++;
-                $tanggalTelat[] = $absensi->tanggal;
+        foreach ($dataAbsensi as $absensi) {
+            // Check for late arrival
+            if (!in_array($absensi->tanggal, $tanggalTelat)) {
+                if ($absensi->jam_mulai > $absensi->shift->jam_mulai && $absensi->jam_mulai) {
+                    $tanggalTelat[] = $absensi->tanggal;
+                    $totalTelat++;
+                    continue;
+                }
             }
-            if ($absensi->jam_pulang < $absensi->shift->jam_pulang && $absensi->jam_pulang ) {
+
+            // Check for early departure
+            if ($absensi->jam_pulang < $absensi->shift->jam_pulang && $absensi->jam_pulang) {
+                if (!in_array($absensi->tanggal, $tanggalPulangCepat)) {
+                    $tanggalPulangCepat[] = $absensi->tanggal;
+                }
                 $totalPulangCepat++;
-                $tanggalPulangCepat[] = $absensi->tanggal;
             }
         }
+
 
         $karyawan = Karyawan::find($id);
 
