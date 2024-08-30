@@ -8,18 +8,25 @@
                 <div class="bg-gray-100 p-5 text-center text-red-600 rounded-md">
                     <ul>
                         @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
+                            <script>
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: '{{ $error }}',
+                                });
+                            </script>
                         @endforeach
                     </ul>
                 </div>
             @endif
             @if (session('success'))
-                <div class="bg-gray-100 p-5 text-green-400 rounded-md">
-                    {{ session('success') }}
-                </div>
-            @endif
-            @if (session('email'))
-                <div class="bg-gray-100 p-5 text-center text-red-600 rounded-md">{{ session('email') }}</div>
+                <script>
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Sukses',
+                        text: '{{ session('success') }}',
+                    });
+                </script>
             @endif
             <div class="text-center font-bold text-[#A4161A] text-3xl">Buat Password baru</div>
             <div class="text-center font-normal">Password baru harus berbeda dari password sebelumnya</div>
@@ -44,24 +51,4 @@
                 Password</button>
         </div>
     </form>
-
-    <script>
-        function togglePasswordVisibility(id, iconId) {
-            const passwordField = document.getElementById(id);
-            const eyeIcon = document.getElementById(iconId);
-            const isPassword = passwordField.type === 'password';
-            passwordField.type = isPassword ? 'text' : 'password';
-            eyeIcon.classList.toggle('ri-eye-fill', isPassword);
-            eyeIcon.classList.toggle('ri-eye-off-fill', !isPassword);
-        }
-
-        document.getElementById('togglePassword').addEventListener('click', function() {
-            togglePasswordVisibility('password', 'eyeIcon');
-        });
-
-        document.getElementById('toggleKonfirmasiPassword').addEventListener('click', function() {
-            togglePasswordVisibility('password_confirmation', 'eyeIconKonfirmasi');
-        });
-    </script>
-
 </x-layout.layout-reset-password>

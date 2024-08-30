@@ -2,25 +2,6 @@
 <x-layout.layout>
     <x-slot:title>Presensi Karyawan</x-slot:title>
     <x-navbar :user="$user" :quotes="$quotes"></x-navbar>
-    @if (session('success'))
-        <script>
-            Swal.fire({
-                icon: 'success',
-                title: 'Sukses',
-                text: '{{ session('success') }}',
-            });
-        </script>
-    @endif
-
-    @if (session('error'))
-        <script>
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: '{{ session('error') }}',
-            });
-        </script>
-    @endif
     <div
         class="grid mt-4 grid-cols-4 max-md:grid-cols-3 max-sm:grid-cols-2 w-full relative py-5 px-16 max-md:px-8 mx-auto justify-center  gap-4 max-md:flex-col ">
         <div class="max-w-48 flex flex-col gap-3 tracking-[.13em] max-md:hidden">
@@ -32,7 +13,9 @@
                     @method('PUT')
                 @endif
                 @csrf
-                <button {{ ($absensi && $absensi->jam_pulang) || $izin || !$user->karyawan->shift_id || ($absensi && $absensi->status_kehadiran == 'Izin')  ? 'disabled' : '' }} type="submit"
+                <button
+                    {{ ($absensi && $absensi->jam_pulang) || $izin || !$user->karyawan->shift_id || ($absensi && $absensi->status_kehadiran == 'Izin') ? 'disabled' : '' }}
+                    type="submit"
                     class="disabled:opacity-20 bg-button w-full text-white font-semibold rounded-xl px-3 py-3 text-sm justify-center gap-1 ">{{ $titleButton ?? 'Masuk' }}</button>
             </form>
             <form action="{{ route('izin') }}" method="post">
@@ -49,9 +32,11 @@
                 </button>
             </form>
             @if ($user->karyawan->kantor_id != '')
-                <a target="_blank" href="{{ $user->karyawan->kantor->link_gmaps}}" class="text-xs text-center tracking-tight text-blue-700 font-bold underline">Lihat lokasi kantor</a>
+                <a target="_blank" href="{{ $user->karyawan->kantor->link_gmaps }}"
+                    class="text-xs text-center tracking-tight text-blue-700 font-bold underline">Lihat lokasi kantor</a>
             @else
-                <div class="cursor-text text-center text-xs tracking-tight font-medium text-gray-300">Kantor belum di tentukan</div>
+                <div class="cursor-text text-center text-xs tracking-tight font-medium text-gray-300">Kantor belum di
+                    tentukan</div>
             @endif
         </div>
         <div class="col-span-3">

@@ -24,9 +24,14 @@ class PasswordController extends Controller
             $request->only('email')
         );
 
-        return $status === Password::RESET_LINK_SENT
-            ? back()->with(['status' => __($status)])
-            : back()->with(['email' => __($status)]);
+        if ($status === Password::RESET_LINK_SENT) {
+            return back()->with(['status' => "Email reset password sudah terkirim! Silakan cek email dan spam"]);
+        } elseif ($status === 'Please wait before retrying') {
+            return back()->with(['email' => 'Mohon ditunggu sebelum mencoba lagi']);
+        } else {
+            return back()->with(['email' => 'Tidak dapat menemukan pengguna dengan email yang sama']);
+        }
+        
     }
 
     public function showResetPasswordForm(string $token, Request $request)
@@ -41,6 +46,10 @@ class PasswordController extends Controller
             'token' => 'required',
             'email' => 'required|email',
             'password' => 'required|confirmed',
+        ], [
+            'password.required_with' => 'Password lama wajib diisi jika Password baru terisi.',
+            'password_confirmation.required_with' => 'Konfirmasi password baru wajib diisi jika Password terisi.',
+            'password.confirmed' => 'Password dan konfirmasi password tidak sama.',
         ]);
 
         $status = Password::reset(

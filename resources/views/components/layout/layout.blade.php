@@ -1,18 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    @vite(['resources/css/app.css','resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <title>{{ $title }}</title>
     <link rel="shortcut icon" href="assets/logo.png" type="image/x-icon">
     <script src="//unpkg.com/alpinejs" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
+
 <body>
     <Main class="h-screen max-w-screen-2xl mx-auto">
         {{ $slot }}
+        @if (session('success'))
+            <script>
+                Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    text: "{{ session('success') }}",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            </script>
+        @endif
+        @if (session('error'))
+            <script>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: '{{ session('error') }}',
+                });
+            </script>
+        @endif
     </Main>
 </body>
+
 </html>
