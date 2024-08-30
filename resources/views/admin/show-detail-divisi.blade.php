@@ -5,7 +5,7 @@
             <div class="flex items-center gap-3">
                 <a href="{{ route('dashboard.divisi') }}"><i
                         class="py-1 pr-3 text-2xl hover:text-blue-600 ri-arrow-left-line"></i></a>
-                <div class="px-3 py-3 text-2xl  rounded-full">
+                <div class="px-3 py-3 text-2xl border-2 border-[#242947] rounded-full">
                     <img class="object-cover w-8" src="https://api.dicebear.com/9.x/identicon/svg?seed={{$dataPerDivisi->divisi}}"
                         alt="icon divisi">
                 </div>
@@ -109,24 +109,4 @@
             @endif
         </div>
     </div>
-    @if (session('success'))
-        <script>
-            Swal.fire({
-                icon: 'success',
-                title: 'Success',
-                text: '{{ session('success') }}',
-            });
-        </script>
-    @endif
-    @if ($errors->any())
-        @foreach ($errors->all() as $error)
-            <script>
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: '{{ $error }}',
-                });
-            </script>
-        @endforeach
-    @endif
 </x-layout.layout-admin>

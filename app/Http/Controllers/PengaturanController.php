@@ -1,10 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Karyawan;
 use App\Models\Admins;
-use App\Models\Absensi;
-use App\Models\Divisi;
 use App\Models\Shift;
 use App\Models\Users;
 use App\Models\Kantor;
@@ -12,6 +9,7 @@ use App\Models\Quotes;
 use App\Models\TanggalLibur;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
 class PengaturanController extends Controller
 {
@@ -24,28 +22,27 @@ class PengaturanController extends Controller
     }
     public function PengaturanEditProfile(Request $request, $id)
     {
+
         $Admin = Admins::findOrFail($id);
         $akun = Users::findOrFail($Admin->akun_id);
 
-        // Validation rules
         $request->validate([
             'nama' => 'string|nullable',
             'username' => [
                 'string',
                 'max:255',
                 'nullable',
-                'unique:users,username'
+                Rule::unique('users', 'username')->ignore($akun->id),
             ],
             'email' => [
                 'string',
                 'email',
                 'max:255',
                 'nullable',
-                'unique:users,email'
+                Rule::unique('users', 'email')->ignore($akun->id),
             ],
             'telepon' => 'string|max:16|nullable',
-            'passwordLama' => 'required_with:password,password_confirmation',
-            'password' => 'required_with:passwordLama|confirmed',
+            'password' => 'nullable|string|confirmed',
         ], [
             'username.string' => 'Username harus berupa teks.',
             'username.max' => 'Username tidak boleh lebih dari 255 karakter.',
@@ -56,46 +53,27 @@ class PengaturanController extends Controller
             'email.unique' => 'Email sudah digunakan.',
             'telepon.string' => 'Telepon harus berupa teks.',
             'telepon.max' => 'Telepon tidak boleh lebih dari 16 karakter.',
-            'passwordLama.required_with' => 'Password lama wajib diisi jika Password baru terisi.',
-            'password.required_with' => 'Password baru wajib diisi jika Password lama terisi.',
-            'password_confirmation.required_with' => 'Konfirmasi password baru wajib diisi jika Password baru terisi.',
-            'password.confirmed' => 'Password baru dan konfirmasi password tidak sama.',
-            'password.min' => 'Password baru harus memiliki minimal 8 karakter.',
+            'password.confirmed' => 'Password baru dan konfirmasi password tidak sama.'
         ]);
 
-        // Track if password was updated
-        $passwordUpdated = false;
-
-        // Check if the old password is provided and matches the current password
-        if ($request->filled('passwordLama') && Hash::check($request->input('passwordLama'), $akun->password)) {
+        $Admin->update([
+            'nama' => $request->input('nama') ,
+            'telepon' => $request->input('telepon') ,
+        ]);
+        if ($request->filled('password')){
             $akun->update([
-                'username' => $request->input('username') ?? $akun->username,
-                'email' => $request->input('email') ?? $akun->email,
+                'username' => $request->input('username'),
+                'email' => $request->input('email'),
                 'password' => Hash::make($request->input('password'))
             ]);
-            $passwordUpdated = true;
-            $message = 'Mengganti Password telah Berhasil';
+            $message = 'Data Profile dan Password berhasil di Perbaharui';
         } else {
-            // If the old password is incorrect, set the message and update only other fields
-            $message = 'Inputan password lama salah';
-            if ($request->input('username') || $request->input('email')) {
-                $akun->update([
-                    'username' => $request->input('username') ?? $akun->username,
-                    'email' => $request->input('email') ?? $akun->email,
-                ]);
-                $message = 'Data Profile berhasil di update';
-            }
-        }
-
-        // Update Admin data
-        if ($request->input('nama') || $request->input('telepon')) {
-            $Admin->update([
-                'nama' => $request->input('nama') ?? $Admin->nama,
-                'telepon' => $request->input('telepon') ?? $Admin->telepon,
+            $akun->update([
+                'username' => $request->input('username'),
+                'email' => $request->input('email'),
             ]);
-            $message = 'Data Profile berhasil di update';
+            $message = 'Data Profile berhasil di Perbaharui';
         }
-        // Redirect back with the appropriate message
         return redirect()->back()->with('success', $message);
     }
 
@@ -294,7 +272,7 @@ class PengaturanController extends Controller
         // Redirect back with success message
         return redirect()->back()->with('success', 'Data Tanggal libur berhasil ditambahkan');
     }
-    
+
     public function PengaturanDeleteTanggal($id)
     {
         $tanggalLibur = TanggalLibur::findOrFail($id);
@@ -344,7 +322,7 @@ class PengaturanController extends Controller
         // Redirect back with success message
         return redirect()->back()->with('success', 'Data Quotes berhasil ditambahkan');
     }
-    
+
     public function PengaturanDeleteQuote($id)
     {
         $quote = Quotes::findOrFail($id);

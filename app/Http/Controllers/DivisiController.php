@@ -2,16 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Karyawan;
-use App\Models\Admins;
-use App\Models\Absensi;
 use App\Models\Divisi;
-use App\Models\Shift;
-use App\Models\Users;
-use App\Models\Kantor;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 class DivisiController extends Controller

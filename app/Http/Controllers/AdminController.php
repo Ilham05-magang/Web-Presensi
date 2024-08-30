@@ -1,15 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Http\Request;
 use App\Models\Karyawan;
-use App\Models\Admins;
 use App\Models\Absensi;
 use App\Models\Aktivitas;
-use App\Models\Divisi;
-use App\Models\Shift;
-use App\Models\Users;
-use App\Models\Kantor;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\View;
 

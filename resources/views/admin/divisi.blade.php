@@ -11,7 +11,7 @@
                 @foreach ($divisiCollection as $divisi)
                     <a href="{{ route('dashboard.divisi.show', $divisi->id) }}"
                         class="flex items-center gap-3 text-lg font-bold hover:text-blue-600">
-                        <div class="px-3 py-3 text-2xl rounded-full">
+                        <div class="px-3 py-3 text-2xl border-2 border-[#242947] rounded-full">
                             <img class="object-cover w-8"
                                 src="https://api.dicebear.com/9.x/identicon/svg?seed={{ $divisi->divisi }}"
                                 alt="icon divisi">
@@ -30,25 +30,5 @@
             </button>
             <x-admin.popup-divisi title="Tambah Divisi" id="TambahDivisi" :action="route('dashboard.divisi.Tambah')" />
         </div>
-        @if (session('success'))
-            <script>
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success',
-                    text: '{{ session('success') }}',
-                });
-            </script>
-        @endif
-        @if ($errors->any())
-            @foreach ($errors->all() as $error)
-                <script>
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: '{{ $error }}',
-                    });
-                </script>
-            @endforeach
-        @endif
     </div>
 </x-layout.layout-admin>

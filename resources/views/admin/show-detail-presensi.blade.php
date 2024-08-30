@@ -26,21 +26,10 @@ $day = \Carbon\Carbon::parse(request('date') ?? $datenow->format('Y-m-d'))->dayO
         <div class="p-4">
             <form class="flex items-center max-w-md mx-auto space-x-4" action="{{ route('dashboard.presensi.searchdetail',$karyawan->id) }}" method="GET">
                 @csrf
-                <div class="flex justify-center gap-3 text-base items-center">
+                <div class="flex items-center justify-center gap-3 text-base">
                     <input type="date" name="tanggal_mulai" class="block w-full py-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     <h2 class="lowercase">s.d.</h2>
                     <input type="date" name="tanggal_selesai" class="block w-full py-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    {{-- <select name="month" id="month" class="block w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                        <option value="" disabled {{ $selectedMonth ? '' : 'selected' }}>Pilih Bulan</option>
-                        @foreach (range(1, 12) as $month)
-                        @php
-                        $monthName = Carbon::create()->month($month)->locale('id')->translatedFormat('F');
-                        @endphp
-                        <option value="{{ $month }}" {{ $month==$selectedMonth ? 'selected' : '' }}>
-                            {{ $monthName }}
-                        </option>
-                        @endforeach
-                    </select> --}}
                 </div>
                 <button type="submit" class="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-[#242947] border border-transparent rounded-md shadow-sm hover:bg-[#242947]/80 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                     <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -73,11 +62,11 @@ $day = \Carbon\Carbon::parse(request('date') ?? $datenow->format('Y-m-d'))->dayO
                         </div>
                         <div class="flex gap-1">
                             <h2>Total Telat:</h2>
-                            <p class="px-1.5 py-0.5 bg-yellow-300 text-white rounded-lg"> {{ $totalTelat ?? '0'}}</p>
+                            <p class="px-1.5 py-0.5 bg-[#DBB80C] text-white rounded-lg"> {{ $totalTelat ?? '0'}}</p>
                         </div>
                         <div class="flex gap-1">
                             <h2>Total Pulang Lebih Awal:</h2>
-                            <p class="px-1.5 py-0.5 bg-green-400 text-white rounded-lg"> {{ $totalPulangCepat ?? '0'}}</p>
+                            <p class="px-1.5 py-0.5 bg-[#DBB80C] text-white rounded-lg"> {{ $totalPulangCepat ?? '0'}}</p>
                         </div>
                     </div>
                 </div>
@@ -135,7 +124,7 @@ $day = \Carbon\Carbon::parse(request('date') ?? $datenow->format('Y-m-d'))->dayO
                                                 \Carbon\Carbon::parse($tanggal)->dayOfWeek === \Carbon\Carbon::SUNDAY ?
                                                 'bg-red-300' :
                                                 (in_array(\Carbon\Carbon::parse($tanggal)->format('Y-m-d'), $tanggalTelat) ? 'bg-yellow-200' :
-                                                (in_array(\Carbon\Carbon::parse($tanggal)->format('Y-m-d'), $tanggalPulangCepat) ? 'bg-green-300' : '')
+                                                (in_array(\Carbon\Carbon::parse($tanggal)->format('Y-m-d'), $tanggalPulangCepat) ? 'bg-yellow-200' : '')
                                             ) }}">
                                         <td class="p-1 border-[#242947] border-[1px]">
                                             {{ $loop->iteration }}
@@ -217,14 +206,14 @@ $day = \Carbon\Carbon::parse(request('date') ?? $datenow->format('Y-m-d'))->dayO
             </div>
             <div class="border-[1px] border-t-0 border-[#242947]/50 rounded-b-lg pt-5 pb-2">
                 @if ($tanggalPerPeriode !== null)
-                    <nav aria-label="Page navigation example" class="w-full text-center flex justify-center pb-5">
+                    <nav aria-label="Page navigation example" class="flex justify-center w-full pb-5 text-center">
                         <ul class="inline-flex -space-x-px text-sm">
                             @foreach ($tanggalPerPeriode->links()->elements as $element)
                                 @if (is_array($element))
                                     @foreach ($element as $page => $url)
                                         <li>
                                             <a href="{{ $url }}&tanggal_mulai={{ request('tanggal_mulai') }}&tanggal_selesai={{ request('tanggal_selesai') }}"
-                                            class="flex items-center justify-center px-3 h-8 border-white border-[1px] text-lg bg-[#242947] text-white rounded-lg
+                                            class="flex items-center justify-center px-2.5 py-0.5 border-white border-2 text-lg bg-[#242947] text-white rounded-lg
                                             {{ $tanggalPerPeriode->currentPage() == $page ? 'bg-[#5B6390] pointer-events-none' : 'hover:bg-[#5B6390]  dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white' }}">
                                                 {{ $page }}
                                             </a>
@@ -240,25 +229,5 @@ $day = \Carbon\Carbon::parse(request('date') ?? $datenow->format('Y-m-d'))->dayO
             </div>
         </div>
     </div>
-    @if (session('success'))
-        <script>
-            Swal.fire({
-                icon: 'success',
-                title: 'Success',
-                text: '{{ session('success') }}',
-            });
-        </script>
-    @endif
-    @if ($errors->any())
-        @foreach ($errors->all() as $error)
-            <script>
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: '{{ $error }}',
-                });
-            </script>
-        @endforeach
-    @endif
 </x-layout.layout-admin>
 

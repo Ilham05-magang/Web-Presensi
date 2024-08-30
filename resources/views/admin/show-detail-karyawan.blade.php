@@ -1,7 +1,3 @@
-@php
-    use Carbon\Carbon;
-@endphp
-
 <x-layout.layout-admin>
     <x-slot:title>{{ $title }}</x-slot:title>
     <div class="-mx-px -mt-px shadow-xl shadow-[#242947]/40">
@@ -60,13 +56,19 @@
                     <label>Email</label>
                     <input type="text" disabled class="editstatus px-3 py-1.5 border-2 border-gray-400 rounded-lg text-sm" value="{{ $datakaryawan->akun->email }}"/>
                 </div>
-                <div class="flex flex-col gap-1">
-                    <label>Password Baru</label>
-                    <input type="password" name="password" disabled class="editstatus px-3 py-1.5 border-2 border-gray-400 rounded-lg text-sm" disabled placeholder="Ubah Password"/>
+                <div class="relative flex flex-col gap-1">
+                    <label for="password" class="font-semibold">Password Baru</label>
+                    <input type="password" id="password" name="password" disabled class="text-sm rounded-lg editstatus" placeholder="Ubah Password" >
+                    <button type="button" id="togglePassword" disabled class="absolute inset-y-0 flex items-center editstatus top-6 right-3">
+                        <i id="eyeIcon" class="ri-eye-off-fill"></i>
+                    </button>
                 </div>
-                <div class="flex flex-col gap-1">
-                    <label>Konfirmasi password</label>
-                    <input type="password" name="password_confirmation" disabled class="editstatus px-3 py-1.5 border-2 border-gray-400 rounded-lg text-sm" disabled placeholder="Ulangi Password"/>
+                <div class="relative flex flex-col gap-1">
+                    <label for="password_confirmation" class="font-semibold">Konfirmasi Password</label>
+                    <input type="password" name="password_confirmation" disabled id="password_confirmation" class="text-sm rounded-lg editstatus" placeholder="Ulangi Password">
+                    <button type="button" id="toggleKonfirmasiPassword" disabled class="absolute inset-y-0 flex items-center editstatus top-6 right-3">
+                        <i id="eyeIconKonfirmasi" class="ri-eye-off-fill"></i>
+                    </button>
                 </div>
             </div>
         </div>
@@ -177,60 +179,4 @@
             </div>
         </div>
     </form>
-    @if (session('success'))
-        <script>
-            Swal.fire({
-                icon: 'success',
-                title: 'Success',
-                text: '{{ session('success') }}',
-            });
-        </script>
-    @endif
-    @if ($errors->any())
-        @foreach ($errors->all() as $error)
-            <script>
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: '{{ $error }}',
-                });
-            </script>
-        @endforeach
-    @endif
 </x-layout.layout-admin>
-
-<script>
-    const buttonEdit = document.getElementById('buttonEdit');
-    const editStatusElements = document.querySelectorAll('.editstatus');
-    const buttonfirst = document.getElementById('buttonfirst');
-    const submitForm = document.getElementById('submitForm');
-    const BatalEdit = document.getElementById('BatalEdit');
-
-    buttonEdit.addEventListener('click', function() {
-        buttonfirst.disabled = !buttonfirst.disabled;
-        submitForm.classList.remove('hidden');
-        BatalEdit.classList.remove('hidden');
-        buttonfirst.classList.remove('hover:bg-yellow-300', 'hover:text-gray-800');
-        buttonfirst.classList.add('bg-yellow-100');
-
-        editStatusElements.forEach(function(element) {
-            if (element.tagName === 'INPUT' || element.tagName === 'SELECT') {
-                element.disabled = !element.disabled;
-            }
-        });
-    });
-
-    BatalEdit.addEventListener('click', function() {
-        buttonfirst.disabled = !buttonfirst.disabled;
-        submitForm.classList.add('hidden');
-        BatalEdit.classList.add('hidden');
-
-        buttonfirst.classList.add('hover:bg-yellow-300', 'hover:text-gray-800');
-        buttonfirst.classList.remove('bg-yellow-100');
-        editStatusElements.forEach(function(element) {
-            if (element.tagName === 'INPUT' || element.tagName === 'SELECT') {
-                element.disabled = !element.disabled;
-            }
-        });
-    });
-</script>

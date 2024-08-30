@@ -55,24 +55,4 @@
         </div>
     </div>
     <x-admin.popup-tambah-data title="Tambah Kantor" :action="route('dashboard.pengaturan.tambahkantor')" id="tambahkantor" />
-    @if (session('success'))
-        <script>
-            Swal.fire({
-                icon: 'success',
-                title: 'Success',
-                text: '{{ session('success') }}',
-            });
-        </script>
-    @endif
-    @if ($errors->any())
-        @foreach ($errors->all() as $error)
-            <script>
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: '{{ $error }}',
-                });
-            </script>
-        @endforeach
-    @endif
 </x-layout.layout-admin>

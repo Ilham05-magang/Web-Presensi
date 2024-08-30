@@ -92,7 +92,7 @@
                         </thead>
                         <tbody>
                             @foreach ($dataAbsensi as $data)
-                            <tr class="border-[#242947] border-[1px] border-t-0 
+                            <tr class="border-[#242947] border-[1px] border-t-0
                         {{in_array( request('date') ?? $datenow->format('Y-m-d'), $dataTanggalLibur->pluck('tanggal_libur')->toArray()) || $day == \Carbon\Carbon::SUNDAY ? 'bg-red-300' : ''}}
                         ">
                                 <td class="p-1 border-[#242947] border-[1px]">
@@ -181,24 +181,4 @@
             </div>
         </div>
     </div>
-    @if (session('success'))
-        <script>
-            Swal.fire({
-                icon: 'success',
-                title: 'Success',
-                text: '{{ session('success') }}',
-            });
-        </script>
-    @endif
-    @if ($errors->any())
-        @foreach ($errors->all() as $error)
-            <script>
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: '{{ $error }}',
-                });
-            </script>
-        @endforeach
-    @endif
 </x-layout.layout-admin>

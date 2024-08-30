@@ -105,10 +105,6 @@ class KaryawanController extends Controller
             'kantor_id' => $request->input('kantor_id') ?? $karyawan->kantor_id,
         ]);
 
-        // Update Akun record
-        $akun->update([
-            'status_akun' => $request->input('status_akun'),
-        ]);
         if ($request->filled('password')) {
             $akun->update([
                 'username' => $request->input('username')?? $akun->username,
@@ -118,6 +114,7 @@ class KaryawanController extends Controller
                 'os' => $request->input('os') ?? $akun->browser,
                 'browser' => $request->input('browser') ?? $akun->browser,
             ]);
+            $message = "Data Karyawan $karyawan->nama dan Password Berhasil Di Perbaharui";
         } else{
             $akun->update([
                 'username' => $request->input('username')?? $akun->username,
@@ -126,10 +123,11 @@ class KaryawanController extends Controller
                 'os' => $request->input('os') ?? $akun->browser,
                 'browser' => $request->input('browser') ?? $akun->browser,
             ]);
+            $message = "Data Karyawan $karyawan->nama Berhasil Di Perbaharui";
         }
 
 
-        return redirect()->back()->with('success', "Data $karyawan->nama Berhasil Di Update ");
+        return redirect()->back()->with('success', $message);
     }
     public function DeleteKaryawanAdmin($id){
         $karyawan = Karyawan::find($id);

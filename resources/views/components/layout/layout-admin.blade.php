@@ -25,5 +25,37 @@
     </x-admin.navbar-admin>
 
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    @if (session('success'))
+        @if (session('success') == 'Inputan password lama salah')
+            <script>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: '{{ session('success') }}',
+                });
+            </script>
+        @else
+            <script>
+                Swal.fire({
+                    position: "center",
+                    icon: 'success',
+                    text: '{{ session('success') }}',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            </script>
+        @endif
+    @endif
+    @if ($errors->any())
+        @foreach ($errors->all() as $error)
+            <script>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: '{{ $error }}',
+                });
+            </script>
+        @endforeach
+    @endif
 </body>
 </html>

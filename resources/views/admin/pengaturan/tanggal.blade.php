@@ -1,29 +1,6 @@
 <x-layout.layout-admin>
     <x-slot:title>{{ $title }}</x-slot:title>
-    @if (session('success'))
-        <script>
-            Swal.fire({
-                icon: 'success',
-                title: 'Sukses',
-                text: '{{ session('success') }}',
-            });
-        </script>
-    @endif
-    @if ($errors->any())
-        <div class="p-5 text-center text-red-600 bg-gray-100 rounded-md">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <script>
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: '{{ $error }}',
-                        });
-                    </script>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+
     <div class="flex items-center justify-between w-full px-10 py-8 text-2xl">
         <h1>{{ $title }}</h1>
         <button data-modal-target="tambahtanggal" data-modal-toggle="tambahtanggal"
@@ -32,15 +9,6 @@
         </button>
     </div>
     <hr class="border-t-2 border-gray-200">
-    @if ($errors->any())
-        <div class="p-5 text-center text-red-600 bg-gray-100 rounded-md">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
     <div class="px-5 py-8">
         <div class="relative overflow-x-auto shadow-md sm:rounded-t-xl">
             <table class="w-full text-sm text-center text-black bg-blue-100 rounded-b-lg rtl:text-right">

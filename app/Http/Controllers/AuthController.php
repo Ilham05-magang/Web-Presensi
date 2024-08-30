@@ -38,7 +38,22 @@ class AuthController extends Controller
             'tempat_lahir' => 'string',
             'tanggal_lahir' => 'date',
             'password' => 'required|string|confirmed',
+        ],[
+            'nama.required' => 'Nama harus diisi',
+            'username.required' => 'Username harus diisi',
+            'username.unique' => 'Username sudah digunakan',
+            'email.required' => 'Email harus diisi',
+            'email.email' => 'Format email tidak valid',
+            'email.unique' => 'Email sudah digunakan',
+            'telepon.required' => 'Nomor telepon harus diisi',
+            'telepon.max' => 'Nomor telepon tidak boleh lebih dari 16 karakter',
+            'nip.max' => 'NIP tidak boleh lebih dari 20 karakter',
+            'tempat_lahir.string' => 'Tempat lahir harus berupa teks',
+            'tanggal_lahir.date' => 'Tanggal lahir harus berupa tanggal yang valid',
+            'password.required' => 'Password harus diisi',
+            'password.confirmed' => 'Password konfirmasi tidak sama',
         ]);
+
     }
 
     public function registerkaryawan(Request $request)
@@ -68,7 +83,7 @@ class AuthController extends Controller
         ]);
 
         // Redirect ke halaman login dengan pesan sukses
-        return redirect()->route('login')->with('success', 'Pendaftaran berhasil! Silakan login.');
+        return redirect()->route('login')->with('success', 'Pendaftaran berhasil! Silakan Hubungi Admin');
     }
 
 

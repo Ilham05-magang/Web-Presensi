@@ -40,7 +40,7 @@
                                 <div class="grid grid-cols-2 gap-1">
                                     <label for="tempat_lahir" class="col-span-2 font-semibold">Tempat, Tanggal Lahir*</label>
                                     <div class="col-span-1">
-                                        <input type="text" name="tempat_lahir" id="tempat_lahir" class="w-full text-sm rounded-lg " placeholder="Tempat..." value="{{ old('tempat_lahir') }}" required>
+                                        <input type="text" name="tempat_lahir" id="tempat_lahir" class="w-full text-sm rounded-lg " placeholder="Tempat" value="{{ old('tempat_lahir') }}" required>
                                     </div>
                                     <div class="col-span-1">
                                         <input type="date" name="tanggal_lahir" id="tanggal_lahir" class="w-full text-sm rounded-lg " value="{{ old('tanggal_lahir') }}" required>
@@ -67,24 +67,9 @@
                             </div>
                         </div>
                         <div>
-                            @if ($errors->has('password'))
-                                <div class="w-full mb-2 text-base text-center text-red-500">
-                                    Password tidak sama
-                                </div>
-                            @endif
-                            @if ($errors->has('username'))
-                                <div class="w-full mb-2 text-base text-center text-red-500">
-                                    Username Telah Dipakai
-                                </div>
-                            @endif
-                            @if ($errors->has('email'))
-                                <div class="w-full mb-2 text-base text-center text-red-500">
-                                    Email sudah digunakan
-                                </div>
-                            @endif
                             <div class="flex justify-center">
                                 <button type="submit"
-                                    class="bg-button px-3 py-2 text-white w-36 shadow-lg shadow-black/30 rounded-lg font-semibold hover:bg-[#ADB5BD] hover:border-button hover:border-[1px] border-[1px] border-button">
+                                    class="bg-login px-3 py-2 text-white w-36 shadow-lg shadow-black/30 rounded-lg font-semibold hover:bg-[#6C767E] hover:border-button hover:border-[1px] border-[1px] border-button">
                                     Sign Up
                                 </button>
                             </div>
@@ -98,23 +83,4 @@
             </div>
         </div>
     </div>
-
-    <script>
-        function togglePasswordVisibility(id, iconId) {
-            const passwordField = document.getElementById(id);
-            const eyeIcon = document.getElementById(iconId);
-            const isPassword = passwordField.type === 'password';
-            passwordField.type = isPassword ? 'text' : 'password';
-            eyeIcon.classList.toggle('ri-eye-fill', isPassword);
-            eyeIcon.classList.toggle('ri-eye-off-fill', !isPassword);
-        }
-
-        document.getElementById('togglePassword').addEventListener('click', function () {
-            togglePasswordVisibility('password', 'eyeIcon');
-        });
-
-        document.getElementById('toggleKonfirmasiPassword').addEventListener('click', function () {
-            togglePasswordVisibility('password_confirmation', 'eyeIconKonfirmasi');
-        });
-    </script>
 </x-layout.layoutauth>
