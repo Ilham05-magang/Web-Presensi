@@ -8,6 +8,7 @@ use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\PresensiController;
 use App\Http\Controllers\DivisiController;
 use App\Http\Controllers\GajiKaryawanController;
+use App\Http\Controllers\GajiController;
 use App\Http\Controllers\PengaturanController;
 
 use App\Http\Controllers\UserController;
@@ -90,7 +91,10 @@ Route::middleware(['auth', 'web'])->group(function () {
 
 
         #Api Laporan
-        Route::get('/dashboard/laporan', [GajiKaryawanController::class, 'GajiKaryawan'])->name('dashboard.laporan');
+        Route::get('/dashboard/gaji', [GajiController::class, 'gajiAdmin'])->name('dashboard.gaji');
+        Route::get('/dashboard/gaji/default', [GajiController::class, 'defaultGaji'])->name('dashboard.gaji.default');
+        Route::get('/dashboard/gaji/input', [GajiController::class, 'inputGaji'])->name('dashboard.gaji.input');
+        Route::get('/dashboard/gaji/riwayat', [GajiController::class, 'riwayatGaji'])->name('dashboard.gaji.riwayat');
 
         #Api Pengaturan
         Route::get('/dashboard/pengaturan/profile', [PengaturanController::class, 'PengaturanProfile'])->name('dashboard.pengaturan.profile');

@@ -82,3 +82,6 @@ BatalEdit.addEventListener('click', function() {
         }
     });
 });
+
+
+
