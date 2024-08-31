@@ -7,11 +7,11 @@ use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\KaryawanController;
 use App\Http\Controllers\PresensiController;
 use App\Http\Controllers\DivisiController;
-use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\GajiKaryawanController;
 use App\Http\Controllers\PengaturanController;
 
 use App\Http\Controllers\UserController;
-
+use App\Models\GajiKaryawan;
 
 /*
 |--------------------------------------------------------------------------
@@ -90,7 +90,7 @@ Route::middleware(['auth', 'web'])->group(function () {
 
 
         #Api Laporan
-        Route::get('/dashboard/laporan', [LaporanController::class, 'LaporanAdmin'])->name('dashboard.laporan');
+        Route::get('/dashboard/laporan', [GajiKaryawanController::class, 'GajiKaryawan'])->name('dashboard.laporan');
 
         #Api Pengaturan
         Route::get('/dashboard/pengaturan/profile', [PengaturanController::class, 'PengaturanProfile'])->name('dashboard.pengaturan.profile');

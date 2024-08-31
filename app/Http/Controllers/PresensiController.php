@@ -8,8 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Collection;
+
 
 class PresensiController extends Controller
 {
@@ -192,40 +191,7 @@ class PresensiController extends Controller
         return redirect()->back()->with('success', "Data Absensi Tanggal $tanggal pada Karyawan $karyawan->nama berhasil di Hapus");
     }
 
-    public function getDaysOfCurrentMonth($selectedMulai, $tanggalSelesai)
-    {
-        // Parse the input dates
-        $startDate = Carbon::parse($selectedMulai);
-        $endDate = Carbon::parse($tanggalSelesai);
 
-        // Initialize a collection to hold the dates
-        $dates = collect();
-
-        // Iterate from the start date to the end date
-        for ($date = $startDate; $date->lte($endDate); $date->addDay()) {
-            $dates->push($date->toDateString());
-        }
-
-        // Paginate the results (40 items per page)
-        $paginatedDates = $this->paginateCollection($dates, 40);
-
-        // dd($paginatedDates);
-        return $paginatedDates;
-    }
-    protected function paginateCollection(Collection $collection, $perPage)
-    {
-        $currentPage = LengthAwarePaginator::resolveCurrentPage();
-
-        $currentItems = $collection->slice(($currentPage - 1) * $perPage, $perPage)->values();
-
-        return new LengthAwarePaginator(
-            $currentItems,
-            $collection->count(),
-            $perPage,
-            $currentPage,
-            ['path' => LengthAwarePaginator::resolveCurrentPath()]
-        );
-    }
 
     public function ShowDetailAbsensi($id)
     {
@@ -247,19 +213,23 @@ class PresensiController extends Controller
 
         return view('admin.show-detail-presensi', compact('title', 'karyawan', 'totalmasuk', 'totalIzin', 'totaltidakmasuk', 'selectedMonth', 'dataTanggalLibur','dateQuery','datenow','tanggalPerPeriode','tanggalMulai'));
     }
-
+         /**
+         * Show a paginated list of days between selected start and end dates.
+         *
+         * @param Request $request
+         * @return \Illuminate\View\View
+         */
     public function SearchAbsensiByPeriode(Request $request, $id)
     {
+        $absensi = new Absensi();
         $tanggalMulai = $request->input('tanggal_mulai');
         $tanggalSelesai = $request->input('tanggal_selesai');
-
 
         $datenow = Carbon::now();
         $selectedMonth = $request->input('month');
         $month = $request->input('month');
         $year = Carbon::now()->year;
-        $tanggalInput = Carbon::create($year, $selectedMonth, 1);
-        $tanggalPerPeriode = $this->getDaysOfCurrentMonth($tanggalMulai,$tanggalSelesai);
+        $tanggalPerPeriode = $absensi->getDaysOfCurrentMonth($tanggalMulai,$tanggalSelesai);
 
         $totalmasuk = Absensi::where('status_kehadiran', 'Masuk')
             ->whereBetween('tanggal', [$tanggalMulai, $tanggalSelesai])
@@ -281,32 +251,12 @@ class PresensiController extends Controller
             ->get();
 
         $dataTanggalLibur = TanggalLibur::All();
-        $totalTelat = 0;
-        $totalPulangCepat = 0;
 
-        $tanggalTelat = [];
-        $tanggalPulangCepat = [];
-
-        foreach ($dataAbsensi as $absensi) {
-            // Check for late arrival
-            if (!in_array($absensi->tanggal, $tanggalTelat)) {
-                if ($absensi->jam_mulai > $absensi->shift->jam_mulai && $absensi->jam_mulai) {
-                    $tanggalTelat[] = $absensi->tanggal;
-                    $totalTelat++;
-                    continue;
-                }
-            }
-
-            // Check for early departure
-            if ($absensi->jam_pulang < $absensi->shift->jam_pulang && $absensi->jam_pulang) {
-                if (!in_array($absensi->tanggal, $tanggalPulangCepat)) {
-                    $tanggalPulangCepat[] = $absensi->tanggal;
-                }
-                $totalPulangCepat++;
-            }
-        }
-
-
+        $kalkulasi = $absensi->calculateAttendanceMetrics($dataAbsensi);
+        $totalTelat = $kalkulasi['totalTelat'];
+        $totalPulangCepat = $kalkulasi['totalPulangCepat'];
+        $tanggalTelat = $kalkulasi['tanggalTelat'];
+        $tanggalPulangCepat = $kalkulasi['tanggalPulangCepat'];
         $karyawan = Karyawan::find($id);
 
         $title = "Data Absensi Karyawan";

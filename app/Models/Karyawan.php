@@ -47,9 +47,12 @@ class Karyawan extends Model
     {
         return $this->hasMany(Absensi::class, 'karyawan_id', 'id');
     }
-
-    public function aktivitas() 
+    public function gajiKaryawan()
     {
-        return $this->hasMany(Aktivitas::class,'karyawan_id');
+        return $this->hasMany(GajiKaryawan::class, 'karyawan_id', 'id');
+    }
+    public function gajiDefault()
+    {
+        return $this->hasMany(GajiDefault::class, 'karyawan_id','id');
     }
 }

@@ -23,6 +23,10 @@ class DatabaseSeeder extends Seeder
             Seederkaryawan::class,
             SeederAbsensis::class,
             SeederQuotes::class,
+            GajiDefaultSeeder::class,
+            GajiKaryawanSeeder::class,
+            GajiHeaderSeeder::class,
+            GajiDetailSeeder::class,
         ]);
     }
 }
