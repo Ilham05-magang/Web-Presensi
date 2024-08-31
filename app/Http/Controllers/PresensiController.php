@@ -230,25 +230,15 @@ class PresensiController extends Controller
         $month = $request->input('month');
         $year = Carbon::now()->year;
         $tanggalPerPeriode = $absensi->getDaysOfCurrentMonth($tanggalMulai,$tanggalSelesai);
+        $kalkulasiAbsensi = $absensi->kalkulasiAbsensi($id,$tanggalMulai,$tanggalSelesai);
 
-        $totalmasuk = Absensi::where('status_kehadiran', 'Masuk')
-            ->whereBetween('tanggal', [$tanggalMulai, $tanggalSelesai])
-            ->where('karyawan_id', $id)
-            ->count();
+        $totalmasuk = $kalkulasiAbsensi['totalMasuk'];
 
-        $totalIzin = Absensi::where('status_kehadiran', 'Izin')
-            ->whereBetween('tanggal', [$tanggalMulai, $tanggalSelesai])
-            ->where('karyawan_id', $id)
-            ->count();
+        $totalIzin = $kalkulasiAbsensi['totalIzin'];
 
-        $totaltidakmasuk = Absensi::where('status_kehadiran', 'Tidak Masuk')
-            ->whereBetween('tanggal', [$tanggalMulai, $tanggalSelesai])
-            ->where('karyawan_id', $id)
-            ->count();
+        $totaltidakmasuk = $kalkulasiAbsensi['totalTidakMasuk'];
 
-        $dataAbsensi = Absensi::whereBetween('tanggal', [$tanggalMulai, $tanggalSelesai])
-            ->where('karyawan_id', $id)
-            ->get();
+        $dataAbsensi = $kalkulasiAbsensi['dataAbsensi'];
 
         $dataTanggalLibur = TanggalLibur::All();
 

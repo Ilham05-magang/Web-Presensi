@@ -65,6 +65,40 @@ class Absensi extends Model
         return $paginatedDates;
     }
 
+    public static function kalkulasiAbsensi($id, $tanggalMulai, $tanggalSelesai)
+    {
+        // Calculate the total number of "Masuk"
+        $totalMasuk = self::where('status_kehadiran', 'Masuk')
+            ->whereBetween('tanggal', [$tanggalMulai, $tanggalSelesai])
+            ->where('karyawan_id', $id)
+            ->count();
+
+        // Calculate the total number of "Izin"
+        $totalIzin = self::where('status_kehadiran', 'Izin')
+            ->whereBetween('tanggal', [$tanggalMulai, $tanggalSelesai])
+            ->where('karyawan_id', $id)
+            ->count();
+
+        // Calculate the total number of "Tidak Masuk"
+        $totalTidakMasuk = self::where('status_kehadiran', 'Tidak Masuk')
+            ->whereBetween('tanggal', [$tanggalMulai, $tanggalSelesai])
+            ->where('karyawan_id', $id)
+            ->count();
+
+        // Retrieve the attendance data for the given date range and employee
+        $dataAbsensi = self::whereBetween('tanggal', [$tanggalMulai, $tanggalSelesai])
+            ->where('karyawan_id', $id)
+            ->get();
+
+        // Return the results in an associative array
+        return [
+            'totalMasuk' => $totalMasuk,
+            'totalIzin' => $totalIzin,
+            'totalTidakMasuk' => $totalTidakMasuk,
+            'dataAbsensi' => $dataAbsensi,
+        ];
+    }
+
     /**
      * Paginate a collection of items.
      *
