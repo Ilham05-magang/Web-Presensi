@@ -58,7 +58,7 @@
                 <x-admin.li-navbar route="dashboard" title="Dashboard" icon="ri-pie-chart-2-fill" />
                 <x-admin.li-navbar route="dashboard.presensi" title="Presensi" icon="ri-database-2-fill" />
                 <x-admin.li-navbar route="dashboard.divisi" title="Divisi" icon="ri-group-2-fill" />
-                <x-admin.li-navbar route="dashboard.laporan" title="Laporan" icon="ri-folder-chart-fill" />
+                <x-admin.li-navbar route="dashboard.gaji" title="Gaji" icon="ri-folder-chart-fill" />
                 <x-admin.li-navbar route="dashboard.karyawan" title="Karyawan" icon="ri-team-fill" />
                 <button id="dropdownPengaturanButton" data-dropdown-toggle="dropdownPengaturan"
                     class="flex items-center p-2 text-gray-700 rounded-lg dark:text-white hover:bg-[#242947] hover:text-white {{ request()->routeIs('dashboard.pengaturan.profile') || request()->routeIs('dashboard.pengaturan.kantor') || request()->routeIs('dashboard.pengaturan.shift') ? 'bg-[#242947] text-white' : '' }}">
