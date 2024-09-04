@@ -25,11 +25,59 @@ class GajiController extends Controller
         $karyawan = Karyawan::all();
         return view('admin.gaji.gaji', compact('title', 'title2','karyawan'));
     }
-    public function defaultGaji()
+    public function defaultGaji($id)
     {
+        $karyawan_id = $id;
         $title = 'Default Gaji';
         $title2 = 'Default Gaji';
-        return view('admin.gaji.default-gaji', compact('title', 'title2'));
+        $DataDefaultGaji = GajiDefault::where('karyawan_id', $id)->get();
+
+        return view('admin.gaji.default-gaji', compact('title', 'title2','DataDefaultGaji', 'karyawan_id'));
+    }
+    public function TambahDefaultGaji(Request $request, $id){
+        $request->validate([
+            'name' => 'string|required',
+            'value' => 'integer|required',
+            'status' => 'integer|required'
+        ],[
+
+        ]);
+
+        $karyawan = Karyawan::findOrFail($id);
+
+        $defaultGaji = GajiDefault::create([
+            'karyawan_id'=>$id,
+            'name' => $request->input('name'),
+            'value'=>$request->input('value'),
+            'status'=>$request->input('status'),
+        ]);
+        return redirect()->back()->with('success', "$defaultGaji->name untuk default gaji pada Karyawan $karyawan->nama berhasil di tambahkan");
+    }
+    public function EditDefaultGaji(Request $request, $id){
+        $request->validate([
+            'name' => 'string',
+            'value' => 'integer',
+            'status' => 'integer'
+        ],[
+
+        ]);
+        $defaultGaji = GajiDefault::findOrFail($id);
+        $karyawan = Karyawan::findOrFail($defaultGaji->karyawan_id);
+
+        $defaultGaji->update([
+            'karyawan_id'=>$defaultGaji->karyawan_id,
+            'name' => $request->input('name')??$defaultGaji->name,
+            'value'=>$request->input('value')??$defaultGaji->value,
+            'status'=>$request->input('status')??$defaultGaji->status,
+        ]);
+        return redirect()->back()->with('success', "$defaultGaji->name untuk default gaji pada Karyawan $karyawan->nama berhasil di ubah");
+    }
+    public function DeleteDefaultGaji($id){
+        $defaultGaji = GajiDefault::findOrFail($id);
+        $karyawan = Karyawan::findOrFail($defaultGaji->karyawan_id);
+
+        $defaultGaji->delete();
+        return redirect()->back()->with('success', "$defaultGaji->name untuk default gaji pada Karyawan $karyawan->nama berhasil di hapus");
     }
     public function inputGaji($id)
     {

@@ -91,7 +91,12 @@ Route::middleware(['auth', 'web'])->group(function () {
 
         #Api Laporan
         Route::get('/dashboard/gaji', [GajiController::class, 'gajiAdmin'])->name('dashboard.gaji');
-        Route::get('/dashboard/gaji/default', [GajiController::class, 'defaultGaji'])->name('dashboard.gaji.default');
+        Route::get('/dashboard/gaji/default/{id}', [GajiController::class, 'defaultGaji'])->name('dashboard.gaji.default');
+        Route::post('/dashboard/gaji/postdefault/{id}', [GajiController::class, 'TambahDefaultGaji'])->name('dashboard.gaji.tambahdefault');
+        Route::put('/dashboard/gaji/editdefault/{id}', [GajiController::class, 'EditDefaultGaji'])->name('dashboard.gaji.editdefault');
+        Route::delete('/dashboard/gaji/deletedefault/{id}', [GajiController::class, 'DeleteDefaultGaji'])->name('dashboard.gaji.deletedefault');
+
+
         Route::get('/dashboard/gaji/input/{id}', [GajiController::class, 'inputGaji'])->name('dashboard.gaji.input');
         Route::get('/dashboard/gaji/searchinput/{id}', [GajiController::class, 'SearchInputGaji'])->name('dashboard.gaji.input.search');
         Route::get('/dashboard/gaji/riwayat/{id}', [GajiController::class, 'riwayatGaji'])->name('dashboard.gaji.riwayat');
