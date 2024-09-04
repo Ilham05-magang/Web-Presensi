@@ -36,4 +36,34 @@ class GajiController extends Controller
         $title2 = 'Riwayat Gaji';
         return view('admin.gaji.riwayat-gaji', compact('title', 'title2'));
     }
+    public function showDetailGaji()
+    {
+        $title = 'Detail Gaji';
+        $title2 = 'Detail Gaji';
+        return view('admin.gaji.show-detail-gaji', compact('title', 'title2'));
+    }
+
+    public function testingCustom(Request $request) {
+
+        $customName = [];
+        $customValue = [];
+
+        // Loop through the request data to find custom_x and customValue_x pairs
+        foreach ($request->all() as $key => $value) {
+            if (str_starts_with($key, 'custom_')) {
+                // Append the value to the $customNames array
+                $customName[] = $value;
+            }
+        
+            if (str_starts_with($key, 'customValue_')) {
+                // Append the value to the $customValues array
+                $customValue[] = $value;
+            }
+        }
+    
+        // Convert the custom data array to JSON
+        $jsonCustomName = json_encode($customName);
+        $jsonCustomValue = json_encode($customValue);
+    
+    }
 }

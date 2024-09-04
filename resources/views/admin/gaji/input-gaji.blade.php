@@ -11,8 +11,9 @@
             <i class="text-2xl ri-add-circle-line"></i>
         </button> --}}
         <div class="p-4">
-            <form class="flex items-center max-w-md mx-auto space-x-4" action="" method="GET">
+            <form class="flex items-center max-w-md mx-auto space-x-4" action="" method="POST">
                 @csrf
+                @method('POST')
                 <div class="flex items-center justify-center gap-3 text-base">
                     <input type="date" name="tanggal_mulai"
                         class="block w-full py-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -34,88 +35,85 @@
     </div>
     <hr class="border-t-2 border-gray-200">
     <div class="p-5 capitalize">
-        <form action="">
-            <div class="relative overflow-x-auto shadow-md rounded-xl border border-gray-200">
-                <table class="w-full text-sm text-center table-auto text-black rtl:text-right">
-                    <tbody class="flex  ">
-                        <tr class="p-3 text-start">
-                            <td class="px-1 py-3  block ">
+        <form action="{{ route('dashboard.gaji.test') }}" method="POST">
+            @csrf
+            @method('POST')
+            <div class="relative overflow-x-auto shadow-md rounded-xl border border-gray-200 p-4">
+                <table class="w-full text-sm text-start table-auto text-black bg-blue-100 rtl:text-right">
+                    <tbody class="" id="tabelBody1">
+                        <tr class="p-3 bg-white text-start">
+                            <td class="px-1 py-3 ">
                                 Periode
                             </td>
-                            <td class="px-1 py-3  block ">
+                            <td class="px-1 py-3 ">
+                                1 Sep - 1 Okt 2024
+                            </td>
+                        </tr>
+                        <tr class="p-3 bg-white text-start">
+                            <td class="px-1 py-3 ">
                                 Nama
                             </td>
-                            <td class="px-1 py-3  block ">
+                            <td class="px-1 py-3 ">
+                                Rudi Hartono
+                            </td>
+                        </tr>
+                        <tr class="p-3 bg-white text-start">
+                            <td class="px-1 py-3 ">
                                 Metode Pembayaran
                             </td>
+                            <td class="px-1 py-3 ">
+                               Transfer
+                            </td>
                         </tr>
-                        <tr class=" p-3 text-start">
-                            <td class="px-1 py-3  block ">
-                                : <input class="py-0 px-0 text-sm border-none" type="text" name=""
-                                    placeholder="??????" id="">
-                            </td>
-                            <td class="px-1 py-3  block ">
-                                : Rudi Hartono
-                            </td>
-                            <td class="px-1 py-3  block ">
-                                : <input class="py-0 px-0 text-sm border-none" type="text" name=""
-                                    placeholder="??????" id="">
-                            </td>
-
-                        </tr>
-                    </tbody>
-                </table>
-                <table class="w-full text-sm text-start table-auto text-black bg-blue-100 rtl:text-right">
-                    <tbody id="tabelBody">
                         <tr class="text-start">
-                            <td class="w-2/5 px-3 py-3 border-[#242947] border-[1px]">
-                                <input class="bg-blue-100 py-0 px-0 text-sm border-none" type="text" name=""
-                                    placeholder="Total Shift" id="">
+                            <td class="w-2/5 border-[#242947] border-[1px]">
+                                <input class="bg-blue-100 w-full h-full text-sm border-none" type="text"
+                                    name="" placeholder="Total Shift" id="">
                             </td>
                             <td class="w-3/5 px-3 py-3 text-end border-[#242947] border-[1px]">
                                 26
                             </td>
                         </tr>
                         <tr class="text-start">
-                            <td class="px-3 py-3 border-[#242947] border-[1px]">
-                                <input class="bg-blue-100 py-0 px-0 text-sm border-none" type="text" name=""
-                                    placeholder="Terlambat" id="">
+                            <td class="border-[#242947] border-[1px]">
+                                <input class="bg-blue-100 w-full h-full text-sm border-none" type="text"
+                                    name="" placeholder="Terlambat" id="">
                             </td>
                             <td class="px-3 py-3 text-end border-[#242947] border-[1px]">
                                 2
                             </td>
                         </tr>
                         <tr class="text-start">
-                            <td class="px-3 py-3 border-[#242947] border-[1px]">
-                                <input class="bg-blue-100 py-0 px-0 text-sm border-none" type="text" name=""
-                                    placeholder="Tidak Hadir" id="">
+                            <td class=" border-[#242947] border-[1px]">
+                                <input class="bg-blue-100 w-full h-full text-sm border-none" type="text"
+                                    name="" placeholder="Tidak Hadir" id="">
                             </td>
                             <td class="px-3 py-3 text-end border-[#242947] border-[1px]">
                                 2
                             </td>
                         </tr>
                         <tr class="text-start">
-                            <td class="px-3 py-3 border-[#242947] border-[1px]">
-                                <input class="bg-blue-100 text-sm py-0 px-0 border-none" type="text" name=""
-                                    placeholder="Ijin Pulang Awal" id="">
+                            <td class=" border-[#242947] border-[1px]">
+                                <input class="bg-blue-100 text-sm w-full h-full border-none" type="text"
+                                    name="" placeholder="Ijin Pulang Awal" id="">
                             </td>
                             <td class="px-3 py-3 text-end border-[#242947] border-[1px]">
                                 1
                             </td>
                         </tr>
                         <tr class="text-start">
-                            <td class="px-3 py-3 border-[#242947] border-[1px]">
-                                <input class="bg-blue-100 text-sm py-0 px-0 border-none" type="text" name=""
-                                    placeholder="Total Hadir Disiplin" id="">
+                            <td class=" border-[#242947] border-[1px]">
+                                <input class="w-full h-full bg-blue-100 text-sm border-none" type="text"
+                                    name="" placeholder="Total Hadir Disiplin" id="">
                             </td>
                             <td class="px-3 py-3 text-end border-[#242947] border-[1px]">
                                 21
                             </td>
                         </tr>
                         <tr class="text-start">
-                            <td class="px-3 py-3 border-[#242947] border-[1px]">
-                                <input class="bg-blue-100 text-sm py-0 px-0 border-none" type="text" name=""
-                                    placeholder="Total Kehadiran" id="">
+                            <td class=" border-[#242947] border-[1px]">
+                                <input class="bg-blue-100 text-sm w-full h-full border-none" type="text"
+                                    name="" placeholder="Total Kehadiran" id="">
                             </td>
                             <td class="px-3 py-3 text-end border-[#242947] border-[1px]">
                                 24
@@ -128,9 +126,8 @@
                         class="w-7 h-7 flex items-center justify-center text-white hover:bg-[#5B6390] border-2 border-[#242947] bg-[#242947] rounded-lg cursor-pointer">
                         <i class="text-sm ri-add-circle-line"></i>
                     </div>
-
                 </div>
-                <div class="font-bold text-base  px-3">
+                <div class="font-bold text-base py-2 px-3">
                     Honorarium
                 </div>
                 <table class="w-full text-sm text-start table-auto text-black bg-blue-100 rounded-b-lg rtl:text-right">
@@ -208,41 +205,45 @@
 
     <script>
         const buttonTambahKolom = document.querySelector('#buttonTambahKolom');
+        let y = 1;
         buttonTambahKolom.addEventListener('click', function() {
-            const customGaji = document.querySelector('#tabelBody');
+            const customGaji = document.querySelector('#tabelBody1');
 
             // Buat elemen <td> dengan <input> di dalamnya menggunakan string literal
             const newTd =
-                `<tr>
+                `
                     <td class="px-3 border-[#242947] border-[1px]">
-                        <input class="bg-blue-100 text-sm px-0 border-none" type="text" placeholder="Masukkan Gaji">
+                        <input name="customHeader_${y}" class="bg-blue-100 text-sm px-0 border-none" type="text" placeholder="Masukkan Gaji">
                     </td>
                     <td class="px-3 border-[#242947] border-[1px] text-end">
-                        <input class="bg-blue-100 text-sm px-0 border-none no-spinner text-end" type="number" placeholder="?">
+                        <input name="customHeaderValue_${y}" class="bg-blue-100 text-sm px-0 border-none no-spinner text-end" type="number" placeholder="?">
                     </td>
-                </tr>`;
+                `;
 
             // Tambahkan elemen <td> baru ke dalam <tr> (customGaji)
             customGaji.insertAdjacentHTML('beforeend', newTd);
+            y++;
         });
+        let x = 1;
 
         const buttonTambahKolom2 = document.querySelector('#buttonTambahKolom2');
         buttonTambahKolom2.addEventListener('click', function() {
-            const customGaji = document.querySelector('#tabelBody2');
+            const tabelBody2 = document.querySelector('#tabelBody2');
+            const totalHonorRow = tabelBody2.querySelector('tr:last-child');
 
-            // Buat elemen <td> dengan <input> di dalamnya menggunakan string literal
-            const newTd =
-                `<tr>
-                    <td class="px-3 border-[#242947] border-[1px]">
-                        <input class="bg-blue-100 text-sm px-1 border-none" type="text" placeholder="Masukkan Gaji">
-                    </td>
-                    <td class="px-3 border-[#242947] border-[1px] text-end text-sm">
-                        <input class="bg-blue-100 text-sm px-1 no-spinner border-none text-end" type="number" placeholder="????">
-                    </td>
-                </tr>`;
-
-            // Tambahkan elemen <td> baru ke dalam <tr> (customGaji)
-            customGaji.insertAdjacentHTML('beforeend', newTd);
+            // Create the new row with the input fields
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                                <td class="px-3 border-[#242947] border-[1px]">
+                                    <input name="custom_${x}" class="bg-blue-100 text-sm px-1 border-none" type="text" placeholder="Masukkan Gaji">
+                                </td>
+                                <td class="px-3 border-[#242947] border-[1px] text-end text-sm">
+                                    <input name="customValue_${x}" class="bg-blue-100 text-sm px-1 no-spinner border-none text-end" type="number" placeholder="????">
+                                </td>
+                            `;
+            // Insert the new row before the Total Honor row
+            tabelBody2.insertBefore(newRow, totalHonorRow);
+            x++;
         });
     </script>
 </x-layout.layout-admin>
