@@ -196,4 +196,10 @@ class GajiController extends Controller
         $title2 = 'Riwayat Gaji';
         return view('admin.gaji.riwayat-gaji', compact('title', 'title2'));
     }
+    public function showDetailGaji()
+    {
+        $title = 'Detail Gaji';
+        $title2 = 'Detail Gaji';
+        return view('admin.gaji.show-detail-gaji', compact('title', 'title2'));
+    }
 }
