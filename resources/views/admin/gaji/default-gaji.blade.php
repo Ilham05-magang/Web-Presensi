@@ -24,10 +24,10 @@
                             Nama
                         </th>
                         <th scope="col" class="px-2 py-5">
-                            Value
+                            Nominal
                         </th>
                         <th scope="col" class="px-2 py-5">
-                            Status
+                            Hitungan
                         </th>
                         <th scope="col" class="px-2 py-5">
                             Aksi
@@ -35,40 +35,45 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="border-[#242947] border-[1px]">
-                        <td class="px-1 py-3 border-[#242947] border-[1px]">
-                            1
-                        </td>
-                        <td class="px-1 py-3 border-[#242947] border-[1px]">
-                            Honor Utama
-                        </td>
-                        <td class="px-1 py-3 border-[#242947] border-[1px]">
-                            70000
-                        </td>
-                        <td class="px-1 py-3 border-[#242947] border-[1px]">
-                            1
-                        </td>
-                        <td class="px-1 py-3 border-[#242947] border-[1px]">
-                            <button data-modal-target="editgaji" data-modal-toggle="editgaji"
-                                class="px-2 py-1 mr-3 text-base font-medium text-center text-white bg-yellow-400 rounded-lg hover:bg-yellow-300 hover:text-gray-800">
-                                <i class="ri-edit-2-line"></i>
-                                <button data-modal-target="deletegaji" data-modal-toggle="deletegaji"
-                                    class="px-2 py-1 ml-4 text-base font-medium text-center text-white bg-red-500 rounded-lg hover:bg-red-400 hover:text-gray-800">
-                                    <i class="ri-delete-bin-6-line"></i>
-                                </button>
-                        </td>
-
-                    </tr>
-                    <x-admin.popup-gaji title="Edit Gaji" id="editgaji" action=""
-                        method="PUT"></x-admin.popup-gaji>
-                    <x-admin.popup-gaji title="deletegaji" id="deletegaji" action=""></x-admin.popup-gaji>
-                    {{-- <x-admin.popup-admin title="delete" :action="route('dashboard.deletekaryawan',$data->id)"
-                        :id="'delete' . $data->id" :data="$data->nama" /> --}}
-
+                    @foreach ($DataDefaultGaji as $data)
+                        <tr class="border-[#242947] border-[1px]">
+                            <td class="px-1 py-3 border-[#242947] border-[1px]">
+                                {{ $loop->iteration }}
+                            </td>
+                            <td class="px-1 py-3 border-[#242947] border-[1px]">
+                                {{ $data->name }}
+                            </td>
+                            <td class="px-1 py-3 border-[#242947] border-[1px]">
+                                {{ Number::currency($data->value, 'IDR', locale: 'id_ID')  }}
+                            </td>
+                            <td class="px-1 py-3 border-[#242947] border-[1px]">
+                                @if ($data->status == 1)
+                                    Total Kehadiran
+                                @elseif($data->status == 2)
+                                    Total Hadir Disiplin
+                                @elseif($data->status == 3)
+                                    Lembur Mingguan
+                                @elseif($data->status == 4)
+                                    Custom
+                                @endif
+                            </td>
+                            <td class="px-1 py-3 border-[#242947] border-[1px]">
+                                <button data-modal-target="editgaji{{ $data->id }}" data-modal-toggle="editgaji{{ $data->id }}"
+                                    class="px-2 py-1 mr-3 text-base font-medium text-center text-white bg-yellow-400 rounded-lg hover:bg-yellow-300 hover:text-gray-800">
+                                    <i class="ri-edit-2-line"></i>
+                                    <button data-modal-target="deletegaji{{ $data->id }}" data-modal-toggle="deletegaji{{ $data->id }}"
+                                        class="px-2 py-1 ml-4 text-base font-medium text-center text-white bg-red-500 rounded-lg hover:bg-red-400 hover:text-gray-800">
+                                        <i class="ri-delete-bin-6-line"></i>
+                                    </button>
+                            </td>
+                            <x-admin.popup-gaji title="Edit Gaji" id="editgaji{{ $data->id }}" action="{{ route('dashboard.gaji.editdefault', $data->id) }}" method="PUT" :data="$data"></x-admin.popup-gaji>
+                            <x-admin.popup-gaji title="deletegaji" id="deletegaji{{ $data->id }}" action="{{ route('dashboard.gaji.deletedefault',$data->id) }}" :data="$data"></x-admin.popup-gaji>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>
     </div>
-    <x-admin.popup-gaji title="Tambah Default Gaji" id="tambahdefaultgaji" action=""
+    <x-admin.popup-gaji title="Tambah Default Gaji" id="tambahdefaultgaji" action="{{ route('dashboard.gaji.tambahdefault',$karyawan_id) }}"
         method="POST"></x-admin.popup-gaji>
 </x-layout.layout-admin>

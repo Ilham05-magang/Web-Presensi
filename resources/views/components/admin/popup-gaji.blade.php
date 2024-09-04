@@ -1,4 +1,4 @@
-@props(['title', 'action', 'id', 'data' => null, 'method' => null])
+@props(['title', 'action', 'id', 'data' => null, 'method' => 'POST'])
 @if ($title == 'deletegaji')
     {{-- model delete --}}
     <div id="{{ $id }}" tabindex="-1"
@@ -11,8 +11,8 @@
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    <h3 class="mb-5 text-lg font-semibold text-gray-700 dark:text-gray-400">Apakah Anda Yakin ingin
-                        menghapus default gaji</h3>
+                    <h3 class="mb-5 text-lg font-medium text-gray-700 dark:text-gray-400">Apakah Anda Yakin ingin
+                        menghapus default gaji <span class="font-semibold">{{ $data->name }}</span></h3>
                     <div class="flex justify-center w-full gap-5">
                         <form action="{{ $action }}" method="POST">
                             @csrf
@@ -39,6 +39,7 @@
             <!-- Modal content -->
             <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                 <!-- Modal header -->
+                {{-- @dd($action) --}}
                 <div class="flex items-center justify-between p-4 border-b rounded-t md:p-5 dark:border-gray-600">
                     <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
                         {{ $title }}
@@ -56,7 +57,7 @@
                 </div>
                 <!-- Modal body -->
                 <div class="p-4 md:p-5">
-                    <form action="{{ $action }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ $action }}" method="POST">
                         @csrf
                         @if ($method == 'PUT')
                             @method('PUT')
@@ -68,20 +69,20 @@
                             <div class="col-span-2">
                                 <label for="divisi"
                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama</label>
-                                <input type="text" name="divisi"
+                                <input type="text" name="name"
                                     class="font-medium bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                    placeholder="Nama Honor...." value="{{ $data->nama ?? '' }}" />
+                                    placeholder="Nama Honor...." value="{{ $data->name ?? '' }}" />
                             </div>
                             <div class="col-span-1">
                                 <label for="value"
                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nominal</label>
                                 <input type="number" name="value"
                                     class="font-medium bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                    placeholder="Masukkan nominal" value="{{ $data->nama ?? '' }}" />
+                                    placeholder="Masukkan nominal" value="{{ $data->value ?? '' }}" />
                             </div>
                             <div class="col-span-1">
                                 <label for="Status"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Status</label>
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Hitungan</label>
                                 <select id="status" name="status"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                                     <option
