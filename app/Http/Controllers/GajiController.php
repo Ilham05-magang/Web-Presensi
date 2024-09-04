@@ -189,12 +189,12 @@ class GajiController extends Controller
     }
 
 
-    public function riwayatGaji()
+    public function riwayatGaji($id)
     {
-
+        $data = GajiKaryawan::where('karyawan_id', $id)->get();
         $title = 'Riwayat Gaji';
         $title2 = 'Riwayat Gaji';
-        return view('admin.gaji.riwayat-gaji', compact('title', 'title2'));
+        return view('admin.gaji.riwayat-gaji', compact('title', 'title2', 'data'));
     }
     public function showDetailGaji()
     {

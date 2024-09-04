@@ -94,7 +94,7 @@ Route::middleware(['auth', 'web'])->group(function () {
         Route::get('/dashboard/gaji/default', [GajiController::class, 'defaultGaji'])->name('dashboard.gaji.default');
         Route::get('/dashboard/gaji/input/{id}', [GajiController::class, 'inputGaji'])->name('dashboard.gaji.input');
         Route::get('/dashboard/gaji/searchinput/{id}', [GajiController::class, 'SearchInputGaji'])->name('dashboard.gaji.input.search');
-        Route::get('/dashboard/gaji/riwayat', [GajiController::class, 'riwayatGaji'])->name('dashboard.gaji.riwayat');
+        Route::get('/dashboard/gaji/riwayat/{id}', [GajiController::class, 'riwayatGaji'])->name('dashboard.gaji.riwayat');
         Route::post('/dashboard/gaji/postgaji/{id}', [GajiController::class, 'PostGajiKaryawan'])->name('dashboard.post.gaji');
         Route::get('/dashboard/gaji/detail', [GajiController::class, 'showDetailGaji'])->name('dashboard.gaji.detail');
 
