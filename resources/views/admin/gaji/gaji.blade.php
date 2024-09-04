@@ -31,36 +31,38 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="border-[#242947] border-[1px]">
-                        <td class="p-1 border-[#242947] border-[1px]">
-                            1
-                        </td>
-                        <td class="p-1 border-[#242947] border-[1px]">
-                            839239823983
-                        </td>
-                        <td class="p-1 border-[#242947] border-[1px]">
-                            Juleha
-                        </td>
-                        <td class="p-1 border-[#242947] border-[1px]">
-                            <a href="{{route('dashboard.gaji.default')}}"
-                                class="px-2 py-2 pl-3 text-sm font-medium text-center text-white bg-yellow-400 rounded-lg hover:bg-yellow-300 hover:text-gray-800">
-                                Detail
-                            </a>
-                        </td>
-                        <td class="p-4 border-[#242947] border-[1px]">
-                            <a href="{{route('dashboard.gaji.input')}}"
-                                class="px-2 py-2 pl-3 text-sm font-medium text-center text-white bg-yellow-400 rounded-lg hover:bg-yellow-300 hover:text-gray-800">
-                                Detail
-                            </a>
-                        </td>
-                        <td class="p-4 border-[#242947] border-[1px]">
-                            <a href="{{route('dashboard.gaji.riwayat')}}"
-                                class="px-2 py-2 pl-3 text-sm font-medium text-center text-white bg-yellow-400 rounded-lg hover:bg-yellow-300 hover:text-gray-800">
-                                Detail
-                            </a>
-                        </td>
+                    @foreach ($karyawan as $data)
+                        <tr class="border-[#242947] border-[1px]">
+                            <td class="p-1 border-[#242947] border-[1px]">
+                                {{ $loop->iteration }}
+                            </td>
+                            <td class="p-1 border-[#242947] border-[1px]">
+                                {{ $data->nama }}
+                            </td>
+                            <td class="p-1 border-[#242947] border-[1px]">
+                                {{ $data->nip }}
+                            </td>
+                            <td class="p-1 border-[#242947] border-[1px]">
+                                <a href="{{route('dashboard.gaji.default')}}"
+                                    class="px-2 py-2 pl-3 text-sm font-medium text-center text-white bg-yellow-400 rounded-lg hover:bg-yellow-300 hover:text-gray-800">
+                                    Detail
+                                </a>
+                            </td>
+                            <td class="p-4 border-[#242947] border-[1px]">
+                                <a href="{{route('dashboard.gaji.input',$data->id)}}"
+                                    class="px-2 py-2 pl-3 text-sm font-medium text-center text-white bg-yellow-400 rounded-lg hover:bg-yellow-300 hover:text-gray-800">
+                                    Detail
+                                </a>
+                            </td>
+                            <td class="p-4 border-[#242947] border-[1px]">
+                                <a href="{{route('dashboard.gaji.riwayat')}}"
+                                    class="px-2 py-2 pl-3 text-sm font-medium text-center text-white bg-yellow-400 rounded-lg hover:bg-yellow-300 hover:text-gray-800">
+                                    Detail
+                                </a>
+                            </td>
 
-                    </tr>
+                        </tr>
+                    @endforeach
                     {{-- <x-admin.popup-admin title="delete" :action="route('dashboard.deletekaryawan',$data->id)"
                         :id="'delete' . $data->id" :data="$data->nama" /> --}}
 

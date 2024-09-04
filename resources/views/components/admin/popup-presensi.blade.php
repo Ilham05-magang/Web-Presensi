@@ -183,6 +183,18 @@
                                 placeholder="{{ $data->jam_selesai_izin ?? 'jam_selesai_izin...' }}" />
                         </div>
                     </div>
+                    <script>
+                        flatpickr("#time-picker", {
+                            enableTime: true,
+                            noCalendar: true,
+                            dateFormat: "H:i:S", // Include seconds
+                            time_24hr: true, // Use 24-hour format
+                            enableSeconds: true, // Enable seconds
+                            minuteIncrement: 1, // Allow minute increments
+                            secondIncrement: 1 // Allow second increments
+                        });
+                    </script>
+                    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
                     @endif
                     <button type="submit"
                         class="text-white inline-flex bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">

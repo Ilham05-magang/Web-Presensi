@@ -91,7 +91,7 @@ class PresensiController extends Controller
             $jamSelesaiIzin = Carbon::createFromFormat('H:i:s', $jamSelesaiIzin);
             $durasiIzin = $jamSelesaiIzin->diffInSeconds($jamIzin);
         }
-        if($jamMulai){
+        if($jamMulai && $jamPulang){
             $jamMulai = Carbon::createFromFormat('H:i:s', $jamMulai);
             $jamPulang = Carbon::createFromFormat('H:i:s', $jamPulang);
             $durasiKerja = $jamPulang->diffInSeconds($jamMulai);
@@ -146,7 +146,6 @@ class PresensiController extends Controller
         $jamIzin = $request->input('jam_izin')?? $absensi->jam_izin ?? null;
         $jamSelesaiIzin = $request->input('jam_selesai_izin')?? $absensi->jam_selesai_izin ?? null;
         $waktuProduktif = $this->kalkulasiTotalProduktif($jamMulai, $jamPulang, $jamIstirahat, $jamSelesaiIstirahat, $jamIzin, $jamSelesaiIzin);
-
         $oldFile = $absensi->file_input;
 
         if ($request->hasFile('file_input')) {
@@ -168,19 +167,33 @@ class PresensiController extends Controller
             $filePath = $oldFile ?? null;
         }
 
+        if ($request->hasFile('file_input')) {
+            $absensi->update([
+                'jam_mulai' => $jamMulai,
+                'jam_istirahat' => $jamIstirahat,
+                'jam_izin' => $jamIzin,
+                'jam_selesai_izin' => $jamSelesaiIzin,
+                'jam_selesai_istirahat' => $jamSelesaiIstirahat,
+                'jam_pulang' => $jamPulang,
+                'jam_total_produktif' => $waktuProduktif,
+                'status_kehadiran'=>$request->input('status_kehadiran') ?? $absensi->status_kehadiran ?? null,
+                'keterangan' => $request->input('keterangan') ?? $absensi->keterangan  ?? null,
+                'file_input' => $filePath
+            ]);
+        }else{
+            $absensi->update([
+                'jam_mulai' => $jamMulai,
+                'jam_istirahat' => $jamIstirahat,
+                'jam_izin' => $jamIzin,
+                'jam_selesai_izin' => $jamSelesaiIzin,
+                'jam_selesai_istirahat' => $jamSelesaiIstirahat,
+                'jam_pulang' => $jamPulang,
+                'jam_total_produktif' => $waktuProduktif,
+                'status_kehadiran'=>$request->input('status_kehadiran') ?? $absensi->status_kehadiran ?? null,
+            ]);
+        }
         // Update data
-        $absensi->update([
-            'jam_mulai' => $jamMulai,
-            'jam_istirahat' => $jamIstirahat,
-            'jam_izin' => $jamIzin,
-            'jam_selesai_izin' => $jamSelesaiIzin,
-            'jam_selesai_istirahat' => $jamSelesaiIstirahat,
-            'jam_pulang' => $jamPulang,
-            'jam_total_produktif' => $waktuProduktif,
-            'status_kehadiran'=>$request->input('status_kehadiran') ?? $absensi->status_kehadiran ?? null,
-            'keterangan' => $request->input('keterangan') ?? $absensi->keterangan  ?? null,
-            'file_input' => $filePath
-        ]);
+
         return redirect()->back()->with('success', "Data Absensi Tanggal $tanggal  pada Karyawan $karyawan->nama berhasil di Update");
     }
     public function DeleteAbsensi($id){
@@ -213,12 +226,7 @@ class PresensiController extends Controller
 
         return view('admin.show-detail-presensi', compact('title', 'karyawan', 'totalmasuk', 'totalIzin', 'totaltidakmasuk', 'selectedMonth', 'dataTanggalLibur','dateQuery','datenow','tanggalPerPeriode','tanggalMulai'));
     }
-         /**
-         * Show a paginated list of days between selected start and end dates.
-         *
-         * @param Request $request
-         * @return \Illuminate\View\View
-         */
+
     public function SearchAbsensiByPeriode(Request $request, $id)
     {
         $absensi = new Absensi();
@@ -252,7 +260,7 @@ class PresensiController extends Controller
         $title = "Data Absensi Karyawan";
 
         // Return view with the required data
-        return view('admin.show-detail-presensi', compact('title', 'tanggalPulangCepat' , 'tanggalTelat' ,'datenow', 'dataAbsensi', 'karyawan', 'totalmasuk', 'totalIzin', 'totaltidakmasuk', 'selectedMonth', 'dataTanggalLibur','datenow', 'tanggalPerPeriode','tanggalMulai','tanggalSelesai','totalTelat','totalPulangCepat'));
+        return view('admin.show-detail-presensi', compact('title','tanggalTelat','tanggalPulangCepat', 'dataAbsensi', 'karyawan', 'totalmasuk', 'totalIzin', 'totaltidakmasuk', 'dataTanggalLibur','datenow', 'tanggalPerPeriode','tanggalMulai','tanggalSelesai','totalTelat','totalPulangCepat'));
     }
 
     public function PostKehadiran(Request $request,$tanggal, $id)

@@ -23,6 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 
+
 function togglePasswordVisibility(id, iconId) {
     const passwordField = document.getElementById(id);
     const eyeIcon = document.getElementById(iconId);
@@ -39,15 +40,7 @@ document.getElementById('togglePassword').addEventListener('click', function () 
 document.getElementById('toggleKonfirmasiPassword').addEventListener('click', function () {
     togglePasswordVisibility('password_confirmation', 'eyeIconKonfirmasi');
 });
-flatpickr("#time-picker", {
-    enableTime: true,
-    noCalendar: true,
-    dateFormat: "H:i:S", // Include seconds
-    time_24hr: true, // Use 24-hour format
-    enableSeconds: true, // Enable seconds
-    minuteIncrement: 1, // Allow minute increments
-    secondIncrement: 1 // Allow second increments
-});
+
 
 const buttonEdit = document.getElementById('buttonEdit');
 const editstatusElements = document.querySelectorAll('.editstatus');

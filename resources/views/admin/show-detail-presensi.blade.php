@@ -3,8 +3,6 @@ use Carbon\Carbon;
 Carbon::setLocale('id');
 // dd($tanggalPerPeriode);
 
-$year = now()->year;
-$dateString = $year . '-' . $selectedMonth;
 if(!$tanggalMulai == null){
     $tanggalmulai = Carbon::parse($tanggalMulai)->locale('id')->translatedFormat('d-F-Y');
     $tanggalselesai = Carbon::parse($tanggalSelesai)->locale('id')->translatedFormat('d-F-Y');

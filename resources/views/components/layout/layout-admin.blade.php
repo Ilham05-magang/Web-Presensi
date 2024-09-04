@@ -10,6 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="shortcut icon" href="/assets/logo.png" type="image/x-icon">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cleave.js@1.6.0/dist/addons/cleave-phone.id.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
@@ -22,9 +23,10 @@
                 </div>
             </div>
         </Main>
+
     </x-admin.navbar-admin>
 
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
     @if (session('success'))
         @if (session('success') == 'Inputan password lama salah')
             <script>

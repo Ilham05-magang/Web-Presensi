@@ -64,6 +64,44 @@ class Absensi extends Model
 
         return $paginatedDates;
     }
+    public function countSundaysBetween($selectedMulai, $tanggalSelesai)
+    {
+        $startDate = Carbon::parse($selectedMulai);
+        $endDate = Carbon::parse($tanggalSelesai);
+
+        $jumlahminggu = 0;
+        $sundays = [];
+
+        for ($date = $startDate; $date->lte($endDate); $date->addDay()) {
+            if ($date->isSunday()) {
+                $jumlahminggu++;
+                $sundays[] = $date->toDateString(); // Menyimpan tanggal hari Minggu
+            }
+        }
+
+        return [
+            'jumlah_minggu' => $jumlahminggu,
+            'tanggal_minggu' => $sundays,
+        ];
+    }
+
+
+    public function countDaysExceptSundays($selectedMulai, $tanggalSelesai)
+    {
+        $startDate = Carbon::parse($selectedMulai);
+        $endDate = Carbon::parse($tanggalSelesai);
+
+        $haritanpaminggu = 0;
+
+        for ($date = $startDate; $date->lte($endDate); $date->addDay()) {
+            if (!$date->isSunday()) {
+                $haritanpaminggu++;
+            }
+        }
+
+        return $haritanpaminggu;
+    }
+
 
     public static function kalkulasiAbsensi($id, $tanggalMulai, $tanggalSelesai)
     {
@@ -134,11 +172,37 @@ class Absensi extends Model
         $tanggalTelat = [];
         $tanggalPulangCepat = [];
 
+        // Ambil tanggal libur dari database
+        $tanggalLibur = TanggalLibur::pluck('tanggal_libur')->toArray();
+
+        // Tentukan rentang tanggal
+        $tanggalMulai = $dataAbsensi->min('tanggal');
+        $tanggalSelesai = $dataAbsensi->max('tanggal');
+
+        // Hitung tanggal Minggu dalam rentang waktu
+        $tanggalMinggu = [];
+        $startDate = Carbon::parse($tanggalMulai);
+        $endDate = Carbon::parse($tanggalSelesai);
+
+        for ($date = $startDate; $date->lte($endDate); $date->addDay()) {
+            if ($date->isSunday()) {
+                $tanggalMinggu[] = $date->toDateString();
+            }
+        }
+
         foreach ($dataAbsensi as $absensi) {
+            // Convert string tanggal to Carbon object if necessary
+            $tanggal = Carbon::parse($absensi->tanggal)->toDateString();
+
+            // Skip if the date is a holiday or Sunday
+            if (in_array($tanggal, $tanggalLibur) || in_array($tanggal, $tanggalMinggu)) {
+                continue;
+            }
+
             // Check for late arrival
-            if (!in_array($absensi->tanggal, $tanggalTelat)) {
+            if (!in_array($tanggal, $tanggalTelat)) {
                 if ($absensi->jam_mulai > $absensi->shift->jam_mulai && $absensi->jam_mulai) {
-                    $tanggalTelat[] = $absensi->tanggal;
+                    $tanggalTelat[] = $tanggal;
                     $totalTelat++;
                     continue;
                 }
@@ -146,8 +210,8 @@ class Absensi extends Model
 
             // Check for early departure
             if ($absensi->jam_pulang < $absensi->shift->jam_pulang && $absensi->jam_pulang) {
-                if (!in_array($absensi->tanggal, $tanggalPulangCepat)) {
-                    $tanggalPulangCepat[] = $absensi->tanggal;
+                if (!in_array($tanggal, $tanggalPulangCepat)) {
+                    $tanggalPulangCepat[] = $tanggal;
                 }
                 $totalPulangCepat++;
             }
@@ -160,4 +224,5 @@ class Absensi extends Model
             'tanggalPulangCepat' => $tanggalPulangCepat,
         ];
     }
+
 }

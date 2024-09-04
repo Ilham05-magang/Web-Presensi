@@ -181,4 +181,16 @@
             </div>
         </div>
     </div>
+    <script>
+        flatpickr("#time-picker", {
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i:S", // Include seconds
+            time_24hr: true, // Use 24-hour format
+            enableSeconds: true, // Enable seconds
+            minuteIncrement: 1, // Allow minute increments
+            secondIncrement: 1 // Allow second increments
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 </x-layout.layout-admin>
