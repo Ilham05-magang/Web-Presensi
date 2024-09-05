@@ -101,7 +101,9 @@ Route::middleware(['auth', 'web'])->group(function () {
         Route::get('/dashboard/gaji/searchinput/{id}', [GajiController::class, 'SearchInputGaji'])->name('dashboard.gaji.input.search');
         Route::get('/dashboard/gaji/riwayat/{id}', [GajiController::class, 'riwayatGaji'])->name('dashboard.gaji.riwayat');
         Route::post('/dashboard/gaji/postgaji/{id}', [GajiController::class, 'PostGajiKaryawan'])->name('dashboard.post.gaji');
-        Route::get('/dashboard/gaji/detail', [GajiController::class, 'showDetailGaji'])->name('dashboard.gaji.detail');
+        Route::get('/dashboard/gaji/detail/{id}', [GajiController::class, 'showDetailGaji'])->name('dashboard.gaji.detail');
+        Route::put('/dashboard/gaji/detail/{id}', [GajiController::class, 'editDetailGaji'])->name('dashboard.gaji.edit');
+        Route::delete('/dashboard/gaji/riawayt/{id}', [GajiController::class, 'deleteGaji'])->name('dashboard.gaji.delete');
 
         #Api Pengaturan
         Route::get('/dashboard/pengaturan/profile', [PengaturanController::class, 'PengaturanProfile'])->name('dashboard.pengaturan.profile');
