@@ -197,12 +197,12 @@
                                                 <input id="Hadir{{ $counterHadir }}"
                                                     name="gajiDetailQTY{{ $counterRequest }}"
                                                     class="w-10 h-7 px-0 py-0 text-sm text-center bg-blue-100 border-none"
-                                                    type="text" value="{{ $totalmasuk - $absensiLemburTotal }}">
+                                                    type="number" value="{{ $totalmasuk - $absensiLemburTotal }}">
                                                 <p>x</p>
                                                 <input id="HadirValue{{ $counterHadir }}"
                                                     name="gajiDetailValue{{ $counterRequest }}"
                                                     class="h-7 px-0 py-0 text-sm text-center bg-blue-100 border-none w-28"
-                                                    type="text" value="{{ $default->value }}">
+                                                    type="number" value="{{ $default->value }}">
                                                 <p>)</p>
                                             </div>
                                         </td>
@@ -231,13 +231,13 @@
                                                 <input id="disiplin{{ $counterDisiplin }}"
                                                     name="gajiDetailQTY{{ $counterRequest }}"
                                                     class="w-10 h-7 px-0 py-0 text-sm text-center bg-blue-100 border-none"
-                                                    type="text"
+                                                    type="number"
                                                     value="{{ $totalmasuk - $totalTelat - $totalPulangCepat - $absensiLemburTotal }}">
                                                 <p>x</p>
                                                 <input id="disiplinValue{{ $counterDisiplin }}"
                                                     name="gajiDetailValue{{ $counterRequest }}"
                                                     class="h-7 px-0 py-0 text-sm text-center bg-blue-100 border-none w-28"
-                                                    type="text" value="{{ $default->value }}">
+                                                    type="number" value="{{ $default->value }}">
                                                 <p>)</p>
                                             </div>
                                         </td>
@@ -268,12 +268,12 @@
                                                 <input id="lembur{{ $counterLembur }}"
                                                     name="gajiDetailQTY{{ $counterRequest }}"
                                                     class="w-10 h-7 px-0 py-0 text-sm text-center bg-blue-100 border-none"
-                                                    type="text" value="{{ $absensiLemburTotal }}">
+                                                    type="number" value="{{ $absensiLemburTotal }}">
                                                 <p>x</p>
                                                 <input id="lemburValue{{ $counterLembur }}"
                                                     name="gajiDetailValue{{ $counterRequest }}"
                                                     class="h-7 px-0 py-0 text-sm text-center bg-blue-100 border-none w-28"
-                                                    type="text" value="{{ $default->value }}">
+                                                    type="number" value="{{ $default->value }}">
                                                 <p>)</p>
                                             </div>
                                         </td>
@@ -302,12 +302,12 @@
                                                 <input id="custom{{ $counterCustom }}"
                                                     name="gajiDetailQTY{{ $counterRequest }}"
                                                     class="w-10 h-7 px-0 py-0 text-sm text-center bg-blue-100 border-none"
-                                                    type="text" value="1" readonly>
+                                                    type="number" value="1" readonly>
                                                 <p>x</p>
                                                 <input id="customValue{{ $counterCustom }}"
                                                     name="gajiDetailValue{{ $counterRequest }}"
                                                     class="h-7 px-0 py-0 text-sm text-center bg-blue-100 border-none w-28"
-                                                    type="text" value="{{ $default->value }}">
+                                                    type="number" value="{{ $default->value }}">
                                                 <p>)</p>
                                             </div>
                                         </td>
@@ -327,7 +327,7 @@
                                     </tr>
                                 @endif
                             @endforeach
-                            <tr class="border-[#242947] border-[1px]">
+                            <tr class="border-[#242947] border-[1px] font-bold">
                                 <td class="">
                                     <input class="w-full h-7 px-3 py-0 text-sm font-bold bg-blue-100 border-none"
                                         type="text" name="gajiDetailName{{ $counterRequest }}"
@@ -335,7 +335,7 @@
                                 </td>
                                 <td class="border-[#242947] border-[1px]">
                                     <input id="TotalHonor"
-                                        class="w-full h-7 px-3 py-0 text-sm text-right bg-gray-300/70  border-none"
+                                        class="w-full h-7  px-3 py-0 text-sm text-right bg-gray-300/70  border-none"
                                         type="text" name="gajiDetailTotalValue{{ $counterRequest }}"
                                         value=" {{ Number::currency($totalHonor, 'IDR', locale: 'id_ID') }}"
                                         readonly>
