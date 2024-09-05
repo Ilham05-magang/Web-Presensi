@@ -33,7 +33,7 @@
                                     </button>
                             </div>
                         </div>
-                        <table class="w-full text-sm text-black bg-blue-100 text-start ">
+                        <table class="w-full text-xs text-black bg-blue-100 text-start ">
                             <tbody>
                                 <tr class="bg-[#242947] text-white rounded-t-lg">
                                     <td class="px-2 py-1 w-[60%] border-[#242947] rounded-tl-lg ">
@@ -70,9 +70,16 @@
                                 @foreach ($data->gajiDetail as $gajiDetail)
                                     <tr
                                         class=" border-[#242947] border-[1px] {{ $gajiDetail->value == null && $gajiDetail->multiply == null ? 'font-bold' : '' }}">
+                                        @if ($gajiDetail->value && $gajiDetail->multiply)
                                         <td class=" px-2 w-1/2 border-[#242947] border-[1px]">
-                                            {{ $gajiDetail->name }}
+                                            {{ $gajiDetail->name }} ( {{$gajiDetail->multiply}} x {{Number::currency($gajiDetail->value, 'IDR', locale: 'id_ID')}})
                                         </td>
+                                        @else
+                                        <td class=" px-2 w-1/2 border-[#242947] border-[1px]">
+                                            {{ $gajiDetail->name }} 
+                                        </td>
+                                        @endif
+                                        
                                         <td class="px-2 w-1/2 text-end border-[#242947] border-[1px]">
                                             {{ Number::currency($gajiDetail->value_total, 'IDR', locale: 'id_ID') }}
                                     </tr>
