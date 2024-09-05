@@ -1,4 +1,4 @@
-@props(['title', 'action', 'id', 'data' => null, 'method' => 'POST'])
+@props(['title', 'action', 'id', 'data' => null, 'method' => 'POST', 'title2' => null])
 @if ($title == 'deletegaji')
     {{-- model delete --}}
     <div id="{{ $id }}" tabindex="-1"
@@ -11,8 +11,15 @@
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    <h3 class="mb-5 text-lg font-medium text-gray-700 dark:text-gray-400">Apakah Anda Yakin ingin
-                        menghapus default gaji <span class="font-semibold">{{ $data->name }}</span></h3>
+                    @if ($title2 == 'Delete Riwayat Gaji')
+                        <h3 class="mb-5 text-lg font-medium text-gray-700 dark:text-gray-400">Apakah Anda Yakin ingin
+                            menghapus riwayat gaji {{ $data->karyawan->nama }} periode <span
+                                class="font-semibold">{{ $data->periode }}</span></h3>
+                    @else
+                        <h3 class="mb-5 text-lg font-medium text-gray-700 dark:text-gray-400">Apakah Anda Yakin ingin
+                            menghapus default gaji <span class="font-semibold">{{ $data->name }}</span></h3>
+                    @endif
+
                     <div class="flex justify-center w-full gap-5">
                         <form action="{{ $action }}" method="POST">
                             @csrf
@@ -27,6 +34,31 @@
                             Batal
                         </button>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@elseif($title == 'editRiwayatGaji')
+    <div id="{{ $id }}" tabindex="-1" aria-hidden="true"
+        class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <div class="relative w-full max-w-xl max-h-full p-4">
+            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                <div class="p-4 text-center md:p-5">
+                    <svg class="w-12 h-12 mx-auto mb-4 text-gray-400 dark:text-gray-200" aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                    <h3 class="mb-5 text-lg font-semibold text-gray-700 dark:text-gray-400">Apakah Anda Yakin ingin edit
+                        data gaji karyawan {{ $data->karyawan->nama }} periode {{$data->periode}}? <br><span
+                            class="text-base font-medium text-red-600 font-italic"></h3>
+                    <button type="submit" id="editButtonGaji"" data-modal-hide="{{ $id }}"
+                        class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
+                        Iya
+                    </button>
+                    <button data-modal-hide="{{ $id }}" type="button"
+                        class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                        Batal</button>
                 </div>
             </div>
         </div>
@@ -85,16 +117,16 @@
                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Hitungan</label>
                                 <select id="status" name="status"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                    <option
-                                        {{$title == 'Tambah Default Gaji' ? 'selected' : '' }} disabled>Pilih</option>
-                                    <option value="1"
-                                        {{$data && $data->status == '1' ? 'selected' : '' }}>Total Kehadiran</option>
-                                    <option value="2"
-                                        {{ $data && $data->status == '2' ? 'selected' : '' }}>Total Hadir Disiplin</option>
-                                    <option value="3"
-                                        {{ $data && $data->status == '3' ? 'selected' : '' }}>Lembur Mingguan</option>
-                                    <option value="4"
-                                        {{ $data && $data->status == '4' ? 'selected' : '' }}>Custom</option>
+                                    <option {{ $title == 'Tambah Default Gaji' ? 'selected' : '' }} disabled>Pilih
+                                    </option>
+                                    <option value="1" {{ $data && $data->status == '1' ? 'selected' : '' }}>Total
+                                        Kehadiran</option>
+                                    <option value="2" {{ $data && $data->status == '2' ? 'selected' : '' }}>Total
+                                        Hadir Disiplin</option>
+                                    <option value="3" {{ $data && $data->status == '3' ? 'selected' : '' }}>
+                                        Lembur Mingguan</option>
+                                    <option value="4" {{ $data && $data->status == '4' ? 'selected' : '' }}>
+                                        Custom</option>
                                 </select>
                             </div>
                         </div>

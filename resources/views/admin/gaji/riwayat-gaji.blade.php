@@ -4,7 +4,7 @@
         <div class="flex gap-1">
             <a href="{{ route('dashboard.gaji') }}"><i
                     class="py-1 pr-3 text-2xl hover:text-blue-600 ri-arrow-left-line"></i></a>
-            <h1>{{ $title }} {{ $data->first()->karyawan->nama }}</h1>
+            <h1>{{ $title }} {{ $data->first()->karyawan->nama ?? '' }}</h1>
         </div>
         <a href="{{ route('dashboard.gaji.export', $data->first()->karyawan->id) }}">
             <button class="bg-green-600 px-3 font-medium py-2 text-white rounded-lg hover:bg-green-400 border-green-600 border"><i class="ri-file-excel-2-line"></i></button>
@@ -23,42 +23,41 @@
                                 </h1>
                             </div>
                             <div>
-                                <a href="{{ route('dashboard.gaji.detail') }}"
+                                <a href="{{ route('dashboard.gaji.detail', $data->id) }}"
                                     class="px-1 py-2 pl-2 text-sm font-medium text-center text-white bg-yellow-400 rounded-lg hover:bg-yellow-300 hover:text-gray-800">
                                     <i class="ri-eye-2-line"></i>
                                 </a>
-                                <button data-modal-target="deletegaji" data-modal-toggle="deletegaji"
-                                    class="px-2 py-1 ml-4 text-base font-medium text-center text-white bg-red-500 rounded-lg hover:bg-red-400 hover:text-gray-800">
-                                    <i class="ri-delete-bin-6-line"></i>
-                                </button>
+                                    <button data-modal-target="deletegaji{{$data->id}}" data-modal-toggle="deletegaji{{$data->id}}"
+                                        class="px-2 py-1 ml-4 text-base font-medium text-center text-white bg-red-500 rounded-lg hover:bg-red-400 hover:text-gray-800">
+                                        <i class="ri-delete-bin-6-line"></i>
+                                    </button>
                             </div>
                         </div>
                         <table class="w-full text-sm text-black bg-blue-100 text-start ">
                             <tbody>
                                 <tr class="bg-[#242947] text-white rounded-t-lg">
-                                    <td class="px-2 py-1 border-[#242947] rounded-tl-lg ">
+                                    <td class="px-2 py-1 w-[60%] border-[#242947] rounded-tl-lg ">
                                         {{ $data->shift }}
                                     </td>
-                                    <td class="px-2 py-1 text-end rounded-tr-lg border-[#242947]">
+                                    <td class="px-2 py-1 w-[40%] text-end rounded-tr-lg border-[#242947]">
                                         {{ $data->shift_total }}
-
                                     </td>
                                 </tr>
                                 <tr class="bg-[#242947] text-white border-white border-t">
-                                    <td class="px-2 py-1 border-[#242947] ">
+                                    <td class="px-2 w-1/2 py-1 border-[#242947] ">
                                         Metode Pembayaran
                                     </td>
-                                    <td class="px-2 py-1 text-end border-[#242947]">
+                                    <td class="px-2 w-1/2 py-1 text-end border-[#242947]">
                                         {{ $data->method }}
                                     </td>
                                 </tr>
                                 {{-- Foreach gaji header disini --}}
                                 @foreach ($data->gajiHeader as $gajiHeader)
                                     <tr class="text-start">
-                                        <td class="px-2 border-[#242947] border-[1px]">
+                                        <td class="px-2 w-1/2 border-[#242947] border-[1px]">
                                             {{ $gajiHeader->name }}
                                         </td>
-                                        <td class=" px-2 text-end border-[#242947] border-[1px]">
+                                        <td class=" px-2 w-1/2 text-end border-[#242947] border-[1px]">
                                             {{ $gajiHeader->value }}
                                         </td>
                                     </tr>
@@ -69,27 +68,30 @@
                                 </tr>
                                 {{-- Foreach gaji detail disini --}}
                                 @foreach ($data->gajiDetail as $gajiDetail)
-                                    <tr class=" border-[#242947] border-[1px] {{$gajiDetail->value == null && $gajiDetail->multiply == null ? 'font-bold' : ''}}">
-                                        <td class=" px-2 border-[#242947] border-[1px]">
+                                    <tr
+                                        class=" border-[#242947] border-[1px] {{ $gajiDetail->value == null && $gajiDetail->multiply == null ? 'font-bold' : '' }}">
+                                        <td class=" px-2 w-1/2 border-[#242947] border-[1px]">
                                             {{ $gajiDetail->name }}
                                         </td>
-                                        <td class="px-2 text-end border-[#242947] border-[1px]">
-                                            {{ $gajiDetail->value_total }}
+                                        <td class="px-2 w-1/2 text-end border-[#242947] border-[1px]">
+                                            {{ Number::currency($gajiDetail->value_total, 'IDR', locale: 'id_ID') }}
                                     </tr>
                                 @endforeach
                                 <tr>
                                     <td colspan="2" class="pt-2 font-bold bg-white"> Note</td>
                                 </tr>
                                 <tr>
-                                    <td colspan="2" class="bg-white border border-[#242947] p-2">{{$data->note}}</td>
+                                    <td colspan="2" class="bg-white border border-[#242947] p-2">{{ $data->note }}
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
+                    <x-admin.popup-gaji title="deletegaji" title2="Delete Riwayat Gaji" id="deletegaji{{$data->id}}" :data="$data" action="{{route('dashboard.gaji.delete', $data->id)}}"
+                    method="POST"></x-admin.popup-gaji>
                 @endforeach
             </div>
         </div>
     </div>
-    <x-admin.popup-gaji title="Tambah Default Gaji" id="tambahdefaultgaji" action=""
-        method="POST"></x-admin.popup-gaji>
+   
 </x-layout.layout-admin>

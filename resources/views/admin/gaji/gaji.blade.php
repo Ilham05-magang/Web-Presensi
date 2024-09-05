@@ -44,19 +44,19 @@
                             </td>
                             <td class="p-1 border-[#242947] border-[1px]">
                                 <a href="{{route('dashboard.gaji.default', $data->id)}}"
-                                    class="px-2 py-2 pl-3 text-sm font-medium text-center text-white bg-yellow-400 rounded-lg hover:bg-yellow-300 hover:text-gray-800">
+                                    class="px-2 py-2 pl-2 text-sm font-medium text-center text-white bg-yellow-400 rounded-lg hover:bg-yellow-300 hover:text-gray-800">
                                     Detail
                                 </a>
                             </td>
                             <td class="p-4 border-[#242947] border-[1px]">
                                 <a href="{{route('dashboard.gaji.input',$data->id)}}"
-                                    class="px-2 py-2 pl-3 text-sm font-medium text-center text-white bg-yellow-400 rounded-lg hover:bg-yellow-300 hover:text-gray-800">
+                                    class="px-2 py-2 pl-2 text-sm font-medium text-center text-white bg-yellow-400 rounded-lg hover:bg-yellow-300 hover:text-gray-800">
                                     Detail
                                 </a>
                             </td>
                             <td class="p-4 border-[#242947] border-[1px]">
                                 <a href="{{route('dashboard.gaji.riwayat',$data->id)}}"
-                                    class="px-2 py-2 pl-3 text-sm font-medium text-center text-white bg-yellow-400 rounded-lg hover:bg-yellow-300 hover:text-gray-800">
+                                    class="px-2 py-2 pl-2 text-sm font-medium text-center text-white bg-yellow-400 rounded-lg hover:bg-yellow-300 hover:text-gray-800">
                                     Detail
                                 </a>
                             </td>

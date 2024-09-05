@@ -4,7 +4,7 @@
         <div class="flex gap-1">
             <a href="{{ route('dashboard.gaji') }}"><i
                     class="py-1 pr-3 text-2xl hover:text-blue-600 ri-arrow-left-line"></i></a>
-            <h1>{{ $title }} Juleha</h1>
+            <h1>{{ $title }} {{$karyawan->nama}}</h1>
         </div>
         <div class="p-4">
             <form class="flex items-center max-w-md mx-auto space-x-4"
@@ -165,7 +165,7 @@
                             </tr>
                         </tbody>
                     </table>
-                    <div class="p-2">
+                    <div class="pt-2">
                         <div id="buttonTambahKolom"
                             class="w-8 h-8 flex mx-auto items-center justify-center text-white hover:bg-[#5B6390] border-2 border-[#242947] bg-[#242947] rounded-lg cursor-pointer">
                             <i class="text-xl ri-add-circle-line"></i>
@@ -189,7 +189,7 @@
                                 @if ($default->status == 1)
                                     <tr class="border-[#242947] border-[1px]">
                                         <td class="flex items-center gap-1">
-                                            <input class="w-full h-7 px-0 px-3 py-0 text-sm bg-blue-100 border-none"
+                                            <input class="w-full h-7 px-3 py-0 text-sm bg-blue-100 border-none"
                                                 type="text" name="gajiDetailName{{ $counterRequest }}"
                                                 value="{{ $loop->iteration }}. {{ $default->name }}">
                                             <div class="flex items-center gap-1 px-2">
@@ -209,7 +209,7 @@
                                         <td class="border-[#242947] border-[1px] w-[50%]">
                                             <input id="totalHadir{{ $counterHadir }}"
                                                 name="gajiDetailTotalValue{{ $counterRequest }}"
-                                                class="w-full bg-gray-300/70  h-7 px-0 px-3 py-0 text-sm text-right bg-blue-100 border-none"
+                                                class="w-full bg-gray-300/70  h-7 px-3 py-0 text-sm text-right bg-blue-100 border-none"
                                                 type="text"
                                                 value="{{ Number::currency(($totalmasuk - $absensiLemburTotal) * $default->value, 'IDR', locale: 'id_ID') }}"
                                                 readonly>
@@ -223,7 +223,7 @@
                                 @elseif ($default->status == 2)
                                     <tr class="border-[#242947] border-[1px]">
                                         <td class="flex items-center gap-1">
-                                            <input class="w-full h-7 px-0 px-3 py-0 text-sm bg-blue-100 border-none"
+                                            <input class="w-full h-7 px-3 py-0 text-sm bg-blue-100 border-none"
                                                 type="text" name="gajiDetailName{{ $counterRequest }}"
                                                 value="{{ $loop->iteration }}. {{ $default->name }}">
                                             <div class="flex items-center gap-1 px-2">
@@ -244,7 +244,7 @@
                                         <td class="border-[#242947] border-[1px] w-[50%]">
                                             <input id="totalDisiplin{{ $counterDisiplin }}"
                                                 name="gajiDetailTotalValue{{ $counterRequest }}"
-                                                class="w-full h-7 px-0 px-3 bg-gray-300/70  py-0 text-sm text-right bg-blue-100 border-none"
+                                                class="w-full h-7 px-3 bg-gray-300/70  py-0 text-sm text-right bg-blue-100 border-none"
                                                 type="text"
                                                 value="{{ Number::currency(($totalmasuk - $totalTelat - $totalPulangCepat - $absensiLemburTotal) * $default->value, 'IDR', locale: 'id_ID') }}"
                                                 readonly>
@@ -260,7 +260,7 @@
                                 @elseif ($default->status == 3)
                                     <tr class="border-[#242947] border-[1px]">
                                         <td class="flex items-center gap-1">
-                                            <input class="w-full h-7 px-0 px-3 py-0 text-sm bg-blue-100 border-none"
+                                            <input class="w-full h-7 px-3 py-0 text-sm bg-blue-100 border-none"
                                                 type="text" name="gajiDetailName{{ $counterRequest }}"
                                                 value="{{ $loop->iteration }}. {{ $default->name }}">
                                             <div class="flex items-center gap-1 px-2">
@@ -280,7 +280,7 @@
                                         <td class="border-[#242947] border-[1px] w-[50%]">
                                             <input id="totalLembur{{ $counterLembur }}"
                                                 name="gajiDetailTotalValue{{ $counterRequest }}"
-                                                class="w-full h-7 px-0 px-3 bg-gray-300/70  py-0 text-sm text-right bg-blue-100 border-none"
+                                                class="w-full h-7 px-3 bg-gray-300/70  py-0 text-sm text-right bg-blue-100 border-none"
                                                 type="text"
                                                 value="{{ Number::currency($absensiLemburTotal * $default->value, 'IDR', locale: 'id_ID') }}"
                                                 readonly>
@@ -294,7 +294,7 @@
                                 @elseif ($default->status == 4)
                                     <tr class="border-[#242947] border-[1px]">
                                         <td class="flex items-center gap-1">
-                                            <input class="w-full h-7 px-0 px-3 py-0 text-sm bg-blue-100 border-none"
+                                            <input class="w-full h-7 px-3 py-0 text-sm bg-blue-100 border-none"
                                                 type="text" name="gajiDetailName{{ $counterRequest }}"
                                                 value="{{ $loop->iteration }}. {{ $default->name }}">
                                             <div class="flex items-center gap-1 px-2">
@@ -314,7 +314,7 @@
                                         <td class="border-[#242947] border-[1px] w-[50%]">
                                             <input id="totalcustom{{ $counterCustom }}"
                                                 name="gajiDetailTotalValue{{ $counterRequest }}"
-                                                class="w-full h-7 px-0 px-3 py-0 text-sm text-right bg-gray-300/70  border-none"
+                                                class="w-full h-7 px-3 py-0 text-sm text-right bg-gray-300/70  border-none"
                                                 type="text"
                                                 value="{{ Number::currency(1 * $default->value, 'IDR', locale: 'id_ID') }}"
                                                 readonly>
@@ -329,13 +329,13 @@
                             @endforeach
                             <tr class="border-[#242947] border-[1px]">
                                 <td class="">
-                                    <input class="w-full h-7 px-0 px-3 py-0 text-sm font-bold bg-blue-100 border-none"
+                                    <input class="w-full h-7 px-3 py-0 text-sm font-bold bg-blue-100 border-none"
                                         type="text" name="gajiDetailName{{ $counterRequest }}"
                                         value="Total Honor">
                                 </td>
                                 <td class="border-[#242947] border-[1px]">
                                     <input id="TotalHonor"
-                                        class="w-full h-7 px-0 px-3 py-0 text-sm text-right bg-gray-300/70  border-none"
+                                        class="w-full h-7 px-3 py-0 text-sm text-right bg-gray-300/70  border-none"
                                         type="text" name="gajiDetailTotalValue{{ $counterRequest }}"
                                         value=" {{ Number::currency($totalHonor, 'IDR', locale: 'id_ID') }}"
                                         readonly>
