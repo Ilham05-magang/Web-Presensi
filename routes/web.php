@@ -95,7 +95,7 @@ Route::middleware(['auth', 'web'])->group(function () {
         Route::post('/dashboard/gaji/postdefault/{id}', [GajiController::class, 'TambahDefaultGaji'])->name('dashboard.gaji.tambahdefault');
         Route::put('/dashboard/gaji/editdefault/{id}', [GajiController::class, 'EditDefaultGaji'])->name('dashboard.gaji.editdefault');
         Route::delete('/dashboard/gaji/deletedefault/{id}', [GajiController::class, 'DeleteDefaultGaji'])->name('dashboard.gaji.deletedefault');
-
+        Route::get('/dashboard/gaji/exportgajikaryawan/{id}', [GajiController::class, 'ExportGajiKaryawan'])->name('dashboard.gaji.export');
 
         Route::get('/dashboard/gaji/input/{id}', [GajiController::class, 'inputGaji'])->name('dashboard.gaji.input');
         Route::get('/dashboard/gaji/searchinput/{id}', [GajiController::class, 'SearchInputGaji'])->name('dashboard.gaji.input.search');

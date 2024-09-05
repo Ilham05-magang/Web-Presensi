@@ -15,6 +15,8 @@ use App\Models\GajiDetail;
 use Illuminate\Http\Request;
 use App\Models\TanggalLibur;
 use Carbon\Carbon;
+use App\Exports\GajiKaryawanExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class GajiController extends Controller
 {
@@ -85,6 +87,11 @@ class GajiController extends Controller
         $tanggalMulai = null;
         $karyawan = Karyawan::where('id', $id)->first();
         return view('admin.gaji.input-gaji', compact('title','karyawan','tanggalMulai'));
+    }
+    public function ExportGajiKaryawan($id)
+    {
+        $karyawan = Karyawan::findOrFail($id);
+        return Excel::download(new GajiKaryawanExport($id), "GajiKaryawan_$karyawan->nama.xlsx");
     }
     public function SearchInputGaji(Request $request, $id){
 

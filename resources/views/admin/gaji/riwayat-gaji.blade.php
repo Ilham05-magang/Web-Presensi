@@ -6,16 +6,19 @@
                     class="py-1 pr-3 text-2xl hover:text-blue-600 ri-arrow-left-line"></i></a>
             <h1>{{ $title }} {{ $data->first()->karyawan->nama }}</h1>
         </div>
+        <a href="{{ route('dashboard.gaji.export', $data->first()->karyawan->id) }}">
+            <button class="bg-green-600 px-3 font-medium py-2 text-white rounded-lg hover:bg-green-400 border-green-600 border"><i class="ri-file-excel-2-line"></i></button>
+        </a>
     </div>
     <hr class="border-t-2 border-gray-200">
     <div class="p-5 capitalize">
         <div class="relative overflow-x-auto shadow-md ">
-            <div class=" grid grid-cols-2 gap-5">
+            <div class="grid grid-cols-2 gap-5 ">
                 @foreach ($data as $data)
-                    <div class="border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 p-4">
+                    <div class="p-4 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                         <div class="flex justify-between py-2">
                             <div>
-                                <h1 class="font-semibold text-base">
+                                <h1 class="text-base font-semibold">
                                     {{ $data->periode }}
                                 </h1>
                             </div>
@@ -30,7 +33,7 @@
                                 </button>
                             </div>
                         </div>
-                        <table class="w-full text-sm text-start text-black bg-blue-100 ">
+                        <table class="w-full text-sm text-black bg-blue-100 text-start ">
                             <tbody>
                                 <tr class="bg-[#242947] text-white rounded-t-lg">
                                     <td class="px-2 py-1 border-[#242947] rounded-tl-lg ">
@@ -60,7 +63,7 @@
                                         </td>
                                     </tr>
                                 @endforeach
-                                <tr class="bg-white font-bold">
+                                <tr class="font-bold bg-white">
                                     <td class="pt-2">Honorarium</td>
                                     <td></td>
                                 </tr>
@@ -75,7 +78,7 @@
                                     </tr>
                                 @endforeach
                                 <tr>
-                                    <td colspan="2" class="bg-white font-bold pt-2"> Note</td>
+                                    <td colspan="2" class="pt-2 font-bold bg-white"> Note</td>
                                 </tr>
                                 <tr>
                                     <td colspan="2" class="bg-white border border-[#242947] p-2">{{$data->note}}</td>
